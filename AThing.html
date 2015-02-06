@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>A Thing</title>
+	
+	<script type="text/javascript" src="Objects.js"></script>
+	<script type="text/javascript" src="Gamestates.js"></script>
+	
+</head>
+<body>
+<div class="wrapper">
+	<div id="banner">
+		<h1 id="title">PUT TITILE HERE</h1>
+	</div>
+	
+	<canvas id='canvas' width='800' height='600'></canvas>
+	
+	<div class="push"></div>
+</div>
+
+	<div id="footer">
+		<div class="container">
+			<ul>
+				<li>Created By: Bodie</li>
+			</ul>
+		</div>
+	</div>
+	
+	<script type='text/javascript'>
+
+	var can = document.getElementById('canvas');
+	var ctx = can.getContext("2d");
+	var lastTickTime = 0;
+	var UPDATEINTERVAL = 1000 / 60;
+	var accumulate = 0;
+	var gamestate;
+	var player = new Player();
+	var keys = {
+		w: new Key(),
+		a: new Key(),
+		s: new Key(),
+		d: new Key(),
+	};
+
+	function tick(time){
+		var deltaTime = time - lastTickTime;
+		
+		ctx.clearRect(0,0,can.width,can.height);
+		gamestate.draw();
+		
+		accumulate += deltaTime;
+		
+		while(accumulate >= UPDATEINTERVAL){
+			gamestate.update(UPDATEINTERVAL);
+			accumulate -= UPDATEINTERVAL;
+			updateAllKeys();
+		}
+		
+		lastTickTime = time;
+		window.requestAnimationFrame(tick);
+	}
+	
+	function updateAllKeys(){
+		keys.a.update();
+		keys.w.update();
+		keys.s.update();
+		keys.d.update();
+	}
+
+	function main(){
+		gamestate = new PlayGamestate();
+		window.requestAnimationFrame(tick);
+	}
+
+	main();
+	
+	</script>
+</html>
