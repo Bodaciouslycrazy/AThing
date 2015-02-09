@@ -6,6 +6,7 @@
 	
 	<script type="text/javascript" src="Objects.js"></script>
 	<script type="text/javascript" src="Gamestates.js"></script>
+	<script type="text/javascript" src="RandomFunctions.js"></script>
 	
 </head>
 <body>
@@ -35,13 +36,8 @@
 	var UPDATEINTERVAL = 1000 / 60;
 	var accumulate = 0;
 	var gamestate;
-	var player = new Player();
-	var keys = {
-		w: new Key(),
-		a: new Key(),
-		s: new Key(),
-		d: new Key(),
-	};
+	var player;
+	var keys = [];
 
 	function tick(time){
 		var deltaTime = time - lastTickTime;
@@ -61,14 +57,38 @@
 		window.requestAnimationFrame(tick);
 	}
 	
+	function handleKeyDown(evt){
+		
+		for(i = 0; i < keys.length; i ++){
+			if(evt.keyCode == keys[i].keyCode)
+				keys[i].press();
+		}
+		
+		if(evt.keyCode > 32 && evt.keyCode < 87)
+			evt.preventDefault();
+	}
+	
+	function handleKeyUp(evt){
+		
+		for(i = 0; i < keys.length; i++){
+			if(evt.keyCode == keys[i].keyCode)
+				keys[i].release();
+		}
+		
+		if(evt.keyCode > 32 && evt.keyCode < 87)
+			evt.preventDefault();
+	}
+	
 	function updateAllKeys(){
-		keys.a.update();
-		keys.w.update();
-		keys.s.update();
-		keys.d.update();
+		for(var i = 0; i < keys.length; i++){
+			keys[i].update();
+		}
 	}
 
 	function main(){
+		document.addEventListener('keydown', handleKeyDown);
+		document.addEventListener('keyup', handleKeyUp);
+		player = new Player();
 		gamestate = new PlayGamestate();
 		window.requestAnimationFrame(tick);
 	}
