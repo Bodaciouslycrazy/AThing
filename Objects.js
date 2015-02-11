@@ -20,10 +20,10 @@ function Player(){
 		space: new Key(), //ADD THESE KEY CODES!
 		q: new Key(),
 		e: new Key(),
-		up:new Key(),
-		down:new Key(),
-		left: new Key(),
-		right:new Key(),
+		up: new Key(38),
+		down: new Key(40),
+		left: new Key(37),
+		right: new Key(39),
 	};
 	
 	this.update = function(time){
@@ -49,6 +49,7 @@ function Player(){
 			if(this.keys.up.pressed && this.weapons.up.waitTime == 0){
 				var b = new Box(this.x + (this.w / 2) - (this.weapons.up.w / 2), this.y + (this.h / 2) - (this.weapons.up.h / 2), this.weapons.up.w, this.weapons.up.h);
 				b.x += Math.cos(this.angle) * this.weapons.up.distance;
+				b.y += Math.sin(this.angle) * this.weapons.up.distance;
 				
 				for(var i = 0; i < gamestate.enemies.length; i++){
 					if(collide( b, gamestate.enemies[i]) ){
@@ -83,6 +84,14 @@ function Player(){
 	}
 }
 
+
+//******************************
+
+//          ENEMIES
+
+//******************************
+
+
 function Slime(){
 	this.x = 200;
 	this.y = 0;
@@ -100,10 +109,16 @@ function Slime(){
 	};
 }
 
+//******************************
+
+//           WEAPONS
+
+//******************************
+
 function Textbook(){
 	this.w = 30;
 	this.h = 30;
-	this.distance = 80;
+	this.distance = 40;
 	this.damage = 2;
 	this.WAITTIME = 1000;
 	this.waitTime = 1000;
@@ -124,6 +139,12 @@ function Box(a,b,c,d){
 		ctx.fillRect(this.x, this.y, this.w, this.h);
 	}
 }
+
+//******************************
+
+//          OTHER
+
+//******************************
 
 function Key(kc){
 	this.down = false;
