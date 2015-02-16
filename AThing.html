@@ -38,6 +38,9 @@
 	var gamestate;
 	var player;
 	var keys = [];
+	var images = {
+		life: new Image(),
+	};
 
 	function tick(time){
 		var deltaTime = time - lastTickTime;
@@ -86,6 +89,8 @@
 	}
 
 	function main(){
+		images.life.src = "Images/Life.png";
+		
 		document.addEventListener('keydown', handleKeyDown);
 		document.addEventListener('keyup', handleKeyUp);
 		player = new Player();

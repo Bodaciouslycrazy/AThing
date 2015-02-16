@@ -10,8 +10,8 @@ function LoadingGamestate(){
 
 function PlayGamestate(){
 	this.enemies = [new Slime()];
-	this.items = [new Item(0,0,new Textbook()), new Item(0,50,new Textbook()), new Item(50,0,new Textbook())];
-	this.wall = new Box(300,300,10,10);
+	this.items = [new Item(0,0,new Textbook()), new Item(0,30,new Textbook()), new Item(30,0,new Textbook())];
+	this.wall = new Box(300,300,100,100);
 	
 	this.update = function(time){
 		player.update(time);
@@ -34,5 +34,6 @@ function PlayGamestate(){
 		}
 		this.wall.draw();
 		player.draw();
+		player.drawHUD();
 	}
 }

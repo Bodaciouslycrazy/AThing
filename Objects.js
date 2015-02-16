@@ -5,6 +5,7 @@ function Player(){
 	this.h = 50;
 	this.speed = 150;
 	this.angle = 0;
+	this.baseHealth = 30
 	this.health = 30;
 	this.weapons = [
 		false,//new Textbook(),
@@ -17,8 +18,8 @@ function Player(){
 		a: new Key(65),
 		s: new Key(83),
 		d: new Key(68),
-		space: new Key(), //ADD THESE KEY CODES!
-		q: new Key(),
+		//space: new Key(), //ADD THESE KEY CODES!
+		q: new Key(81),
 		e: new Key(69),
 		arrows: [
 			new Key(38),//up
@@ -49,7 +50,11 @@ function Player(){
 		//Weapons update
 		
 		for(var i = 0; i < this.keys.arrows.length; i++ ){
-			if(this.keys.e.down && this.keys.arrows[i].pressed){
+			if(this.keys.q.down && this.keys.arrows[i].pressed){
+				gamestate.items.push(new Item(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5, this.weapons[i]) );
+				this.weapons[i] = false;
+			}
+			else if(this.keys.e.down && this.keys.arrows[i].pressed){
 				for(var k = 0; k < gamestate.items.length; k++){
 					if(collide(player,gamestate.items[k])){
 						this.weapons[i] = gamestate.items[k].weapon;
@@ -85,6 +90,45 @@ function Player(){
 	}
 	
 	this.drawHUD = function(){
+		//health
+		var pixels = Math.round(600 * (this.health / this.baseHealth) );
+		var placex = 100;
+		var placey = 5;
+		for(var i = 0; i < 12; i++){
+			if(i == 0){
+				if(pixels >= 50){
+					ctx.drawImage(images.life, 0,0,50,20,placex,placey,50,20);
+					pixels -= 50;
+					placex += 50
+				}
+				else{
+					ctx.drawImage(images.life,0,0,pixels,20,placex,placey,pixels,20);
+					break;
+				}
+			}
+			else if(i == 11){
+				if(pixels >= 50){
+					ctx.drawImage(images.life, 0,40,50,20,placex,placey,50,20);
+					pixels -= 50;
+					placex += 50
+				}
+				else{
+					ctx.drawImage(images.life,0,40,pixels,20,placex,placey,pixels,20);
+					break;
+				}
+			}
+			else{
+				if(pixels >= 50){
+					ctx.drawImage(images.life, 0,20,50,20,placex,placey,50,20);
+					pixels -= 50;
+					placex += 50
+				}
+				else{
+					ctx.drawImage(images.life,0,20,pixels,20,placex,placey,pixels,20);
+					break;
+				}
+			}
+		}
 		//draw health and items
 	};
 	
@@ -110,7 +154,7 @@ function Player(){
 
 function Slime(){
 	this.x = 200;
-	this.y = 0;
+	this.y = 200;
 	this.w = 20;
 	this.h = 20;
 	this.health = 5;
@@ -123,6 +167,12 @@ function Slime(){
 		ctx.fillStyle = "#00FF00";
 		ctx.fillRect(this.x, this.y, this.w, this.h);
 	};
+}
+
+//enemy weapons
+
+function SlimeBall(){
+	
 }
 
 //******************************
