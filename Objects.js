@@ -56,7 +56,7 @@ function Player(){
 			}
 			else if(this.keys.e.down && this.keys.arrows[i].pressed){
 				for(var k = 0; k < gamestate.items.length; k++){
-					if(collide(player,gamestate.items[k])){
+					if(collide(player,gamestate.items[k]) && this.weapons[i] == false){
 						this.weapons[i] = gamestate.items[k].weapon;
 						gamestate.items.splice(k,1);
 						break;
@@ -158,9 +158,46 @@ function Slime(){
 	this.w = 20;
 	this.h = 20;
 	this.health = 5;
+	this.angle = 0;
+	this.speed = 50;
+	this.weapon = new SlimeBall();
+	this.ATTACKDELAY = 500;
+	this.attackDelay = 500;
+	this.moving = true; //when false, it is attacking
 	
 	this.update = function(time){
-		
+		if(this.moving){
+			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
+			this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+			this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+			
+			var b = new Box( this.x + (this.w * 0.5) - (this.weapon.w * 0.5), this.y + (this.h * 0.5) - (this.weapon.h * 0.5) ,this.weapon.w, this.weapon.h);
+			b.x += Math.cos(this.angle) * this.weapon.distance;
+			b.y += Math.sin(this.angle) * this.weapon.distance;
+			
+			this.weapon.waitTime -= time;
+			if(this.weapon.waitTime < 0)
+				this.weapon.waitTime = 0;
+			
+			if(collide(player,b) && this.weapon.waitTime == 0){
+				this.moving = false;
+				this.attackDelay = this.ATTACKDELAY;
+			}
+		}
+		else{
+			this.attackDelay -= time;
+			if(this.attackDelay <= 0){
+				var b = new Box( this.x + (this.w * 0.5) - (this.weapon.w * 0.5), this.y + (this.h * 0.5) - (this.weapon.h * 0.5) ,this.weapon.w, this.weapon.h);
+				b.x += Math.cos(this.angle) * this.weapon.distance;
+				b.y += Math.sin(this.angle) * this.weapon.distance;
+				
+				if(collide(player,b))
+					player.hurt(this.weapon.damage);
+				
+				this.weapon.waitTime = this.weapon.WAITTIME;
+				this.moving = true;
+			}
+		}
 	};
 	
 	this.draw = function(){
@@ -172,7 +209,12 @@ function Slime(){
 //enemy weapons
 
 function SlimeBall(){
-	
+	this.w = 20;
+	this.h = 20;
+	this.distance = 15;
+	this.damage = 1;
+	this.WAITTIME = 1000;
+	this.waitTime = 1000;
 }
 
 //******************************
