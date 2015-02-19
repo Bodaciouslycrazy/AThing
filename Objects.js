@@ -131,7 +131,35 @@ function Player(){
 				}
 			}
 		}
-		//draw health and items
+		
+		//Inventory
+		
+		ctx.fillStyle = "rgba(0,0,200,0.3)";
+		
+		if(this.weapons[0] == false)
+			ctx.fillRect(715,515,40,40);
+		else{
+			ctx.fillRect(715,555 - (40 * (this.weapons[0].waitTime / this.weapons[0].WAITTIME)), 40, 40 * (this.weapons[0].waitTime / this.weapons[0].WAITTIME));
+			this.weapons[0].draw(715,515,40,40);
+		}
+		if(this.weapons[1] == false)
+			ctx.fillRect(715,560,40,40);
+		else{
+			ctx.fillRect(715,600 - (40 * (this.weapons[1].waitTime / this.weapons[1].WAITTIME)), 40,40 * (this.weapons[1].waitTime / this.weapons[1].WAITTIME));
+			this.weapons[1].draw(715,560,40,40);
+		}
+		if(this.weapons[2] == false)
+			ctx.fillRect(670,560,40,40);
+		else{
+			ctx.fillRect(670,600 - (40 * (this.weapons[2].waitTime / this.weapons[2].WAITTIME)), 40, 40 * (this.weapons[2].waitTime / this.weapons[2].WAITTIME));
+			this.weapons[2].draw(670,560,40,40);
+		}
+		if(this.weapons[3] == false)
+			ctx.fillRect(760,560,40,40)
+		else{
+			ctx.fillRect(760,600 - ( 40 * (this.weapons[3].waitTime / this.weapons[3].WAITTIME)), 40, 40 * (this.weapons[3].waitTime / this.weapons[3].WAITTIME));
+			this.weapons[3].draw(760,560,40,40);
+		}
 	};
 	
 	this.hurt = function(num){
@@ -232,6 +260,10 @@ function Textbook(){
 	this.damage = 2;
 	this.WAITTIME = 1000;
 	this.waitTime = 1000;
+	
+	this.draw = function(x,y,w,h){
+		ctx.drawImage(images.weapons,0,0,20,20,x,y,w,h);
+	};
 }
 
 function Box(a,b,c,d){
@@ -263,7 +295,7 @@ function Item(a,b,c){
 	};
 	
 	this.draw = function(){
-		ctx.drawImage(images.weapons, 0,0,20,20,this.x, this.y, this.w, this.h);
+		this.weapon.draw(this.x,this.y,this.w,this.h);
 	};
 }
 
