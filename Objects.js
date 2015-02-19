@@ -52,7 +52,7 @@ function Player(){
 		//Weapons update
 		
 		for(var i = 0; i < this.keys.arrows.length; i++ ){
-			if(this.keys.q.down && this.keys.arrows[i].pressed){
+			if(this.keys.q.down && this.keys.arrows[i].pressed && this.weapons[i] != false){
 				gamestate.items.push(new Item(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5, this.weapons[i]) );
 				this.weapons[i] = false;
 			}

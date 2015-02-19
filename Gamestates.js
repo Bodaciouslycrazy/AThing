@@ -28,7 +28,7 @@ function PlayGamestate(){
 		cleanUpBodies();
 		
 		if(collide(player,this.leftDoor)){
-			player.x = 650;
+			player.x = 730;
 			player.y = 225;
 			
 			gamestate = room2;
@@ -53,8 +53,8 @@ function PlayGamestate(){
 function Room2(){
 	this.enemies = [new Slime()];
 	this.items = [new Item(100,100,new Textbook())];
-	this.walls = [new Box(-10,-10,20,620), new Box(-10,-10,820,20), new Box(790,-10,20,620), new Box(-10,590,820,20)];
-	this.leftDoor = new Box(-10,200,20,100);
+	this.walls = [new Box(-10,-10,20,620), new Box(-10,-10,820,20), new Box(790,-10,20,210),new Box(790,300,20,310), new Box(-10,590,820,20)];
+	this.rightDoor = new Box(790,200,20,100);
 	
 	this.update = function(time){
 		player.update(time);
@@ -69,11 +69,11 @@ function Room2(){
 		
 		cleanUpBodies();
 		
-		if(collide(player,this.leftDoor)){
-			player.x = 650;
+		if(collide(player,this.rightDoor)){
+			player.x = 20;
 			player.y = 225;
 			
-			gamestate = room2;
+			gamestate = room1;
 		}
 	}
 	
