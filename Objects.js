@@ -18,7 +18,7 @@ function Player(){
 		a: new Key(65),
 		s: new Key(83),
 		d: new Key(68),
-		//space: new Key(), //ADD THESE KEY CODES!
+		space: new Key(32),
 		q: new Key(81),
 		e: new Key(69),
 		arrows: [
@@ -41,9 +41,11 @@ function Player(){
 		if(this.keys.d.down)
 			hz++;
 		if(hz != 0 || vt != 0 ){
-			this.angle = Math.atan2(vt,hz);
-			this.x += Math.cos(this.angle) * this.speed * time * .001;
-			this.y += Math.sin(this.angle) * this.speed * time * .001;
+			var a = Math.atan2(vt,hz);
+			if(this.keys.space.down != true)
+				this.angle = a;
+			this.x += Math.cos(a) * this.speed * time * .001;
+			this.y += Math.sin(a) * this.speed * time * .001;
 		}
 		
 		
@@ -251,8 +253,8 @@ function Box(a,b,c,d){
 function Item(a,b,c){
 	this.x = a;
 	this.y = b;
-	this.w = 10;
-	this.h = 10;
+	this.w = 20;
+	this.h = 20;
 	
 	this.weapon = c;
 	
@@ -261,9 +263,7 @@ function Item(a,b,c){
 	};
 	
 	this.draw = function(){
-		//this.weapon.draw();
-		ctx.fillStyle = "#FF0000";
-		ctx.fillRect(this.x, this.y, this.w, this.h);
+		ctx.drawImage(images.weapons, 0,0,20,20,this.x, this.y, this.w, this.h);
 	};
 }
 

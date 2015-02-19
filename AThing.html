@@ -40,6 +40,7 @@
 	var keys = [];
 	var images = {
 		life: new Image(),
+		weapons: new Image(),
 	};
 	
 	//gamestates
@@ -94,6 +95,7 @@
 
 	function main(){
 		images.life.src = "Images/Life.png";
+		images.weapons.src = "Images/Weapons.png";
 		
 		document.addEventListener('keydown', handleKeyDown);
 		document.addEventListener('keyup', handleKeyUp);
