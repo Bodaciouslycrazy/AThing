@@ -39,6 +39,8 @@
 	var player;
 	var keys = [];
 	var images = {
+		frame: new Image(),
+		kim: new Image(),
 		life: new Image(),
 		weapons: new Image(),
 		room1: new Image(),
@@ -50,8 +52,10 @@
 
 	function tick(time){
 		var deltaTime = time - lastTickTime;
+		console.log(deltaTime + "");
 		
 		ctx.clearRect(0,0,can.width,can.height);
+		ctx.beginPath();//from what I know, this doesn't change anything, but clears all of the ctx.draw memory, keeping the process speed fast.
 		gamestate.draw();
 		
 		accumulate += deltaTime;
@@ -69,7 +73,7 @@
 	function handleKeyDown(evt){
 		
 		for(i = 0; i < keys.length; i ++){
-			if(evt.keyCode == keys[i].keyCode)
+			if(evt.keyCode == keys[i].keyCode && keys[i].down != true)
 				keys[i].press();
 		}
 		
@@ -95,9 +99,11 @@
 	}
 
 	function main(){
+		images.frame.src = "Images/Frame.png";
 		images.life.src = "Images/Life.png";
 		images.weapons.src = "Images/Weapons.png";
 		images.room1.src = "Images/Room1.png";
+		images.kim.src = "Images/Kim.png";
 		
 		//This is to help with image smoothing (which looks like crap)
 		ctx.mozImageSmoothingEnabled = false;

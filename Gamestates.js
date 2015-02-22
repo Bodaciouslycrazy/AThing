@@ -11,8 +11,8 @@ function LoadingGamestate(){
 function MainRoom(){
 	this.enemies = [];
 	this.items = [new Item(100,100,new Textbook())];
-	this.walls = [new Box(-10,-10,20,210), new Box(-10,300,20,310), new Box(-10,-10,820,20), new Box(790,-10,20,620), new Box(-10,590,820,20)];
-	this.leftDoor = new Box(-10,200,10,100);
+	this.walls = [new Box(-10,-10,20,620), new Box(-10,-10,385,50), new Box(455,-10,385,50), new Box(790,-10,20,620), new Box(-10,590,820,20), new Box(135,140,90,30), new Box(155,85,45,70)];
+	this.door = new Box(385,-10,100,20);
 	
 	this.update = function(time){
 		player.update(time);
@@ -27,9 +27,9 @@ function MainRoom(){
 		
 		cleanUpBodies();
 		
-		if(collide(player,this.leftDoor)){
-			player.x = 730;
-			player.y = 225;
+		if(collide(player,this.door)){
+			player.x = 400;
+			player.y = 530;
 			
 			gamestate = room2;
 		}

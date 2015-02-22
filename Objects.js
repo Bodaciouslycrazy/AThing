@@ -1,7 +1,7 @@
 function Player(){
-	this.x = 0;
-	this.y = 0;
-	this.w = 50;
+	this.x = 100;
+	this.y = 100;
+	this.w = 30;
 	this.h = 50;
 	this.speed = 150;
 	this.angle = 0;
@@ -89,14 +89,19 @@ function Player(){
 	this.draw = function(){
 		ctx.fillStyle = "rgb(0,0,255)";
 		ctx.fillRect(this.x, this.y, this.w, this.h);
+		
+		if(this.angle == Math.PI / 2.0)
+			ctx.drawImage(images.kim, 0,0,30,50, this.x, this.y, this.w, this.h);
+		else if(this.angle == ( 3 * Math.PI) / 4.0)
+			ctx.drawImage(images.kim,30,0,30,50, this.x, this.y, this.w, this.h);
 	}
 	
 	this.drawHUD = function(){
 		//health
-		var pixels = Math.round(600 * (this.health / this.baseHealth) );
-		var placex = 100;
-		var placey = 5;
-		for(var i = 0; i < 12; i++){
+		var pixels = Math.round(200 * (this.health / this.baseHealth) );
+		var placex = 20;
+		var placey = 20;
+		for(var i = 0; i < 4; i++){
 			if(i == 0){
 				if(pixels >= 50){
 					ctx.drawImage(images.life, 0,0,50,20,placex,placey,50,20);
@@ -108,7 +113,7 @@ function Player(){
 					break;
 				}
 			}
-			else if(i == 11){
+			else if(i == 3){
 				if(pixels >= 50){
 					ctx.drawImage(images.life, 0,40,50,20,placex,placey,50,20);
 					pixels -= 50;
@@ -137,29 +142,31 @@ function Player(){
 		ctx.fillStyle = "rgba(0,0,200,0.3)";
 		
 		if(this.weapons[0] == false)
-			ctx.fillRect(715,515,40,40);
+			ctx.fillRect(710,510,40,40);
 		else{
-			ctx.fillRect(715,555 - (40 * (this.weapons[0].waitTime / this.weapons[0].WAITTIME)), 40, 40 * (this.weapons[0].waitTime / this.weapons[0].WAITTIME));
-			this.weapons[0].draw(715,515,40,40);
+			ctx.fillRect(710,550 - (40 * (this.weapons[0].waitTime / this.weapons[0].WAITTIME)), 40, 40 * (this.weapons[0].waitTime / this.weapons[0].WAITTIME));
+			this.weapons[0].draw(710,510,40,40);
 		}
 		if(this.weapons[1] == false)
-			ctx.fillRect(715,560,40,40);
+			ctx.fillRect(710,555,40,40);
 		else{
-			ctx.fillRect(715,600 - (40 * (this.weapons[1].waitTime / this.weapons[1].WAITTIME)), 40,40 * (this.weapons[1].waitTime / this.weapons[1].WAITTIME));
-			this.weapons[1].draw(715,560,40,40);
+			ctx.fillRect(710,595 - (40 * (this.weapons[1].waitTime / this.weapons[1].WAITTIME)), 40,40 * (this.weapons[1].waitTime / this.weapons[1].WAITTIME));
+			this.weapons[1].draw(710,555,40,40);
 		}
 		if(this.weapons[2] == false)
-			ctx.fillRect(670,560,40,40);
+			ctx.fillRect(665,555,40,40);
 		else{
-			ctx.fillRect(670,600 - (40 * (this.weapons[2].waitTime / this.weapons[2].WAITTIME)), 40, 40 * (this.weapons[2].waitTime / this.weapons[2].WAITTIME));
-			this.weapons[2].draw(670,560,40,40);
+			ctx.fillRect(665,595 - (40 * (this.weapons[2].waitTime / this.weapons[2].WAITTIME)), 40, 40 * (this.weapons[2].waitTime / this.weapons[2].WAITTIME));
+			this.weapons[2].draw(665,555,40,40);
 		}
 		if(this.weapons[3] == false)
-			ctx.fillRect(760,560,40,40)
+			ctx.fillRect(755,555,40,40)
 		else{
-			ctx.fillRect(760,600 - ( 40 * (this.weapons[3].waitTime / this.weapons[3].WAITTIME)), 40, 40 * (this.weapons[3].waitTime / this.weapons[3].WAITTIME));
-			this.weapons[3].draw(760,560,40,40);
+			ctx.fillRect(755,595 - ( 40 * (this.weapons[3].waitTime / this.weapons[3].WAITTIME)), 40, 40 * (this.weapons[3].waitTime / this.weapons[3].WAITTIME));
+			this.weapons[3].draw(755,555,40,40);
 		}
+		
+		ctx.drawImage(images.frame,0,0,140,95,660,505,140,95);
 	};
 	
 	this.hurt = function(num){
@@ -277,8 +284,9 @@ function Box(a,b,c,d){
 	};
 	
 	this.draw = function(){
-		ctx.fillStyle = "#000000";
-		ctx.fillRect(this.x, this.y, this.w, this.h);
+		//ctx.fillStyle = "#000000";
+		//ctx.rect(this.x, this.y, this.w, this.h);
+		//ctx.stroke();
 	}
 }
 
