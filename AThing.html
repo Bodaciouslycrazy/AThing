@@ -41,10 +41,11 @@
 	var images = {
 		life: new Image(),
 		weapons: new Image(),
+		room1: new Image(),
 	};
 	
 	//gamestates
-	var room1 = new PlayGamestate();
+	var mainRoom = new MainRoom();
 	var room2 = new Room2();
 
 	function tick(time){
@@ -96,11 +97,18 @@
 	function main(){
 		images.life.src = "Images/Life.png";
 		images.weapons.src = "Images/Weapons.png";
+		images.room1.src = "Images/Room1.png";
+		
+		//This is to help with image smoothing (which looks like crap)
+		ctx.mozImageSmoothingEnabled = false;
+		ctx.webkitImageSmoothingEnabled = false;
+		ctx.msImageSmoothingEnabled = false;
+		ctx.imageSmoothingEnabled = false;
 		
 		document.addEventListener('keydown', handleKeyDown);
 		document.addEventListener('keyup', handleKeyUp);
 		player = new Player();
-		gamestate = room1;
+		gamestate = mainRoom;
 		window.requestAnimationFrame(tick);
 	}
 

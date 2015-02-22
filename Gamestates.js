@@ -8,7 +8,7 @@ function LoadingGamestate(){
 	}
 }
 
-function PlayGamestate(){
+function MainRoom(){
 	this.enemies = [];
 	this.items = [new Item(100,100,new Textbook())];
 	this.walls = [new Box(-10,-10,20,210), new Box(-10,300,20,310), new Box(-10,-10,820,20), new Box(790,-10,20,620), new Box(-10,590,820,20)];
@@ -36,6 +36,8 @@ function PlayGamestate(){
 	}
 	
 	this.draw = function(){
+		ctx.drawImage(images.room1, 0,0,200,150,0,0,800,600);
+		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
 		}
@@ -73,7 +75,7 @@ function Room2(){
 			player.x = 20;
 			player.y = 225;
 			
-			gamestate = room1;
+			gamestate = mainRoom;
 		}
 	}
 	
