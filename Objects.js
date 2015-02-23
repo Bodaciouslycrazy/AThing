@@ -87,13 +87,25 @@ function Player(){
 	}
 	
 	this.draw = function(){
-		ctx.fillStyle = "rgb(0,0,255)";
-		ctx.fillRect(this.x, this.y, this.w, this.h);
 		
 		if(this.angle == Math.PI / 2.0)
-			ctx.drawImage(images.kim, 0,0,30,50, this.x, this.y, this.w, this.h);
+			ctx.drawImage(images.kim,0,0,30,50,this.x,this.y,this.w,this.h);
 		else if(this.angle == ( 3 * Math.PI) / 4.0)
-			ctx.drawImage(images.kim,30,0,30,50, this.x, this.y, this.w, this.h);
+			ctx.drawImage(images.kim,30,0,30,50,this.x,this.y,this.w,this.h);
+		else if(this.angle == Math.PI || this.angle == -Math.PI)
+			ctx.drawImage(images.kim,60,0,30,50,this.x,this.y,this.w,this.h);
+		else if(this.angle == (-3 * Math.PI )/ 4.0 )
+			ctx.drawImage(images.kim,90,0,30,50,this.x,this.y,this.w,this.h);
+		else if(this.angle == -Math.PI / 2.0)
+			ctx.drawImage(images.kim,120,0,30,50,this.x,this.y,this.w,this.h);
+		else if(this.angle == -Math.PI / 4.0)
+			ctx.drawImage(images.kim,150,0,30,50,this.x,this.y,this.w,this.h);
+		else if(this.angle == 0)
+			ctx.drawImage(images.kim,180,0,30,50,this.x,this.y,this.w,this.h);
+		else if(this.angle == Math.PI / 4.0)
+			ctx.drawImage(images.kim,210,0,30,50,this.x,this.y,this.w,this.h);
+		else
+			ctx.fillRect(this.x,this.y,this.w,this.h);
 	}
 	
 	this.drawHUD = function(){
