@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>A Thing</title>
 	
+	<script type="text/javascript" src="howler.min.js"></script>
 	<script type="text/javascript" src="Objects.js"></script>
 	<script type="text/javascript" src="Gamestates.js"></script>
 	<script type="text/javascript" src="RandomFunctions.js"></script>
@@ -36,7 +37,12 @@
 	var UPDATEINTERVAL = 1000 / 60;
 	var accumulate = 0;
 	var gamestate;
+	var gamestates = {
+		mainRoom: new MainRoom(),
+		room2: new Room2(),
+	};
 	var player;
+	var damageCounters = [];
 	var keys = [];
 	var images = {
 		frame: new Image(),
@@ -52,11 +58,12 @@
 
 	function tick(time){
 		var deltaTime = time - lastTickTime;
-		console.log(deltaTime + "");
+		//console.log(deltaTime + "");
 		
 		ctx.clearRect(0,0,can.width,can.height);
 		ctx.beginPath();//from what I know, this doesn't change anything, but clears all of the ctx.draw memory, keeping the process speed fast.
 		gamestate.draw();
+		drawDamageCounters();
 		
 		accumulate += deltaTime;
 		
@@ -64,6 +71,7 @@
 			gamestate.update(UPDATEINTERVAL);
 			accumulate -= UPDATEINTERVAL;
 			updateAllKeys();
+			updateDamageCounters(UPDATEINTERVAL);
 		}
 		
 		lastTickTime = time;
@@ -120,5 +128,11 @@
 
 	main();
 	
+	
+	/*
+	Things to work on:
+		layering correctly when drawing (sort enemy array based on y values)
+		add a system of resistances.
+	*/
 	</script>
 </html>

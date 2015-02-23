@@ -68,3 +68,24 @@ function cleanUpBodies(){
 		}
 	}
 }
+
+function updateDamageCounters(time){
+	for(var i = 0; i < damageCounters.length; i++){
+		damageCounters[i].update(time);
+		if(damageCounters[i].timeLeft <= 0){
+			damageCounters.splice(i,1);
+			i--;
+		}
+	}
+}
+
+function drawDamageCounters(){
+	for(var i = 0; i < damageCounters.length; i++){
+		damageCounters[i].draw();
+	}
+}
+
+function hurtEnemy(en,dam){
+	en.health -= dam;
+	new DamageCounter(en.x,en.y + en.h,dam);
+}

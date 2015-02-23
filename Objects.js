@@ -73,8 +73,11 @@ function Player(){
 				b.y += Math.sin(this.angle) * this.weapons[i].distance;
 				
 				for(var j = 0; j < gamestate.enemies.length; j++){
-					if(collide(b,gamestate.enemies[j]))
-						gamestate.enemies[j].health -= this.weapons[i].damage;
+					if(collide(b,gamestate.enemies[j])){
+						//gamestate.enemies[j].health -= this.weapons[i].damage;
+						//new DamageCounter(gamestate.enemies[j].x,gamestate.enemies[j].y + gamestate.enemies[j].h,this.weapons[i].damage);
+						hurtEnemy(gamestate.enemies[j] , this.weapons[i].damage);
+					}
 				}
 				
 				this.weapons[i].waitTime = this.weapons[i].WAITTIME;
@@ -184,7 +187,9 @@ function Player(){
 	this.hurt = function(num){
 		this.health -= num;
 		if(this.health < 0)
-			this.health = 0;
+			this.health = 0; //call a death screen
+		
+		new DamageCounter(this.x,this.y + this.h, num);
 	}
 	
 	this.heal = function(num){
@@ -201,9 +206,9 @@ function Player(){
 //******************************
 
 
-function Slime(){
-	this.x = 200;
-	this.y = 200;
+function Slime(a,b){
+	this.x = a;
+	this.y = b;
 	this.w = 20;
 	this.h = 20;
 	this.health = 5;
@@ -272,7 +277,7 @@ function SlimeBall(){
 
 //******************************
 
-function Textbook(){
+function Textbook(a,b){
 	this.w = 30;
 	this.h = 30;
 	this.distance = 40;
@@ -324,6 +329,30 @@ function Item(a,b,c){
 //          OTHER
 
 //******************************
+
+function DamageCounter(a,b,c){
+	this.x = a;
+	this.y = b;
+	this.number = c;
+	this.timeLeft = 1000;
+	this.distance = 5;
+	
+	this.draw = function(){
+		ctx.fillStyle = "#A30000";
+		ctx.font = "bold 30px Agency FB";
+		var a = (Math.random() * 2 * Math.PI) - Math.PI;
+		ctx.fillText(this.number + "", this.x + (Math.cos(a) * this.distance), this.y + (Math.sin(a) * this.distance));
+	};
+	
+	this.update = function(time){
+		this.timeLeft -= time;
+		this.distance -= (time / 100);
+		if(this.distance < 0)
+			this.distance = 0;
+	};
+	
+	damageCounters.push(this);
+}
 
 function Key(kc){
 	this.down = false;
