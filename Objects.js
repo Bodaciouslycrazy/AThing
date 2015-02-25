@@ -8,7 +8,7 @@ function Player(){
 	this.baseHealth = 30
 	this.health = 30;
 	this.weapons = [
-		false,//new Textbook(),
+		false,
 		false,
 		false,
 		false,
@@ -52,10 +52,16 @@ function Player(){
 		//Weapons update
 		
 		for(var i = 0; i < this.keys.arrows.length; i++ ){
+			
+			//when q is held, drop weapons
+		
 			if(this.keys.q.down && this.keys.arrows[i].pressed && this.weapons[i] != false){
 				gamestate.items.push(new Item(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5, this.weapons[i]) );
 				this.weapons[i] = false;
 			}
+			
+			//when e is held, drop weapons
+			
 			else if(this.keys.e.down && this.keys.arrows[i].pressed){
 				for(var k = 0; k < gamestate.items.length; k++){
 					if(collide(player,gamestate.items[k]) && this.weapons[i] == false){
@@ -65,27 +71,20 @@ function Player(){
 					}
 				}
 			}
-			else if(this.keys.arrows[i].pressed && this.weapons[i].waitTime == 0){
-				if(!this.weapons[i])
+			
+			//when only an arrow is pressed, it fires the weapon.
+			
+			else if(this.keys.arrows[i].pressed && this.weapons[i] != false ){ //use Weapon
+				if(this.weapons[i].canFire() == false)
 					continue;
-				var b = new Box(this.x + (this.w * 0.5) - (this.weapons[i].w * 0.5), this.y + (this.h * 0.5) - (this.weapons[i].h * 0.5), this.weapons[i].w, this.weapons[i].h);
-				b.x += Math.cos(this.angle) * this.weapons[i].distance;
-				b.y += Math.sin(this.angle) * this.weapons[i].distance;
-				
-				for(var j = 0; j < gamestate.enemies.length; j++){
-					if(collide(b,gamestate.enemies[j])){
-						//gamestate.enemies[j].health -= this.weapons[i].damage;
-						//new DamageCounter(gamestate.enemies[j].x,gamestate.enemies[j].y + gamestate.enemies[j].h,this.weapons[i].damage);
-						hurtEnemy(gamestate.enemies[j] , this.weapons[i].damage);
-					}
-				}
-				
-				this.weapons[i].waitTime = this.weapons[i].WAITTIME;
+				else
+					this.weapons[i].fire(this.x + (this.w / 2.0) , this.y + (this.h / 2.0) , this.angle);
 			}
 			
-			this.weapons[i].waitTime -= time;
-			if(this.weapons[i].waitTime <= 0)
-				this.weapons[i].waitTime = 0;
+			//update every weapon
+			
+			if(this.weapons[i] != false)
+				this.weapons[i].update(time);
 		}
 	}
 	
@@ -189,7 +188,7 @@ function Player(){
 		if(this.health < 0)
 			this.health = 0; //call a death screen
 		
-		new DamageCounter(this.x,this.y + this.h, num);
+		new DamageCounter(this.x + (this.w / 2.0),this.y + (this.h / 2.0), num);
 	}
 	
 	this.heal = function(num){
@@ -285,8 +284,35 @@ function Textbook(a,b){
 	this.WAITTIME = 1000;
 	this.waitTime = 1000;
 	
+	this.update = function(time){
+		this.waitTime -= time;
+		if(this.waitTime < 0)
+			this.waitTime = 0;
+	};
+	
 	this.draw = function(x,y,w,h){
 		ctx.drawImage(images.weapons,0,0,20,20,x,y,w,h);
+	};
+	
+	this.fire = function(px, py, ang){
+		var b = new Box(px - (this.w * 0.5), py - (this.h * 0.5), this.w, this.h);
+		b.x += Math.cos(ang) * this.distance;
+		b.y += Math.sin(ang) * this.distance;
+		
+		for(var j = 0; j < gamestate.enemies.length; j++){
+			if(collide(b,gamestate.enemies[j])){
+				hurtEnemy(gamestate.enemies[j] , this.damage);
+			}
+		}
+		
+		this.waitTime = this.WAITTIME;
+	};
+	
+	this.canFire = function(){
+		if(this.waitTime > 0)
+			return false;
+		else
+			return true;
 	};
 }
 
@@ -331,14 +357,15 @@ function Item(a,b,c){
 //******************************
 
 function DamageCounter(a,b,c){
-	this.x = a;
-	this.y = b;
+	ctx.font = "bold 30px Agency FB";
+	this.x = a - ( ctx.measureText(c).width / 2.0);
+	this.y = b + 15;
 	this.number = c;
 	this.timeLeft = 1000;
 	this.distance = 5;
 	
 	this.draw = function(){
-		ctx.fillStyle = "#A30000";
+		ctx.fillStyle = "#CC0000";
 		ctx.font = "bold 30px Agency FB";
 		var a = (Math.random() * 2 * Math.PI) - Math.PI;
 		ctx.fillText(this.number + "", this.x + (Math.cos(a) * this.distance), this.y + (Math.sin(a) * this.distance));

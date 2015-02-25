@@ -85,7 +85,11 @@ function drawDamageCounters(){
 	}
 }
 
+function clearDamageCounters(){
+	damageCounters.splice(0,damageCounters.length);
+}
+
 function hurtEnemy(en,dam){
 	en.health -= dam;
-	new DamageCounter(en.x,en.y + en.h,dam);
+	new DamageCounter(en.x + ( en.w / 2.0 ),en.y + ( en.h / 2.0 ),dam);
 }
