@@ -89,16 +89,22 @@ function Room2(){
 	}
 	
 	this.draw = function(){
+		var drw = this.enemies.slice();
+		drw.push(player);
+		sortEnemies(drw);
+		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
 		}
-		for(var i = 0; i < this.enemies.length; i++){
-			this.enemies[i].draw();
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
 		}
+		
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
 		}
-		player.draw();
+		//player.draw();
 		player.drawHUD();
 	}
 }

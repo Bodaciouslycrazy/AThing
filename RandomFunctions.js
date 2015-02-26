@@ -89,3 +89,9 @@ function hurtEnemy(en,dam){
 	en.health -= dam;
 	new DamageCounter(en.x,en.y + en.h,dam);
 }
+
+function sortEnemies(en){
+	en.sort(function(a,b){
+		return (a.y + a.h) - (b.y + b.h);
+	});
+}
