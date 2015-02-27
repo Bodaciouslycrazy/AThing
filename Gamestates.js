@@ -1,22 +1,64 @@
 function LoadingGamestate(){
-	this.update = function(){
-		
+	this.loaded = 0;
+	this.need = 0;
+	
+	this.update = function(time){
+		if(this.loaded == this.need)
+			gamestate = gamestates.intro;
 	}
 	
 	this.draw = function(){
+		ctx.fillStyle = "#000000";
+		ctx.font = "bold 200px Agency FB"
+		ctx.fillText("LOADING",400 - (ctx.measureText("LOADING").width / 2.0),400);
 		
+		ctx.fillStyle = "#ff0000";
+		ctx.fillRect(0,500,800 * (this.loaded / this.need),100);
 	}
+}
+
+function Intro(){
+	this.timeIn = 0;
+	
+	this.update = function(time){
+		this.timeIn += time;
+	};
+	
+	this.draw = function(){
+		ctx.fillStyle = "#000000";
+		ctx.fillRect(0,0,can.width,can.height);
+		ctx.font = "50px Agency FB";
+		
+		if(this.timeIn < 5000){
+			var num;
+			if(this.timeIn < 4000)
+				num = Math.round(255 * (this.timeIn / 1000.0));
+			else
+				num = Math.round(255 * ( (1000 - (this.timeIn - 4000) ) / 1000.0));
+			ctx.fillStyle = "rgb(" + num + ", " + num + ", " + num + ")";
+			ctx.fillText("Your boyfriend is slowly dying...", 400 - ( ctx.measureText("Your boyfriend is slowly dying...").width / 2.0),325);
+		}
+		else if(this.timeIn < 10000){
+			var num;
+			if(this.timeIn < 9000)
+				num = Math.round(255 * ( (this.timeIn - 5000) / 1000.0));
+			else
+				num = Math.round(255 * ( (1000 - (this.timeIn - 9000) ) / 1000.0));
+			ctx.fillStyle = "rgb(" + num + ", " + num + ", " + num + ")";
+			ctx.fillText("Only you can save him.", 400 - ( ctx.measureText("Only you can save him.").width / 2.0),325);
+		}
+	};
 }
 
 function MainRoom(){
 	this.enemies = [];
-	this.items = [new Item(408,50,new Textbook())];
+	this.items = [new Item(408,50,new Textbook()), new Item(400,300, new DrPepper())];
 	this.walls = [
-		new Box(-10,-10,20,620), //left wall
+		new Box(-10,-10,22,620), //left wall
 		new Box(-10,-10,385,50), //up left wall 
 		new Box(457,-10,383,50), //up right wall
-		new Box(790,-10,20,620), //right wall
-		new Box(-10,590,820,20), //bottom wall
+		new Box(788,-10,22,620), //right wall
+		new Box(-10,588,820,22), //bottom wall
 		new Box(145,140,66,30),  //bottom cans
 		new Box(155,112,45,30),  //middle cans
 		new Box(167,84,20,30),   //top cans
@@ -40,7 +82,7 @@ function MainRoom(){
 			player.x = 400;
 			player.y = 530;
 			
-			gamestate = room2;
+			gamestate = gamestates.room2;
 		}
 	}
 	
@@ -84,7 +126,7 @@ function Room2(){
 			player.x = 20;
 			player.y = 225;
 			
-			gamestate = mainRoom;
+			gamestate = gamestates.mainRoom;
 		}
 	}
 	

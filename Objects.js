@@ -154,25 +154,27 @@ function Player(){
 		//Inventory
 		
 		ctx.fillStyle = "rgba(0,0,200,0.3)";
-		
 		if(this.weapons[0] == false)
 			ctx.fillRect(710,510,40,40);
 		else{
 			ctx.fillRect(710,550 - (40 * (this.weapons[0].waitTime / this.weapons[0].WAITTIME)), 40, 40 * (this.weapons[0].waitTime / this.weapons[0].WAITTIME));
 			this.weapons[0].draw(710,510,40,40);
 		}
+		ctx.fillStyle = "rgba(0,0,200,0.3)";
 		if(this.weapons[1] == false)
 			ctx.fillRect(710,555,40,40);
 		else{
 			ctx.fillRect(710,595 - (40 * (this.weapons[1].waitTime / this.weapons[1].WAITTIME)), 40,40 * (this.weapons[1].waitTime / this.weapons[1].WAITTIME));
 			this.weapons[1].draw(710,555,40,40);
 		}
+		ctx.fillStyle = "rgba(0,0,200,0.3)";
 		if(this.weapons[2] == false)
 			ctx.fillRect(665,555,40,40);
 		else{
 			ctx.fillRect(665,595 - (40 * (this.weapons[2].waitTime / this.weapons[2].WAITTIME)), 40, 40 * (this.weapons[2].waitTime / this.weapons[2].WAITTIME));
 			this.weapons[2].draw(665,555,40,40);
 		}
+		ctx.fillStyle = "rgba(0,0,200,0.3)";
 		if(this.weapons[3] == false)
 			ctx.fillRect(755,555,40,40)
 		else{
@@ -193,7 +195,8 @@ function Player(){
 	
 	this.heal = function(num){
 		this.health += num;
-		//check if over healed later
+		if(this.health > this.baseHealth)
+			this.health = baseHealth;
 	}
 }
 
@@ -313,6 +316,32 @@ function Textbook(a,b){
 			return false;
 		else
 			return true;
+	};
+}
+
+function DrPepper(){
+	this.w = 0;
+	this.h = 0;
+	this.distance = 0;
+	this.damage = 0;
+	this.WAITTIME = 1000;
+	this.waitTime = 1000;
+	
+	this.update = function(time){
+	
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.fillStyle = "#FF0000";
+		ctx.fillRect(x,y,w,h);
+	};
+	
+	this.fire = function(){
+		
+	};
+	
+	this.canFire = function(){
+		return false;
 	};
 }
 

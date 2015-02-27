@@ -36,14 +36,20 @@
 	var lastTickTime = 0;
 	var UPDATEINTERVAL = 1000 / 60;
 	var accumulate = 0;
+	
 	var gamestate;
 	var gamestates = {
+		intro: new Intro(),
 		mainRoom: new MainRoom(),
 		room2: new Room2(),
 	};
+	
 	var player;
+	
 	var damageCounters = [];
+	
 	var keys = [];
+	
 	var images = {
 		frame: new Image(),
 		kim: new Image(),
@@ -53,8 +59,6 @@
 	};
 	
 	//gamestates
-	var mainRoom = new MainRoom();
-	var room2 = new Room2();
 
 	function tick(time){
 		var deltaTime = time - lastTickTime;
@@ -107,6 +111,18 @@
 	}
 
 	function main(){
+		gamestate = new LoadingGamestate();
+		
+		for(var k in images){
+			if(images.hasOwnProperty(k))
+				gamestate.need++;
+		}
+		
+		images.frame.onload = function(){ gamestate.loaded++; };
+		images.life.onload = function(){ gamestate.loaded++; };
+		images.weapons.onload = function(){ gamestate.loaded++; };
+		images.room1.onload = function(){ gamestate.loaded++; };
+		images.kim.onload = function(){ gamestate.loaded++; };
 		images.frame.src = "Images/Frame.png";
 		images.life.src = "Images/Life.png";
 		images.weapons.src = "Images/Weapons.png";
@@ -122,7 +138,7 @@
 		document.addEventListener('keydown', handleKeyDown);
 		document.addEventListener('keyup', handleKeyUp);
 		player = new Player();
-		gamestate = mainRoom;
+		//gamestate = mainRoom;
 		window.requestAnimationFrame(tick);
 	}
 
