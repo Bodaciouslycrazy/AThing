@@ -4,8 +4,11 @@ function LoadingGamestate(){
 	
 	this.update = function(time){
 		if(this.loaded == this.need){
-			music.intro.play();
-			gamestate = gamestates.intro;
+			//music.intro.play();
+			//gamestate = gamestates.intro;
+			
+			//for testing purposes, you can skip to a gamestate by putting it here
+			gamestate = gamestates.mainRoom;
 		}
 	}
 	
@@ -83,6 +86,7 @@ function MainRoom(){
 		new Box(167,84,20,30),   //top cans
 	];
 	this.door = new Box(385,-10,100,20);
+	this.bodie = new Bodie(600,300);
 	
 	this.update = function(time){
 		player.update(time);
@@ -108,16 +112,20 @@ function MainRoom(){
 	this.draw = function(){
 		ctx.drawImage(images.room1, 0,0,200,150,0,0,800,600);
 		
+		var drw = this.enemies.slice();
+		drw.push(player);
+		drw.push(this.bodie);
+		sortEnemies(drw);
+		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
 		}
-		for(var i = 0; i < this.enemies.length; i++){
-			this.enemies[i].draw();
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
 		}
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
 		}
-		player.draw();
 		player.drawHUD();
 	}
 }
@@ -165,7 +173,7 @@ function Room2(){
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
 		}
-		//player.draw();
+		
 		player.drawHUD();
 	}
 }

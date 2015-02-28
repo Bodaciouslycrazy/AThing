@@ -385,6 +385,23 @@ function Item(a,b,c){
 
 //******************************
 
+function Bodie(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 30;
+	this.h = 50;
+	
+	this.update = function(time){
+		
+	};
+	
+	this.draw = function(){
+		ctx.fillStyle = "#0000FF";
+		ctx.fillRect(this.x, this.y, this.w, this.h);
+		//ctx.drawImage(images.bodie, 0,0,30,50,this.x,this.y,this.w,this.h);
+	};
+}
+
 function DamageCounter(a,b,c){
 	ctx.font = "bold 30px Impact";
 	this.x = a - ( ctx.measureText(c).width / 2.0);
