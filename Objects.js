@@ -386,7 +386,7 @@ function Item(a,b,c){
 //******************************
 
 function DamageCounter(a,b,c){
-	ctx.font = "bold 30px Agency FB";
+	ctx.font = "bold 30px Impact";
 	this.x = a - ( ctx.measureText(c).width / 2.0);
 	this.y = b + 15;
 	this.number = c;
@@ -395,7 +395,7 @@ function DamageCounter(a,b,c){
 	
 	this.draw = function(){
 		ctx.fillStyle = "#CC0000";
-		ctx.font = "bold 30px Agency FB";
+		ctx.font = "bold 30px Impact";
 		var a = (Math.random() * 2 * Math.PI) - Math.PI;
 		ctx.fillText(this.number + "", this.x + (Math.cos(a) * this.distance), this.y + (Math.sin(a) * this.distance));
 	};

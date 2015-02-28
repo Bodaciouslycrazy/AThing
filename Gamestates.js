@@ -3,13 +3,15 @@ function LoadingGamestate(){
 	this.need = 0;
 	
 	this.update = function(time){
-		if(this.loaded == this.need)
+		if(this.loaded == this.need){
+			music.intro.play();
 			gamestate = gamestates.intro;
+		}
 	}
 	
 	this.draw = function(){
 		ctx.fillStyle = "#000000";
-		ctx.font = "bold 200px Agency FB"
+		ctx.font = "bold 200px Impact"
 		ctx.fillText("LOADING",400 - (ctx.measureText("LOADING").width / 2.0),400);
 		
 		ctx.fillStyle = "#ff0000";
@@ -22,30 +24,47 @@ function Intro(){
 	
 	this.update = function(time){
 		this.timeIn += time;
+		if(this.timeIn > 23000)
+			gamestate = gamestates.mainRoom;
 	};
 	
 	this.draw = function(){
 		ctx.fillStyle = "#000000";
 		ctx.fillRect(0,0,can.width,can.height);
-		ctx.font = "50px Agency FB";
+		ctx.font = "50px Impact";
 		
+		var num;
 		if(this.timeIn < 5000){
-			var num;
 			if(this.timeIn < 4000)
 				num = Math.round(255 * (this.timeIn / 1000.0));
 			else
 				num = Math.round(255 * ( (1000 - (this.timeIn - 4000) ) / 1000.0));
 			ctx.fillStyle = "rgb(" + num + ", " + num + ", " + num + ")";
-			ctx.fillText("Your boyfriend is slowly dying...", 400 - ( ctx.measureText("Your boyfriend is slowly dying...").width / 2.0),325);
+			ctx.fillText("Bodie is slowly dying...", 400 - ( ctx.measureText("Bodie is slowly dying...").width / 2.0),325);
 		}
 		else if(this.timeIn < 10000){
-			var num;
 			if(this.timeIn < 9000)
 				num = Math.round(255 * ( (this.timeIn - 5000) / 1000.0));
 			else
 				num = Math.round(255 * ( (1000 - (this.timeIn - 9000) ) / 1000.0));
 			ctx.fillStyle = "rgb(" + num + ", " + num + ", " + num + ")";
-			ctx.fillText("Only you can save him.", 400 - ( ctx.measureText("Only you can save him.").width / 2.0),325);
+			ctx.fillText("Only you, Kim, can save him.", 400 - ( ctx.measureText("Only you, Kim, can save him.").width / 2.0),325);
+		}
+		else if(this.timeIn < 15000){
+			if(this.timeIn < 14000)
+				num = Math.round(255 * ( (this.timeIn - 10000) / 1000.0));
+			else
+				num = Math.round(255 * ( (1000 - (this.timeIn - 14000) ) / 1000.0));
+			ctx.fillStyle = "rgb(" + num + ", " + num + ", " + num + ")";
+			ctx.fillText("If you bring him Dr.Pepper.", 400 - ( ctx.measureText("If you bring him Dr.Pepper.").width / 2.0),325);
+		}
+		else if(this.timeIn < 20000){
+			if(this.timeIn < 19000)
+				num = Math.round(255 * ( (this.timeIn - 15000) / 1000.0));
+			else
+				num = Math.round(255 * ( (1000 - (this.timeIn - 19000) ) / 1000.0));
+			ctx.fillStyle = "rgb(" + num + ", " + num + ", " + num + ")";
+			ctx.fillText("Bodie's life is in your hands.", 400 - ( ctx.measureText("Bodie's life is in your hands.").width / 2.0),325);
 		}
 	};
 }

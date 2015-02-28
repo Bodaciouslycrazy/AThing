@@ -58,6 +58,10 @@
 		room1: new Image(),
 	};
 	
+	var music = {
+		intro: 0,
+	};
+	
 	//gamestates
 
 	function tick(time){
@@ -117,6 +121,10 @@
 			if(images.hasOwnProperty(k))
 				gamestate.need++;
 		}
+		for(var k in music){
+			if(music.hasOwnProperty(k))
+				gamestate.need++;
+		}
 		
 		images.frame.onload = function(){ gamestate.loaded++; };
 		images.life.onload = function(){ gamestate.loaded++; };
@@ -128,6 +136,10 @@
 		images.weapons.src = "Images/Weapons.png";
 		images.room1.src = "Images/Room1.png";
 		images.kim.src = "Images/Kim.png";
+		music.intro = new Howl({
+			onload: function(){ gamestate.loaded++; },
+			urls: ['SadSong.wav'],
+			});
 		
 		//This is to help with image smoothing (which looks like crap)
 		ctx.mozImageSmoothingEnabled = false;
@@ -138,7 +150,6 @@
 		document.addEventListener('keydown', handleKeyDown);
 		document.addEventListener('keyup', handleKeyUp);
 		player = new Player();
-		//gamestate = mainRoom;
 		window.requestAnimationFrame(tick);
 	}
 
@@ -147,7 +158,6 @@
 	
 	/*
 	Things to work on:
-		layering correctly when drawing (sort enemy array based on y values)
 		add a system of resistances.
 	*/
 	</script>
