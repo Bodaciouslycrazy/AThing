@@ -74,7 +74,7 @@ function Intro(){
 
 function MainRoom(){
 	this.enemies = [];
-	this.items = [new Item(408,50,new Textbook()), new Item(400,300, new DrPepper())];
+	this.items = [new Item(400,300, new DrPepper())];
 	this.walls = [
 		new Box(-10,-10,22,620), //left wall
 		new Box(-10,-10,385,50), //up left wall 
@@ -126,6 +126,8 @@ function MainRoom(){
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
 		}
+		
+		this.bodie.talk();
 		player.drawHUD();
 	}
 }
