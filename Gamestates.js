@@ -4,11 +4,11 @@ function LoadingGamestate(){
 	
 	this.update = function(time){
 		if(this.loaded == this.need){
-			//music.intro.play();
-			//gamestate = gamestates.intro;
+			music.intro.play();
+			gamestate = gamestates.intro;
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			gamestate = gamestates.mainRoom;
+			//gamestate = gamestates.mainRoom;
 		}
 	}
 	
