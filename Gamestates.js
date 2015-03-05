@@ -4,11 +4,11 @@ function LoadingGamestate(){
 	
 	this.update = function(time){
 		if(this.loaded == this.need){
-			music.intro.play();
-			gamestate = gamestates.intro;
+			//music.intro.play();
+			//gamestate = gamestates.intro;
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			//gamestate = gamestates.mainRoom;
+			gamestate = gamestates.mainRoom;
 		}
 	}
 	
@@ -73,7 +73,7 @@ function Intro(){
 }
 
 function MainRoom(){
-	this.enemies = [];
+	this.enemies = [new TutorialDoor(366,40)];
 	this.items = [new Item(400,300, new DrPepper())];
 	this.walls = [
 		new Box(-10,-10,22,620), //left wall
@@ -85,6 +85,7 @@ function MainRoom(){
 		new Box(155,112,45,30),  //middle cans
 		new Box(167,84,20,30),   //top cans
 	];
+	this.specialWall = new Box(376,0,80,50)
 	this.door = new Box(385,-10,100,20);
 	this.bodie = new Bodie(600,300);
 	
@@ -97,6 +98,14 @@ function MainRoom(){
 		for(var i = 0; i < this.walls.length; i++){
 			if(collide(player,this.walls[i]))
 				adjust(player,this.walls[i]);
+		}
+		if(this.specialWall != false){
+			if(collide(player,this.specialWall))
+				adjust(player,this.specialWall);
+			if(this.enemies.length == 0){
+				this.specialWall = false;
+				this.bodie.status++;
+			}
 		}
 		
 		cleanUpBodies();
@@ -126,6 +135,8 @@ function MainRoom(){
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
 		}
+		if(this.specialWall != false)
+			this.specialWall.draw();
 		
 		this.bodie.talk();
 		player.drawHUD();
@@ -134,7 +145,7 @@ function MainRoom(){
 
 function Room2(){
 	this.enemies = [new Slime(200,100), new Slime(500,200)];
-	this.items = [new Item(100,100,new Textbook())];
+	this.items = [new Item(100,100,new Textbook()), new Item(100, 500, new Armor())];
 	this.walls = [new Box(-10,-10,20,620), new Box(-10,-10,820,20), new Box(790,-10,20,210),new Box(790,300,20,310), new Box(-10,590,820,20)];
 	this.rightDoor = new Box(800,200,10,100);
 	

@@ -7,7 +7,7 @@ function Player(){
 	this.angle = 0;
 	this.baseHealth = 30
 	this.health = 30;
-	this.weaknesses = ["slime"];
+	this.weaknesses = [];
 	this.weapons = [
 		false,
 		false,
@@ -57,16 +57,18 @@ function Player(){
 			//when q is held, drop weapons
 		
 			if(this.keys.q.down && this.keys.arrows[i].pressed && this.weapons[i] != false){
-				gamestate.items.push(new Item(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5, this.weapons[i]) );
+				gamestate.items.push(new Item(this.x + (this.w * 0.5) - 10, this.y + this.h - 10, this.weapons[i]) );
+				this.weapons[i].onDrop();
 				this.weapons[i] = false;
 			}
 			
-			//when e is held, drop weapons
+			//when e is held, pick up weapons
 			
 			else if(this.keys.e.down && this.keys.arrows[i].pressed){
 				for(var k = 0; k < gamestate.items.length; k++){
 					if(collide(player,gamestate.items[k]) && this.weapons[i] == false){
 						this.weapons[i] = gamestate.items[k].weapon;
+						this.weapons[i].onPickup();
 						gamestate.items.splice(k,1);
 						break;
 					}
@@ -216,6 +218,29 @@ function Player(){
 
 //******************************
 
+function TutorialDoor(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 100;
+	this.h = 30;
+	this.health = 1;
+	this.weaknesses = [];
+	this.angle = 0;
+	this.speed = 0;
+	this.weapon = new SlimeBall();
+	this.ATTACKDELAY = 500;
+	this.attackDelay = 500;
+	
+	this.update = function(time){
+		
+	};
+	
+	this.draw = function(){
+		//ctx.fillStyle = "#FF0000";
+		//ctx.fillRect(this.x, this.y, this.w, this.h);
+		ctx.drawImage(images.enemies,0,0,100,30,this.x, this.y, this.w, this.h);
+	}
+}
 
 function Slime(a,b){
 	this.x = a;
@@ -223,7 +248,7 @@ function Slime(a,b){
 	this.w = 20;
 	this.h = 20;
 	this.health = 5;
-	this.weaknesses = ["normal"];
+	this.weaknesses = ["fire"];
 	this.angle = 0;
 	this.speed = 50;
 	this.weapon = new SlimeBall();
@@ -328,6 +353,14 @@ function Textbook(){
 		else
 			return true;
 	};
+	
+	this.onPickup = function(){
+		
+	};
+	
+	this.onDrop = function(){
+		
+	};
 }
 
 function DrPepper(){
@@ -343,7 +376,40 @@ function DrPepper(){
 	};
 	
 	this.draw = function(x,y,w,h){
-		ctx.fillStyle = "#FF0000";
+		ctx.drawImage(images.weapons,20,0,20,20,x,y,w,h);
+	};
+	
+	this.fire = function(){
+		
+	};
+	
+	this.canFire = function(){
+		return false;
+	};
+	
+	this.onPickup = function(){
+		
+	};
+	
+	this.onDrop = function(){
+		
+	};
+}
+
+function Armor(){
+	this.w = 0;
+	this.h = 0;
+	this.distance = 0;
+	this.damage = 0;
+	this.WAITTIME = 10;
+	this.waitTime = 10;
+	
+	this.update = function(time){
+		
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.fillStyle = "rgb(255,0,0)";
 		ctx.fillRect(x,y,w,h);
 	};
 	
@@ -354,23 +420,14 @@ function DrPepper(){
 	this.canFire = function(){
 		return false;
 	};
-}
-
-function Box(a,b,c,d){
-	this.x = a;
-	this.y = b;
-	this.w = c;
-	this.h = d;
 	
-	this.update = function(time){
-		
+	this.onPickup = function(){
+		player.baseHealth += 10;
 	};
 	
-	this.draw = function(){
-		//ctx.fillStyle = "#000000";
-		//ctx.rect(this.x, this.y, this.w, this.h);
-		//ctx.stroke();
-	}
+	this.onDrop = function(){
+		player.baseHealth -= 10;
+	};
 }
 
 function Item(a,b,c){
@@ -448,9 +505,31 @@ function Bodie(a,b){
 			ctx.fillText("I feel a bit better... But I will need a lot more.",400,200);
 			ctx.fillText("Here, take my Calc textbook. You can use it to break ",400,220);
 			ctx.fillText("the door down and start searching. I need my Dr.P!!!",400,240);
+			
+			if(collide(player, new Box(356,0,120,100) ) ){
+				ctx.font = "12px Impact";
+				ctx.fillText("Press an item's arrow key to use it.",400,400);
+			}
 		}
 		
 	};
+}
+
+function Box(a,b,c,d){
+	this.x = a;
+	this.y = b;
+	this.w = c;
+	this.h = d;
+	
+	this.update = function(time){
+		
+	};
+	
+	this.draw = function(){
+		//ctx.fillStyle = "#000000";
+		//ctx.rect(this.x, this.y, this.w, this.h);
+		//ctx.stroke();
+	}
 }
 
 function DamageCounter(a, b, c, d){

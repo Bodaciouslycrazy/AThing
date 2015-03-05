@@ -55,6 +55,7 @@
 		kim: new Image(),
 		life: new Image(),
 		weapons: new Image(),
+		enemies: new Image(),
 		room1: new Image(),
 	};
 	
@@ -131,11 +132,13 @@
 		images.weapons.onload = function(){ gamestate.loaded++; };
 		images.room1.onload = function(){ gamestate.loaded++; };
 		images.kim.onload = function(){ gamestate.loaded++; };
+		images.enemies.onload = function(){ gamestate.loaded++; };
 		images.frame.src = "Images/Frame.png";
 		images.life.src = "Images/Life.png";
 		images.weapons.src = "Images/Weapons.png";
 		images.room1.src = "Images/Room1.png";
 		images.kim.src = "Images/Kim.png";
+		images.enemies.src = "Images/Enemies.png";
 		music.intro = new Howl({
 			onload: function(){ gamestate.loaded++; },
 			urls: ['SadSong.wav'],
@@ -158,7 +161,7 @@
 	
 	/*
 	Things to work on:
-		add a system of resistances.
+		when we finish, you can take a
 	*/
 	</script>
 </html>
