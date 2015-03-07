@@ -171,6 +171,7 @@ function Room2(){
 	}
 	
 	this.draw = function(){
+		ctx.drawImage(images.room2,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
 		sortEnemies(drw);
