@@ -111,8 +111,9 @@ function MainRoom(){
 		cleanUpBodies();
 		
 		if(collide(player,this.door)){
-			player.x = 400;
+			//player.x = 400;
 			player.y = 530;
+			clearDamageCounters();
 			
 			gamestate = gamestates.room2;
 		}
@@ -145,9 +146,15 @@ function MainRoom(){
 
 function Room2(){
 	this.enemies = [new Slime(200,100), new Slime(500,200)];
-	this.items = [new Item(100,100,new Textbook()), new Item(100, 500, new Armor())];
-	this.walls = [new Box(-10,-10,20,620), new Box(-10,-10,820,20), new Box(790,-10,20,210),new Box(790,300,20,310), new Box(-10,590,820,20)];
-	this.rightDoor = new Box(800,200,10,100);
+	this.items = [ new Item(100, 500, new Armor()) ];
+	this.walls = [
+		//new Box(-20,-10,20,620), //left wall
+		new Box(-10,-20,820,20), //top wall
+		//new Box(800,-10,20,620), //right wall
+		new Box(-10,600,385,50), //bottom left wall 
+		new Box(457,600,383,50), //bottom right wall
+		];
+	this.downDoor = new Box(375,610,100,20);
 	
 	this.update = function(time){
 		player.update(time);
@@ -160,11 +167,22 @@ function Room2(){
 				adjust(player,this.walls[i]);
 		}
 		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
 		cleanUpBodies();
 		
-		if(collide(player,this.rightDoor)){
-			player.x = 20;
-			player.y = 225;
+		if(collide(player,this.downDoor)){
+			//player.x = 0;
+			player.y = 20;
+			clearDamageCounters();
 			
 			gamestate = gamestates.mainRoom;
 		}

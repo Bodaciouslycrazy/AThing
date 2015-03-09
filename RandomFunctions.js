@@ -63,6 +63,7 @@ function adjust(moveable,stationary){
 function cleanUpBodies(){
 	for(var i = 0; i < gamestate.enemies.length; i++){
 		if(gamestate.enemies[i].health <= 0){
+			gamestate.enemies[i].onDeath();
 			gamestate.enemies.splice(i,1);
 			i--;
 		}
@@ -92,7 +93,7 @@ function clearDamageCounters(){
 function hurtEnemy(en,dam,type){
 	var c = "#FF0000";
 	for(var i = 0; i < en.weaknesses.length; i++){
-		if(type = en.weaknesses[i]){
+		if(type == en.weaknesses[i]){
 			dam *= 2;
 			c = "#FFCC00";
 			break;

@@ -66,7 +66,7 @@ function Player(){
 			
 			else if(this.keys.e.down && this.keys.arrows[i].pressed){
 				for(var k = 0; k < gamestate.items.length; k++){
-					if(collide(player,gamestate.items[k]) && this.weapons[i] == false){
+					if(collide(player,gamestate.items[k]) && this.weapons[i] == false && gamestate.items[k].canPickUp ){
 						this.weapons[i] = gamestate.items[k].weapon;
 						this.weapons[i].onPickup();
 						gamestate.items.splice(k,1);
@@ -207,7 +207,7 @@ function Player(){
 	this.heal = function(num){
 		this.health += num;
 		if(this.health > this.baseHealth)
-			this.health = baseHealth;
+			this.health = this.baseHealth;
 	}
 }
 
@@ -240,6 +240,10 @@ function TutorialDoor(a,b){
 		//ctx.fillRect(this.x, this.y, this.w, this.h);
 		ctx.drawImage(images.enemies,0,0,100,30,this.x, this.y, this.w, this.h);
 	}
+	
+	this.onDeath = function(){
+	
+	};
 }
 
 function Slime(a,b){
@@ -294,6 +298,26 @@ function Slime(a,b){
 	this.draw = function(){
 		ctx.fillStyle = "#00FF00";
 		ctx.fillRect(this.x, this.y, this.w, this.h);
+	};
+	
+	this.onDeath = function(){
+		var num = Math.random();
+		
+		if(num > 0.90){
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Oboe() ) );
+		}
+		else if(num > 0.70){
+			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
+			thing.canPickUp = false;
+			thing.onCollide = function(){
+				player.heal(5);
+				return true;
+			};
+			gamestate.items.push( thing );
+		}
+		else if(num > 0.40){
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Textbook() ) );
+		}
 	};
 }
 
@@ -350,8 +374,8 @@ function Textbook(){
 	this.canFire = function(){
 		if(this.waitTime > 0)
 			return false;
-		else
-			return true;
+		
+		return true;
 	};
 	
 	this.onPickup = function(){
@@ -361,6 +385,68 @@ function Textbook(){
 	this.onDrop = function(){
 		
 	};
+}
+
+function Oboe(){
+	this.w = 40;
+	this.h = 40;
+	this.distance = 50;
+	this.damage = 2;
+	this.WAITTIME = 300;
+	this.waitTime = 300;
+	
+	this.update = function(time){
+		this.waitTime -= time;
+		if(this.waitTime < 0)
+			this.waitTime = 0;
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.fillStyle = "#CC5500";
+		ctx.fillRect(x,y,w,h);
+	};
+	
+	this.fire = function(px, py, ang){
+		var b = new Box(px - (this.w * 0.5), py - (this.h * 0.5), this.w, this.h);
+		b.x += Math.cos(ang) * this.distance;
+		b.y += Math.sin(ang) * this.distance;
+		
+		for(var j = 0; j < gamestate.enemies.length; j++){
+			if(collide(b,gamestate.enemies[j])){
+				hurtEnemy(gamestate.enemies[j] , this.damage, "musical");
+			}
+		}
+		
+		this.waitTime = this.WAITTIME;
+	};
+	
+	this.canFire = function(){
+		if(this.waitTime > 0)
+				return false;
+				
+		return true;
+	};
+	
+	this.onPickup = function(){
+	
+	};
+	
+	this.onDrop = function(){
+	
+	};
+}
+
+function HealthPack(){
+	
+	this.update = function(time){
+		
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.fillStyle = "#00CC00";
+		ctx.fillRect(x,y,w,h);
+	};
+	
 }
 
 function DrPepper(){
@@ -435,8 +521,13 @@ function Item(a,b,c){
 	this.y = b;
 	this.w = 20;
 	this.h = 20;
+	this.canPickUp = true;
 	
 	this.weapon = c;
+	
+	this.onCollide = function(){
+		return false;
+	};
 	
 	this.update = function(time){
 	
