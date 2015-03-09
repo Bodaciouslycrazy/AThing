@@ -116,7 +116,7 @@ function Player(){
 	this.drawHUD = function(){
 		//health
 		var pixels = Math.round(200 * (this.health / this.baseHealth) );
-		var placex = 20;
+		var placex = 60;
 		var placey = 20;
 		for(var i = 0; i < 4; i++){
 			if(i == 0){
@@ -153,6 +153,11 @@ function Player(){
 				}
 			}
 		}
+		ctx.fillStyle = "#CC0000";
+		ctx.font = "20px Impact";
+		ctx.fillText(this.health + "", 30 - (ctx.measureText(this.health + "").width * 0.5), 25 );
+		ctx.fillText(this.baseHealth + "", 30 - (ctx.measureText(this.baseHealth + "").width * 0.5),55);
+		ctx.fillRect(20,27,20,6);
 		
 		//Inventory
 		
@@ -513,6 +518,8 @@ function Armor(){
 	
 	this.onDrop = function(){
 		player.baseHealth -= 10;
+		if(player.health > player.baseHealth)
+			player.health = player.baseHealth;
 	};
 }
 
