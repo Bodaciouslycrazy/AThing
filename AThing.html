@@ -61,6 +61,9 @@
 		room2: new Image(),
 	};
 	
+	var sounds = {
+		puch: 0,
+	};
 	var music = {
 		intro: 0,
 	};
@@ -128,6 +131,10 @@
 			if(music.hasOwnProperty(k))
 				gamestate.need++;
 		}
+		for(var k in sounds){
+			if(sounds.hasOwnProperty(k))
+				gamestate.need++;
+		}
 		
 		images.frame.onload = function(){ gamestate.loaded++; };
 		images.life.onload = function(){ gamestate.loaded++; };
@@ -145,7 +152,11 @@
 		images.room2.src = "Images/Room2.png";
 		music.intro = new Howl({
 			onload: function(){ gamestate.loaded++; },
-			urls: ['SadSong.wav'],
+			urls: ['Sounds/SadSong.wav'],
+			});
+		sounds.punch = new Howl({
+			onload: function(){ gamestate.loaded++; },
+			urls: ["Sounds/Punch.wav"],
 			});
 		
 		//This is to help with image smoothing (which looks like crap)

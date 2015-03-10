@@ -378,6 +378,7 @@ function Textbook(){
 		}
 		
 		this.waitTime = this.WAITTIME;
+		sounds.punch.play();
 	};
 	
 	this.canFire = function(){
