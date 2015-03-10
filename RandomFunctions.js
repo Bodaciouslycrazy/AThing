@@ -68,6 +68,9 @@ function cleanUpBodies(){
 			i--;
 		}
 	}
+	
+	if(player.health <= 0)
+		gamestate = gamestates.gameOver;
 }
 
 function updateDamageCounters(time){

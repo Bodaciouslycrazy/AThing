@@ -115,6 +115,13 @@ function Player(){
 	
 	this.drawHUD = function(){
 		//health
+		
+		ctx.fillStyle = "#FFFFFF";
+		ctx.font = "20px Impact";
+		ctx.drawImage(images.frame,140,0,60,60,0,0,60,60);
+		ctx.fillText(this.health + "", 30 - (ctx.measureText(this.health + "").width * 0.5), 25 );
+		ctx.fillText(this.baseHealth + "", 30 - (ctx.measureText(this.baseHealth + "").width * 0.5),52);
+		
 		var pixels = Math.round(200 * (this.health / this.baseHealth) );
 		var placex = 60;
 		var placey = 20;
@@ -153,11 +160,6 @@ function Player(){
 				}
 			}
 		}
-		ctx.fillStyle = "#CC0000";
-		ctx.font = "20px Impact";
-		ctx.fillText(this.health + "", 30 - (ctx.measureText(this.health + "").width * 0.5), 25 );
-		ctx.fillText(this.baseHealth + "", 30 - (ctx.measureText(this.baseHealth + "").width * 0.5),55);
-		ctx.fillRect(20,27,20,6);
 		
 		//Inventory
 		
@@ -203,8 +205,10 @@ function Player(){
 			}
 		}
 		this.health -= num;
-		if(this.health < 0)
-			this.health = 0; //call a death screen
+		if(this.health <= 0){
+			this.health = 0;
+			//gamestate = gamestates.gameOver;
+		}
 		
 		new DamageCounter(this.x + (this.w / 2.0),this.y + (this.h / 2.0), num, c);
 	}

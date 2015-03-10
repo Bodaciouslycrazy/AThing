@@ -210,6 +210,7 @@ function Room2(){
 	}
 }
 
+//needs to be redone
 function EmptyGamestate(){
 	this.enemies = [];
 	this.items = [];
@@ -241,5 +242,21 @@ function EmptyGamestate(){
 		}
 		player.draw();
 		player.drawHUD();
+	};
+}
+
+function GameOver(){
+	
+	this.update = function(time){
+		
+	};
+	
+	this.draw = function(){
+		ctx.fillStyle = "#000000";
+		ctx.fillRect(0,0,can.width,can.height);
+		
+		ctx.fillStyle = "#FFFFFF";
+		ctx.font = "bold 100px Impact";
+		ctx.fillText("YOU HAVE DIED", 400 - (0.5 * ctx.measureText("YOU HAVE DIED").width), 350);
 	};
 }
