@@ -59,6 +59,7 @@
 		enemies: new Image(),
 		room1: new Image(),
 		room2: new Image(),
+		bodie: new Image(),
 	};
 	
 	var sounds = {
@@ -143,6 +144,7 @@
 		images.kim.onload = function(){ gamestate.loaded++; };
 		images.enemies.onload = function(){ gamestate.loaded++; };
 		images.room2.onload = function(){ gamestate.loaded++; };
+		images.bodie.onload = function(){ gamestate.loaded++; };
 		images.frame.src = "Images/Frame.png";
 		images.life.src = "Images/Life.png";
 		images.weapons.src = "Images/Weapons.png";
@@ -150,6 +152,7 @@
 		images.kim.src = "Images/Kim.png";
 		images.enemies.src = "Images/Enemies.png";
 		images.room2.src = "Images/Room2.png";
+		images.bodie.src = "Images/Bodie.png";
 		music.intro = new Howl({
 			onload: function(){ gamestate.loaded++; },
 			urls: ['Sounds/SadSong.wav'],
