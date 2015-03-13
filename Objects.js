@@ -269,6 +269,9 @@ function Slime(a,b){
 	this.attackDelay = 500;
 	this.moving = true; //when false, it is attacking
 	
+	this.frameNumber = 0;
+	this.frameTime = 200;
+	
 	this.update = function(time){
 		if(this.moving){
 			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
@@ -302,11 +305,28 @@ function Slime(a,b){
 				this.moving = true;
 			}
 		}
+		
+		this.frameTime -= time;
 	};
 	
 	this.draw = function(){
-		ctx.fillStyle = "#00FF00";
-		ctx.fillRect(this.x, this.y, this.w, this.h);
+		//ctx.fillStyle = "#00FF00";
+		//ctx.fillRect(this.x, this.y, this.w, this.h);
+		if(this.frameNumber >= 3 && this.frameTime <= 0 ){
+			this.frameNumber = 0;
+			this.frameTime += 200;
+		}
+		else if(this.frameTime <= 0 ){
+			this.frameNumber ++;
+			this.frameTime += 200;
+		}
+		
+		if(this.frameNumber == 0)
+			ctx.drawImage(images.enemies,0,30,20,20,this.x,this.y,this.w,this.h);
+		else if(this.frameNumber == 1 || this.frameNumber == 3)
+			ctx.drawImage(images.enemies,20,30,20,20,this.x,this.y,this.w,this.h);
+		else
+			ctx.drawImage(images.enemies,40,30,20,20,this.x,this.y,this.w,this.h);
 	};
 	
 	this.onDeath = function(){

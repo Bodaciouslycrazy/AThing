@@ -146,7 +146,7 @@ function MainRoom(){
 
 function Room2(){
 	this.enemies = [new Slime(200,100), new Slime(500,200)];
-	this.items = [ new Item(100, 500, new Armor()) ];
+	this.items = [];
 	this.walls = [
 		//new Box(-20,-10,20,620), //left wall
 		new Box(-10,-20,820,20), //top wall
@@ -155,14 +155,23 @@ function Room2(){
 		new Box(457,600,383,50), //bottom right wall
 		];
 	this.downDoor = new Box(375,610,100,20);
+	this.leftDoor = new Box(-20,-10,20,600);
 	
 	this.update = function(time){
+		
 		player.update(time);
+		
 		for(var i = 0; i < this.enemies.length; i ++){
 			this.enemies[i].update(time);
 		}
 		
 		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
 			if(collide(player,this.walls[i]))
 				adjust(player,this.walls[i]);
 		}
@@ -177,8 +186,6 @@ function Room2(){
 			}
 		}
 		
-		cleanUpBodies();
-		
 		if(collide(player,this.downDoor)){
 			//player.x = 0;
 			player.y = 20;
@@ -186,6 +193,13 @@ function Room2(){
 			
 			gamestate = gamestates.mainRoom;
 		}
+		else if(collide(player,this.leftDoor)){
+			player.x = 760;
+			clearDamageCounters();
+			gamestate = gamestates.leftPath;
+		}
+		
+		cleanUpBodies();
 	}
 	
 	this.draw = function(){
@@ -210,6 +224,69 @@ function Room2(){
 	}
 }
 
+function LeftPath(){
+	this.enemies = [new Slime(100,200), new Slime(100,400)];//add something else here
+	this.items = [];
+	this.walls = [
+		
+		];
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.eneimes.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		//collide with doors here.
+		
+		cleanUpBodies();
+	};
+	
+	this.draw = function(){
+		//ctx.drawImage(images.room2,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		sortEnemies(drw);
+		
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		player.drawHUD();
+	};
+}
+
 //needs to be redone
 function EmptyGamestate(){
 	this.enemies = [];
@@ -217,30 +294,63 @@ function EmptyGamestate(){
 	this.walls = [];
 	
 	this.update = function(time){
+		
 		player.update(time);
+		
 		for(var i = 0; i < this.enemies.length; i ++){
 			this.enemies[i].update(time);
 		}
 		
 		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.eneimes.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
 			if(collide(player,this.walls[i]))
 				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		if(collide(player,this.downDoor)){
+			//player.x = 0;
+			player.y = 20;
+			clearDamageCounters();
+			
+			gamestate = gamestates.mainRoom;
 		}
 		
 		cleanUpBodies();
 	};
 	
 	this.draw = function(){
+		ctx.drawImage(images.room2,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		sortEnemies(drw);
+		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
 		}
-		for(var i = 0; i < this.enemies.length; i++){
-			this.enemies[i].draw();
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
 		}
+		
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
 		}
-		player.draw();
+		
 		player.drawHUD();
 	};
 }
