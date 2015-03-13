@@ -65,6 +65,7 @@
 	
 	var sounds = {
 		puch: 0,
+		swing: 0,
 	};
 	var music = {
 		intro: 0,
@@ -161,6 +162,10 @@
 		sounds.punch = new Howl({
 			onload: function(){ gamestate.loaded++; },
 			urls: ["Sounds/Punch.wav"],
+			});
+		sounds.swing = new Howl({
+			onload: function(){ gamestate.loaded++; },
+			urls: ["Sounds/Swing.wav"],
 			});
 		
 		//This is to help with image smoothing (which looks like crap)

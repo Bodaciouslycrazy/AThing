@@ -390,14 +390,20 @@ function Textbook(){
 		b.x += Math.cos(ang) * this.distance;
 		b.y += Math.sin(ang) * this.distance;
 		
+		var hurt = false;
 		for(var j = 0; j < gamestate.enemies.length; j++){
 			if(collide(b,gamestate.enemies[j])){
 				hurtEnemy(gamestate.enemies[j] , this.damage, "normal");
+				hurt = true;
 			}
 		}
 		
+		if(hurt)
+			sounds.punch.play();
+		else
+			sounds.swing.play();
+		
 		this.waitTime = this.WAITTIME;
-		sounds.punch.play();
 	};
 	
 	this.canFire = function(){
