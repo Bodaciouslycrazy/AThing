@@ -60,8 +60,12 @@
 		enemies: new Image(),
 		room1: new Image(),
 		room2: new Image(),
+		bodie: new Image(),
 	};
 	
+	var sounds = {
+		puch: 0,
+	};
 	var music = {
 		intro: 0,
 	};
@@ -129,6 +133,10 @@
 			if(music.hasOwnProperty(k))
 				gamestate.need++;
 		}
+		for(var k in sounds){
+			if(sounds.hasOwnProperty(k))
+				gamestate.need++;
+		}
 		
 		images.frame.onload = function(){ gamestate.loaded++; };
 		images.life.onload = function(){ gamestate.loaded++; };
@@ -137,6 +145,7 @@
 		images.kim.onload = function(){ gamestate.loaded++; };
 		images.enemies.onload = function(){ gamestate.loaded++; };
 		images.room2.onload = function(){ gamestate.loaded++; };
+		images.bodie.onload = function(){ gamestate.loaded++; };
 		images.frame.src = "Images/Frame.png";
 		images.life.src = "Images/Life.png";
 		images.weapons.src = "Images/Weapons.png";
@@ -144,9 +153,14 @@
 		images.kim.src = "Images/Kim.png";
 		images.enemies.src = "Images/Enemies.png";
 		images.room2.src = "Images/Room2.png";
+		images.bodie.src = "Images/Bodie.png";
 		music.intro = new Howl({
 			onload: function(){ gamestate.loaded++; },
-			urls: ['SadSong.wav'],
+			urls: ['Sounds/SadSong.wav'],
+			});
+		sounds.punch = new Howl({
+			onload: function(){ gamestate.loaded++; },
+			urls: ["Sounds/Punch.wav"],
 			});
 		
 		//This is to help with image smoothing (which looks like crap)

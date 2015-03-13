@@ -54,23 +54,22 @@ function Player(){
 		
 		for(var i = 0; i < this.keys.arrows.length; i++ ){
 			
-			//when q is held, drop weapons
-		
-			if(this.keys.q.down && this.keys.arrows[i].pressed && this.weapons[i] != false){
-				gamestate.items.push(new Item(this.x + (this.w * 0.5) - 10, this.y + this.h - 10, this.weapons[i]) );
-				this.weapons[i].onDrop();
-				this.weapons[i] = false;
-			}
+			//when e is held, pick up or drop weapons
 			
-			//when e is held, pick up weapons
-			
-			else if(this.keys.e.down && this.keys.arrows[i].pressed){
-				for(var k = 0; k < gamestate.items.length; k++){
-					if(collide(player,gamestate.items[k]) && this.weapons[i] == false && gamestate.items[k].canPickUp ){
-						this.weapons[i] = gamestate.items[k].weapon;
-						this.weapons[i].onPickup();
-						gamestate.items.splice(k,1);
-						break;
+			if(this.keys.e.down && this.keys.arrows[i].pressed){
+				if(this.weapons[i] != false){
+					gamestate.items.push(new Item(this.x + (this.w * 0.5) - 10, this.y + this.h - 10, this.weapons[i]) );
+					this.weapons[i].onDrop();
+					this.weapons[i] = false;
+				}
+				else{
+					for(var k = 0; k < gamestate.items.length; k++){
+						if(collide(player,gamestate.items[k]) && this.weapons[i] == false && gamestate.items[k].canPickUp ){
+							this.weapons[i] = gamestate.items[k].weapon;
+							this.weapons[i].onPickup();
+							gamestate.items.splice(k,1);
+							break;
+						}
 					}
 				}
 			}
@@ -398,6 +397,7 @@ function Textbook(){
 		}
 		
 		this.waitTime = this.WAITTIME;
+		sounds.punch.play();
 	};
 	
 	this.canFire = function(){
@@ -431,8 +431,7 @@ function Oboe(){
 	};
 	
 	this.draw = function(x,y,w,h){
-		ctx.fillStyle = "#CC5500";
-		ctx.fillRect(x,y,w,h);
+		ctx.drawImage(images.weapons, 60,0,20,20,x,y,w,h);
 	};
 	
 	this.fire = function(px, py, ang){
@@ -472,8 +471,7 @@ function HealthPack(){
 	};
 	
 	this.draw = function(x,y,w,h){
-		ctx.fillStyle = "#00CC00";
-		ctx.fillRect(x,y,w,h);
+		ctx.drawImage(images.weapons,40,0,20,20,x,y,w,h);
 	};
 	
 }
@@ -524,8 +522,7 @@ function Armor(){
 	};
 	
 	this.draw = function(x,y,w,h){
-		ctx.fillStyle = "rgb(255,0,0)";
-		ctx.fillRect(x,y,w,h);
+		ctx.drawImage(images.weapons, 80,0,20,20,x,y,w,h);
 	};
 	
 	this.fire = function(){
@@ -587,9 +584,9 @@ function Bodie(a,b){
 	};
 	
 	this.draw = function(){
-		ctx.fillStyle = "#0000FF";
-		ctx.fillRect(this.x, this.y, this.w, this.h);
-		//ctx.drawImage(images.bodie, 0,0,30,50,this.x,this.y,this.w,this.h);
+		//ctx.fillStyle = "#0000FF";
+		//ctx.fillRect(this.x, this.y, this.w, this.h);
+		ctx.drawImage(images.bodie, 0,0,30,50,this.x,this.y,this.w,this.h);
 	};
 	
 	this.talk = function(){
@@ -607,7 +604,7 @@ function Bodie(a,b){
 			
 			if(hasPepper && collide(player, new Box(this.x - 20, this.y - 20, this.w + 40, this.h + 40) )){
 				ctx.font = "12px Impact";
-				ctx.fillText("Hold \"Q\" and press the arrow key to drop an item.", 400,400);
+				ctx.fillText("Hold \"E\" and press the arrow key to drop an item.", 400,400);
 			}
 			else if( !hasPepper ){
 				if(collide(gamestate.items[0],new Box(this.x - 40, this.y - 40, this.w + 80, this.h + 80) ) ){
