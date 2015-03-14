@@ -331,7 +331,7 @@ function Slime(a,b){
 	this.onDeath = function(){
 		var num = Math.random();
 		
-		if(num > 0.90){
+		if(num > 0.95){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Oboe() ) );
 		}
 		else if(num > 0.70){
@@ -343,10 +343,55 @@ function Slime(a,b){
 			};
 			gamestate.items.push( thing );
 		}
-		else if(num > 0.40){
+		else if(num > 0.55){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Textbook() ) );
 		}
 	};
+}
+
+function Saxaphone(a,b){//Needs to be finished
+	this.x = a;
+	this.y = b;
+	this.w = 20;
+	this.h = 30;
+	this.health = 10;
+	this.weaknesses = [];
+	this.angle = 0;
+	this.speed = 100;
+	this.weapon = //;
+	this.attackDelay = 300;
+	this.ATTACKDELAY = 300;
+	this.moving = true;
+	
+	this.update = function(time){
+		if(this.moving){
+			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
+			this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+			this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+			
+			var b = new Box( this.x + (this.w * 0.5) - (this.weapon.w * 0.5), this.y + (this.h * 0.5) - (this.weapon.h * 0.5) ,this.weapon.w, this.weapon.h);
+			b.x += Math.cos(this.angle) * this.weapon.distance;
+			b.y += Math.sin(this.angle) * this.weapon.distance;
+			
+			this.weapon.waitTime -= time;
+			if(this.weapon.waitTime < 0)
+				this.weapon.waitTime = 0;
+			
+			if(collide(player,b) && this.weapon.waitTime == 0){
+				this.moving = false;
+				this.attackDelay = this.ATTACKDELAY;
+			}
+		}
+	};
+	
+	this.draw = function(){
+		
+	};
+	
+	this.onDeath = function(){
+		
+	};
+	
 }
 
 //enemy weapons
@@ -358,6 +403,13 @@ function SlimeBall(){
 	this.damage = 1;
 	this.WAITTIME = 1000;
 	this.waitTime = 1000;
+}
+
+function SqueakeyReed(){
+	this.damamge = 3;
+	this.waitTime = 1000;
+	this.WAITTIME = 1000;
+	this.distance = 75;
 }
 
 //******************************
