@@ -61,6 +61,7 @@
 		room1: new Image(),
 		room2: new Image(),
 		bodie: new Image(),
+		leftPath: new Image(),
 	};
 	
 	var sounds = {
@@ -71,7 +72,20 @@
 		intro: 0,
 	};
 	
-	//gamestates
+	
+	
+	//TESTING VARS
+	
+	
+	
+	var drawBoxes = false;
+	
+	
+	
+	//FUNCTIONS
+	
+	
+	
 
 	function tick(time){
 		var deltaTime = time - lastTickTime;
@@ -147,6 +161,7 @@
 		images.enemies.onload = function(){ gamestate.loaded++; };
 		images.room2.onload = function(){ gamestate.loaded++; };
 		images.bodie.onload = function(){ gamestate.loaded++; };
+		images.leftPath.onload = function(){ gamestate.loaded++; };
 		images.frame.src = "Images/Frame.png";
 		images.life.src = "Images/Life.png";
 		images.weapons.src = "Images/Weapons.png";
@@ -155,6 +170,7 @@
 		images.enemies.src = "Images/Enemies.png";
 		images.room2.src = "Images/Room2.png";
 		images.bodie.src = "Images/Bodie.png";
+		images.leftPath.src = "Images/EndOfRoad.png";
 		music.intro = new Howl({
 			onload: function(){ gamestate.loaded++; },
 			urls: ['Sounds/SadSong.wav'],

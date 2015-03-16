@@ -149,7 +149,7 @@ function Room2(){
 	this.items = [];
 	this.walls = [
 		//new Box(-20,-10,20,620), //left wall
-		new Box(-10,-20,820,20), //top wall
+		new Box(-10,0,820,20), //top wall
 		//new Box(800,-10,20,620), //right wall
 		new Box(-10,600,385,50), //bottom left wall 
 		new Box(457,600,383,50), //bottom right wall
@@ -228,8 +228,11 @@ function LeftPath(){
 	this.enemies = [new Slime(100,200), new Slime(100,400)];//add something else here
 	this.items = [];
 	this.walls = [
-		
+		new Box(-10,0,820,20), //top wall
+		new Box(-10,600,820,20), //bottom wall
 		];
+	
+	this.rightDoor = new Box(800,0,20,600);
 	
 	this.update = function(time){
 		
@@ -241,7 +244,7 @@ function LeftPath(){
 		
 		for(var i = 0; i < this.walls.length; i++){
 			
-			for(var e = 0; e < this.eneimes.length; e++){
+			for(var e = 0; e < this.enemies.length; e++){
 				if(collide(this.enemies[e],this.walls[i]))
 					adjust(this.enemies[e],this.walls[i]);
 			}
@@ -261,12 +264,18 @@ function LeftPath(){
 		}
 		
 		//collide with doors here.
+		if(collide(player,this.rightDoor)){
+			player.x = 10;
+			clearDamageCounters();
+			
+			gamestate = gamestates.room2;
+		}
 		
 		cleanUpBodies();
 	};
 	
 	this.draw = function(){
-		//ctx.drawImage(images.room2,0,0,200,150,0,0,800,600);
+		ctx.drawImage(images.leftPath,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
 		sortEnemies(drw);

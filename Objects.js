@@ -30,6 +30,10 @@ function Player(){
 		],
 	};
 	
+	//variables used for animation
+	this.frame = 0;
+	this.frameTime = 1000;
+	
 	this.update = function(time){
 		var hz = 0;
 		var vt = 0;
@@ -47,6 +51,27 @@ function Player(){
 				this.angle = a;
 			this.x += Math.cos(a) * this.speed * time * .001;
 			this.y += Math.sin(a) * this.speed * time * .001;
+			
+			//below is stuff for animations.
+			
+			if(this.frame == 0){
+				this.frame = 1;
+				this.frameTime = 500;
+			}
+			
+			this.frameTime -= time;
+			
+			if(this.frameTime <= 0 && this.frame == 1){
+				this.frame = 2;
+				this.frameTime += 500;
+			}
+			else if(this.frameTime <= 0){
+				this.frame = 1;
+				this.frameTime += 500;
+			}
+		}
+		else{
+			this.frame = 0;
 		}
 		
 		
@@ -92,22 +117,24 @@ function Player(){
 	
 	this.draw = function(){
 		
+		var ypix = this.frame * 50;
+		
 		if(this.angle == Math.PI / 2.0)
-			ctx.drawImage(images.kim,0,0,30,50,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.kim,0,ypix,30,50,this.x,this.y,this.w,this.h);
 		else if(this.angle == ( 3 * Math.PI) / 4.0)
-			ctx.drawImage(images.kim,30,0,30,50,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.kim,30,ypix,30,50,this.x,this.y,this.w,this.h);
 		else if(this.angle == Math.PI || this.angle == -Math.PI)
-			ctx.drawImage(images.kim,60,0,30,50,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.kim,60,ypix,30,50,this.x,this.y,this.w,this.h);
 		else if(this.angle == (-3 * Math.PI )/ 4.0 )
-			ctx.drawImage(images.kim,90,0,30,50,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.kim,90,ypix,30,50,this.x,this.y,this.w,this.h);
 		else if(this.angle == -Math.PI / 2.0)
-			ctx.drawImage(images.kim,120,0,30,50,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.kim,120,ypix,30,50,this.x,this.y,this.w,this.h);
 		else if(this.angle == -Math.PI / 4.0)
-			ctx.drawImage(images.kim,150,0,30,50,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.kim,150,ypix,30,50,this.x,this.y,this.w,this.h);
 		else if(this.angle == 0)
-			ctx.drawImage(images.kim,180,0,30,50,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.kim,180,ypix,30,50,this.x,this.y,this.w,this.h);
 		else if(this.angle == Math.PI / 4.0)
-			ctx.drawImage(images.kim,210,0,30,50,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.kim,210,ypix,30,50,this.x,this.y,this.w,this.h);
 		else
 			ctx.fillRect(this.x,this.y,this.w,this.h);
 	}
@@ -703,9 +730,11 @@ function Box(a,b,c,d){
 	};
 	
 	this.draw = function(){
-		//ctx.fillStyle = "#000000";
-		//ctx.rect(this.x, this.y, this.w, this.h);
-		//ctx.stroke();
+		if(drawBoxes){//this if statement is for testing purposes.
+			ctx.fillStyle = "#000000";
+			ctx.rect(this.x, this.y, this.w, this.h);
+			ctx.stroke();
+		}
 	}
 }
 
