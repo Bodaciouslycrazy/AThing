@@ -49,6 +49,7 @@
 	var player;
 	
 	var damageCounters = [];
+	var effects = [];
 	
 	var keys = [];
 	
@@ -62,6 +63,7 @@
 		room2: new Image(),
 		bodie: new Image(),
 		leftPath: new Image(),
+		effects: new Image(),
 	};
 	
 	var sounds = {
@@ -94,16 +96,20 @@
 		ctx.clearRect(0,0,can.width,can.height);
 		ctx.beginPath();//from what I know, this doesn't change anything, but clears all of the ctx.draw memory, keeping the process speed fast.
 		gamestate.draw();
+		drawEffects();
 		drawDamageCounters();
 		
 		accumulate += deltaTime;
 		
+		var allIntervals = 0;
 		while(accumulate >= UPDATEINTERVAL){
 			gamestate.update(UPDATEINTERVAL);
 			accumulate -= UPDATEINTERVAL;
 			updateAllKeys();
-			updateDamageCounters(UPDATEINTERVAL);
+			allIntervals += UPDATEINTERVAL;
 		}
+		updateEffects(allIntervals);
+		updateDamageCounters(allIntervals);
 		
 		lastTickTime = time;
 		window.requestAnimationFrame(tick);
@@ -162,6 +168,7 @@
 		images.room2.onload = function(){ gamestate.loaded++; };
 		images.bodie.onload = function(){ gamestate.loaded++; };
 		images.leftPath.onload = function(){ gamestate.loaded++; };
+		images.effects.onload = function(){ gamestate.loaded++; };
 		images.frame.src = "Images/Frame.png";
 		images.life.src = "Images/Life.png";
 		images.weapons.src = "Images/Weapons.png";
@@ -171,6 +178,7 @@
 		images.room2.src = "Images/Room2.png";
 		images.bodie.src = "Images/Bodie.png";
 		images.leftPath.src = "Images/EndOfRoad.png";
+		images.effects.src = "Images/Swipe.png";
 		music.intro = new Howl({
 			onload: function(){ gamestate.loaded++; },
 			urls: ['Sounds/SadSong.wav'],

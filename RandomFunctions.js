@@ -83,9 +83,30 @@ function updateDamageCounters(time){
 	}
 }
 
+function updateEffects(time){
+	for(var i = 0; i < effects.length; i++){
+		effects[i].update(time);
+		
+		if(effects[i].timeLeft <= 0){
+			effects.splice(i,1);
+			i--;
+		}
+	}
+}
+
 function drawDamageCounters(){
+	sortDamageCounters(damageCounters);
+	
 	for(var i = 0; i < damageCounters.length; i++){
 		damageCounters[i].draw();
+	}
+}
+
+function drawEffects(){
+	sortEnemies(effects);
+	
+	for( var i = 0; i < effects.length; i++){
+		effects[i].draw();
 	}
 }
 
@@ -106,9 +127,17 @@ function hurtEnemy(en,dam,type){
 	new DamageCounter(en.x + ( en.w / 2.0 ),en.y + ( en.h / 2.0 ),dam, c);
 }
 
+
+//can also be used with effects
 function sortEnemies(en){
 	en.sort(function(a,b){
 		return (a.y + a.h) - (b.y + b.h);
+	});
+}
+
+function sortDamageCounters(dc){
+	dc.sort( function(a , b){
+		return a.y - b.y;
 	});
 }
 

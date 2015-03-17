@@ -32,7 +32,7 @@ function Player(){
 	
 	//variables used for animation
 	this.frame = 0;
-	this.frameTime = 1000;
+	this.frameTime = 500;
 	
 	this.update = function(time){
 		var hz = 0;
@@ -56,18 +56,18 @@ function Player(){
 			
 			if(this.frame == 0){
 				this.frame = 1;
-				this.frameTime = 500;
+				this.frameTime = 300;
 			}
 			
 			this.frameTime -= time;
 			
 			if(this.frameTime <= 0 && this.frame == 1){
 				this.frame = 2;
-				this.frameTime += 500;
+				this.frameTime += 300;
 			}
 			else if(this.frameTime <= 0){
 				this.frame = 1;
-				this.frameTime += 500;
+				this.frameTime += 300;
 			}
 		}
 		else{
@@ -482,6 +482,8 @@ function Textbook(){
 		else
 			sounds.swing.play();
 		
+		new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, ang);
+		
 		this.waitTime = this.WAITTIME;
 	};
 	
@@ -530,6 +532,8 @@ function Oboe(){
 			}
 		}
 		
+		new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, ang);
+		
 		this.waitTime = this.WAITTIME;
 	};
 	
@@ -554,8 +558,8 @@ function Bow(){
 	this.h = 10;
 	this.distance = 5;
 	this.damage = 5;
-	this.WAITTIME = 1000;
-	this.waitTime = 1000;
+	this.WAITTIME = 1500;
+	this.waitTime = 1500;
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -834,6 +838,36 @@ function DamageCounter(a, b, c, d){
 	};
 	
 	damageCounters.push(this);
+}
+
+function Effect(im, cx, cy, cw, ch, a, b, c, d, ang){
+	this.x = a;
+	this.y = b;
+	this.w = c;
+	this.h = d;
+	this.angle = ang;
+	
+	this.image = im;
+	this.cropX = cx;
+	this.cropY = cy;
+	this.cropW = cw;
+	this.cropH = ch;
+	
+	this.timeLeft = 100;
+	
+	this.update = function(time){
+		this.timeLeft -= time;
+	}
+	
+	this.draw = function(){
+		ctx.save();
+		ctx.translate( this.x + (this.w / 2.0), this.y + (this.h / 2.0) );
+		ctx.rotate(this.angle);
+		ctx.drawImage(this.image, this.cropX, this.cropY, this.cropW, this.cropH, -this.w * 0.5, -this.h * 0.5, this.w, this.h);
+		ctx.restore();
+	}
+	
+	effects.push(this);
 }
 
 function Key(kc){
