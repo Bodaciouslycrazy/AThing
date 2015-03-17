@@ -549,6 +549,78 @@ function Oboe(){
 	};
 }
 
+function Bow(){
+	this.w = 10;
+	this.h = 10;
+	this.distance = 5;
+	this.damage = 5;
+	this.WAITTIME = 1000;
+	this.waitTime = 1000;
+	
+	this.update = function(time){
+		this.waitTime -= time;
+		if(this.waitTime < 0)
+			this.waitTime = 0;
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.fillStyle = "#ff0000";
+		ctx.fillRect(x,y,w,h);
+	};
+	
+	this.fire = function(px, py, ang){
+		var path = [];
+		var xs = px - (this.w * 0.5);
+		var ys = py - (this.h * 0.5);
+		
+		var times = 0;
+		do{
+			times++;
+			path.push(new Box(xs,ys,this.w, this.h) );
+			xs += Math.cos(ang) * this.distance;
+			ys += Math.sin(ang) * this.distance;
+		}while( stillInBounds(new Box(xs,ys, this.w, this.h)) && times < 300);
+		
+		var ens = new Array(gamestate.enemies.length);
+		for(var i = 0; i < ens.length; i++){
+			ens[i] = false;
+		}
+		
+		for(var i = 0; i < gamestate.enemies.length; i++){
+			for(var j = 0; j < path.length; j++){
+				
+				if(collide(gamestate.enemies[i],path[j])){
+					ens[i] = true;
+					break;
+				}
+				
+			}
+		}
+		
+		for(var i = 0; i < ens.length; i++){
+			if(ens[i]){
+				hurtEnemy(gamestate.enemies[i], this.damage, "ren");
+			}
+		}
+	};
+	
+	this.canFire = function(){
+		if(this.waitTime == 0){
+			return true;
+		}
+		
+		return false;
+	};
+	
+	this.onPickup = function(){
+		
+	};
+	
+	this.onDrop = function(){
+		
+	};
+}
+
 function HealthPack(){
 	
 	this.update = function(time){

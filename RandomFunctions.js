@@ -111,3 +111,15 @@ function sortEnemies(en){
 		return (a.y + a.h) - (b.y + b.h);
 	});
 }
+
+function stillInBounds(box){
+	if( !collide(box, new Box(0,0,can.width,can.height) ) )
+		return false;
+	
+	for(var i = 0; i < gamestate.walls.length; i++){
+		if(collide(box,gamestate.walls[i]) )
+			return false;
+	}
+	
+	return true;
+}
