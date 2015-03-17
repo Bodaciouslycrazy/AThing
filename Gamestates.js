@@ -74,7 +74,7 @@ function Intro(){
 
 function MainRoom(){
 	this.enemies = [new TutorialDoor(366,40)];
-	this.items = [new Item(400,300, new DrPepper())];
+	this.items = [new Item(400,300, new DrPepper()), new Item(100, 100, new Bow() )];
 	this.walls = [
 		new Box(-10,-10,22,620), //left wall
 		new Box(-10,-10,385,50), //up left wall 

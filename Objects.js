@@ -581,6 +581,7 @@ function Bow(){
 		do{
 			times++;
 			path.push(new Box(xs,ys,this.w, this.h) );
+			new Effect(images.effects, 50, 0, 10, 10, xs, ys, this.w, this.h, ang);
 			xs += Math.cos(ang) * this.distance;
 			ys += Math.sin(ang) * this.distance;
 		}while( stillInBounds(new Box(xs,ys, this.w, this.h)) && times < 300);
@@ -606,6 +607,8 @@ function Bow(){
 				hurtEnemy(gamestate.enemies[i], this.damage, "ren");
 			}
 		}
+		
+		this.waitTime += this.WAITTIME;
 	};
 	
 	this.canFire = function(){
