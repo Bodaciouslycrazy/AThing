@@ -556,7 +556,7 @@ function Oboe(){
 function Bow(){
 	this.w = 10;
 	this.h = 10;
-	this.distance = 5;
+	this.distance = 10;
 	this.damage = 5;
 	this.WAITTIME = 1500;
 	this.waitTime = 1500;
@@ -577,14 +577,17 @@ function Bow(){
 		var xs = px - (this.w * 0.5);
 		var ys = py - (this.h * 0.5);
 		
-		var times = 0;
+		var timeToAdd = 0;
 		do{
-			times++;
 			path.push(new Box(xs,ys,this.w, this.h) );
-			new Effect(images.effects, 50, 0, 10, 10, xs, ys, this.w, this.h, ang);
+			
+			var eff = new Effect(images.effects, 50, 0, 10, 10, xs, ys, this.w, this.h, ang);
+			eff.timeLeft += timeToAdd;
+			timeToAdd += 20;
+			
 			xs += Math.cos(ang) * this.distance;
 			ys += Math.sin(ang) * this.distance;
-		}while( stillInBounds(new Box(xs,ys, this.w, this.h)) && times < 300);
+		}while( stillInBounds(new Box(xs,ys, this.w, this.h)) );
 		
 		var ens = new Array(gamestate.enemies.length);
 		for(var i = 0; i < ens.length; i++){

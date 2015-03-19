@@ -4,11 +4,11 @@ function LoadingGamestate(){
 	
 	this.update = function(time){
 		if(this.loaded == this.need){
-			//music.intro.play();
-			//gamestate = gamestates.intro;
+			music.intro.play();
+			gamestate = gamestates.intro;
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			gamestate = gamestates.mainRoom;
+			//gamestate = gamestates.mainRoom;
 		}
 	}
 	
@@ -21,6 +21,10 @@ function LoadingGamestate(){
 		ctx.fillRect(0,500,800 * (this.loaded / this.need),100);
 	}
 }
+
+
+
+
 
 function Intro(){
 	this.timeIn = 0;
@@ -72,9 +76,13 @@ function Intro(){
 	};
 }
 
+
+
+
+
 function MainRoom(){
 	this.enemies = [new TutorialDoor(366,40)];
-	this.items = [new Item(400,300, new DrPepper()), new Item(100, 100, new Bow() )];
+	this.items = [new Item(400,300, new DrPepper())];
 	this.walls = [
 		new Box(-10,-10,22,620), //left wall
 		new Box(-10,-10,385,50), //up left wall 
@@ -113,7 +121,7 @@ function MainRoom(){
 		if(collide(player,this.door)){
 			//player.x = 400;
 			player.y = 530;
-			clearDamageCounters();
+			clearScreen();
 			
 			gamestate = gamestates.room2;
 		}
@@ -144,9 +152,13 @@ function MainRoom(){
 	}
 }
 
+
+
+
+
 function Room2(){
 	this.enemies = [new Slime(200,100), new Slime(500,200)];
-	this.items = [];
+	this.items = [new Item(100, 100, new Bow() )];
 	this.walls = [
 		//new Box(-20,-10,20,620), //left wall
 		new Box(-10,0,820,20), //top wall
@@ -156,6 +168,7 @@ function Room2(){
 		];
 	this.downDoor = new Box(375,610,100,20);
 	this.leftDoor = new Box(-20,-10,20,600);
+	this.rightDoor = new Box(800,-10,20,600);
 	
 	this.update = function(time){
 		
@@ -189,14 +202,21 @@ function Room2(){
 		if(collide(player,this.downDoor)){
 			//player.x = 0;
 			player.y = 20;
-			clearDamageCounters();
+			clearScreen();
 			
 			gamestate = gamestates.mainRoom;
 		}
 		else if(collide(player,this.leftDoor)){
 			player.x = 760;
-			clearDamageCounters();
+			clearScreen();
+			
 			gamestate = gamestates.leftPath;
+		}
+		else if( collide( player, this.rightDoor)){
+			player.x = 10;
+			clearScreen();
+			
+			gamestate = gamestates.rightPath;
 		}
 		
 		cleanUpBodies();
@@ -223,6 +243,10 @@ function Room2(){
 		player.drawHUD();
 	}
 }
+
+
+
+
 
 function LeftPath(){
 	this.enemies = [new Slime(100,200), new Slime(100,400)];//add something else here
@@ -266,7 +290,7 @@ function LeftPath(){
 		//collide with doors here.
 		if(collide(player,this.rightDoor)){
 			player.x = 10;
-			clearDamageCounters();
+			clearScreen();
 			
 			gamestate = gamestates.room2;
 		}
@@ -296,10 +320,19 @@ function LeftPath(){
 	};
 }
 
+
+
+
+
 function RightPath(){
 	this.enemies = [];
 	this.items = [];
-	this.walls = [];
+	this.walls = [
+		new Box(0,0,292,20), //top left wall
+		new Box(508,0,292,20), //top right wall
+		new Box(-10,600,820,20), //bottom wall
+		];
+	this.leftDoor = new Box(-20,-10,20,620);
 	
 	this.update = function(time){
 		
@@ -311,7 +344,7 @@ function RightPath(){
 		
 		for(var i = 0; i < this.walls.length; i++){
 			
-			for(var e = 0; e < this.eneimes.length; e++){
+			for(var e = 0; e < this.enemies.length; e++){
 				if(collide(this.enemies[e],this.walls[i]))
 					adjust(this.enemies[e],this.walls[i]);
 			}
@@ -331,12 +364,18 @@ function RightPath(){
 		}
 		
 		//doors
+		if( collide( player, this.leftDoor)){
+			player.x = 760;
+			clearScreen();
+			
+			gamestate = gamestates.room2;
+		}
 		
 		cleanUpBodies();
 	};
 	
 	this.draw = function(){
-		ctx.drawImage(images.room2,0,0,200,150,0,0,800,600);
+		ctx.drawImage(images.rightPath,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
 		sortEnemies(drw);
@@ -357,6 +396,10 @@ function RightPath(){
 	};
 }
 
+
+
+
+
 //needs to be redone
 function EmptyGamestate(){
 	this.enemies = [];
@@ -373,7 +416,7 @@ function EmptyGamestate(){
 		
 		for(var i = 0; i < this.walls.length; i++){
 			
-			for(var e = 0; e < this.eneimes.length; e++){
+			for(var e = 0; e < this.enemies.length; e++){
 				if(collide(this.enemies[e],this.walls[i]))
 					adjust(this.enemies[e],this.walls[i]);
 			}
@@ -404,7 +447,7 @@ function EmptyGamestate(){
 	};
 	
 	this.draw = function(){
-		ctx.drawImage(images.room2,0,0,200,150,0,0,800,600);
+		//ctx.drawImage( ,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
 		sortEnemies(drw);
@@ -424,6 +467,10 @@ function EmptyGamestate(){
 		player.drawHUD();
 	};
 }
+
+
+
+
 
 function GameOver(){
 	

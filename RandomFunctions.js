@@ -73,22 +73,13 @@ function cleanUpBodies(){
 		gamestate = gamestates.gameOver;
 }
 
+//damage Counter Stuff
+
 function updateDamageCounters(time){
 	for(var i = 0; i < damageCounters.length; i++){
 		damageCounters[i].update(time);
 		if(damageCounters[i].timeLeft <= 0){
 			damageCounters.splice(i,1);
-			i--;
-		}
-	}
-}
-
-function updateEffects(time){
-	for(var i = 0; i < effects.length; i++){
-		effects[i].update(time);
-		
-		if(effects[i].timeLeft <= 0){
-			effects.splice(i,1);
 			i--;
 		}
 	}
@@ -102,6 +93,23 @@ function drawDamageCounters(){
 	}
 }
 
+function clearDamageCounters(){
+	damageCounters.splice(0,damageCounters.length);
+}
+
+//Effects stuff
+
+function updateEffects(time){
+	for(var i = 0; i < effects.length; i++){
+		effects[i].update(time);
+		
+		if(effects[i].timeLeft <= 0){
+			effects.splice(i,1);
+			i--;
+		}
+	}
+}
+
 function drawEffects(){
 	sortEnemies(effects);
 	
@@ -110,9 +118,18 @@ function drawEffects(){
 	}
 }
 
-function clearDamageCounters(){
-	damageCounters.splice(0,damageCounters.length);
+function clearEffects(){
+	effects.splice(0,effects.length);
 }
+
+//others
+
+function clearScreen(){
+	clearDamageCounters();
+	clearEffects();
+}
+
+
 
 function hurtEnemy(en,dam,type){
 	var c = "#FF0000";
