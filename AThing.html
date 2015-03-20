@@ -71,6 +71,10 @@
 	var sounds = {
 		punch: 0,
 		swing: 0,
+		slimeJump: 0,
+		slimeDeath: 0,
+		saxHit: 0,
+		saxDeath: 0,
 	};
 	var music = {
 		intro: 0,
@@ -194,6 +198,22 @@
 		sounds.swing = new Howl({
 			onload: function(){ gamestate.loaded++; },
 			urls: ["Sounds/Swing.wav"],
+			});
+		sounds.slimeJump = new Howl({
+			onload: function(){ gamestate.loaded++; },
+			urls: ["Sounds/SlimeJump.wav"],
+			});
+		sounds.slimeDeath = new Howl({
+			onload: function(){ gamestate.loaded++; },
+			urls: ["Sounds/SlimeDeath.wav"],
+			});
+		sounds.saxHit = new Howl({
+			onload: function(){ gamestate.loaded++; },
+			urls: ["Sounds/SaxHit.wav"],
+			});
+		sounds.saxDeath = new Howl({
+			onload: function(){ gamestate.loaded++; },
+			urls: ["Sounds/SaxDeath.wav"],
 			});
 		
 		//This is to help with image smoothing (which looks like crap)

@@ -295,6 +295,7 @@ function Slime(a,b){
 	this.attackDelay = 500;
 	this.moving = true; //when false, it is attacking
 	
+	this.firstFrame = true;
 	this.frameNumber = 0;
 	this.frameTime = 200;
 	
@@ -316,14 +317,26 @@ function Slime(a,b){
 				this.moving = false;
 				this.attackDelay = this.ATTACKDELAY;
 			}
+			
+			this.frameTime -= time;
+			if(this.firstFrame == false && this.frameNumber == 0){
+				sounds.slimeJump.play();
+				this.firstFrame = true;
+			}
+			
+			if(this.frameNumber != 0)
+				this.firstFrame = false;
 		}
 		else{
 			this.attackDelay -= time;
+			
+			this.frameNumber = 0;
 			if(this.attackDelay <= 0){
 				var b = new Box( this.x + (this.w * 0.5) - (this.weapon.w * 0.5), this.y + (this.h * 0.5) - (this.weapon.h * 0.5) ,this.weapon.w, this.weapon.h);
 				b.x += Math.cos(this.angle) * this.weapon.distance;
 				b.y += Math.sin(this.angle) * this.weapon.distance;
 				
+				sounds.swing.play();
 				new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, this.angle);
 				
 				if(collide(player,b))
@@ -334,7 +347,7 @@ function Slime(a,b){
 			}
 		}
 		
-		this.frameTime -= time;
+		//this.frameTime -= time;
 	};
 	
 	this.draw = function(){
@@ -375,6 +388,8 @@ function Slime(a,b){
 		else if(num > 0.55){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Textbook() ) );
 		}
+		
+		sounds.slimeDeath.play();
 	};
 }
 
@@ -383,7 +398,7 @@ function Saxaphone(a,b){//Needs to be finished
 	this.y = b;
 	this.w = 20;
 	this.h = 30;
-	this.health = 10;
+	this.health = 8;
 	this.weaknesses = [];
 	this.angle = 0;
 	this.speed = 70;
@@ -413,6 +428,8 @@ function Saxaphone(a,b){//Needs to be finished
 				this.moving = false;
 				this.attackDelay = this.ATTACKDELAY;
 			}
+			
+			this.frameTime -= time;
 		}
 		else{
 			this.attackDelay -= time;
@@ -421,6 +438,7 @@ function Saxaphone(a,b){//Needs to be finished
 				b.x += Math.cos(this.angle) * this.weapon.distance;
 				b.y += Math.sin(this.angle) * this.weapon.distance;
 				
+				sounds.saxHit.play();
 				new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, this.angle);
 				
 				if(collide(player,b))
@@ -430,8 +448,6 @@ function Saxaphone(a,b){//Needs to be finished
 				this.moving = true;
 			}
 		}
-		
-		this.frameTime -= time;
 	};
 	
 	this.draw = function(){
@@ -444,7 +460,7 @@ function Saxaphone(a,b){//Needs to be finished
 			this.frame = 1;
 		}
 		
-		var cropX = 0;
+		var cropX = 60;
 		var cropY = 50;
 		
 		if(this.frame == 1)
@@ -461,7 +477,9 @@ function Saxaphone(a,b){//Needs to be finished
 	};
 	
 	this.onDeath = function(){
+		sounds.saxDeath.play();
 		
+		gamestate.items.push( new Item(this.x + (this.w / 2.0) - 10, this.y + (this.h / 2.0) - 10, new Oboe() ) );
 	};
 	
 }
@@ -478,12 +496,12 @@ function SlimeBall(){
 }
 
 function SqueakeyReed(){
-	this.w = 50;
-	this.h = 50;
+	this.w = 70;
+	this.h = 70;
 	this.damage = 4;
 	this.waitTime = 1000;
 	this.WAITTIME = 1000;
-	this.distance = 20;
+	this.distance = 40;
 }
 
 //******************************
