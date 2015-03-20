@@ -324,6 +324,8 @@ function Slime(a,b){
 				b.x += Math.cos(this.angle) * this.weapon.distance;
 				b.y += Math.sin(this.angle) * this.weapon.distance;
 				
+				new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, this.angle);
+				
 				if(collide(player,b))
 					player.hurt(this.weapon.damage, "slime");
 				
@@ -384,11 +386,14 @@ function Saxaphone(a,b){//Needs to be finished
 	this.health = 10;
 	this.weaknesses = [];
 	this.angle = 0;
-	this.speed = 100;
-	this.weapon = //;
-	this.attackDelay = 300;
-	this.ATTACKDELAY = 300;
+	this.speed = 70;
+	this.weapon = new SqueakeyReed();
+	this.attackDelay = 1000;
+	this.ATTACKDELAY = 1000;
 	this.moving = true;
+	
+	this.frameNumber = 0;
+	this.frameTime = 200;
 	
 	this.update = function(time){
 		if(this.moving){
@@ -409,10 +414,50 @@ function Saxaphone(a,b){//Needs to be finished
 				this.attackDelay = this.ATTACKDELAY;
 			}
 		}
+		else{
+			this.attackDelay -= time;
+			if(this.attackDelay <= 0){
+				var b = new Box( this.x + (this.w * 0.5) - (this.weapon.w * 0.5), this.y + (this.h * 0.5) - (this.weapon.h * 0.5) ,this.weapon.w, this.weapon.h);
+				b.x += Math.cos(this.angle) * this.weapon.distance;
+				b.y += Math.sin(this.angle) * this.weapon.distance;
+				
+				new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, this.angle);
+				
+				if(collide(player,b))
+					player.hurt(this.weapon.damage, "normal");
+				
+				this.weapon.waitTime = this.weapon.WAITTIME;
+				this.moving = true;
+			}
+		}
+		
+		this.frameTime -= time;
 	};
 	
 	this.draw = function(){
+		if(this.frameTime <= 0 && this.frame == 1){
+			this.frameTime += 200;
+			this.frame = 0;
+		}
+		else if(this.frameTime <= 0){
+			this.frameTime += 200;
+			this.frame = 1;
+		}
 		
+		var cropX = 0;
+		var cropY = 50;
+		
+		if(this.frame == 1)
+			cropY += 30;
+		
+		if(this.angle < (-Math.PI / 4 ) && this.angle >= ( (-Math.PI * 3) / 4 ) ) //facing up
+			cropX = 40;
+		else if(this.angle > (Math.PI / 4) && this.angle <= ( ( Math.PI * 3) / 4) ) //facing down
+			cropX = 0;
+		else if(this.angle < ( (-Math.PI * 3) / 4 ) || this.angle > ( (Math.PI * 3) / 4 ) ) //facing left
+			cropX = 20;
+			
+		ctx.drawImage(images.enemies, cropX, cropY, 20,30, this.x, this.y, this.w, this.h);
 	};
 	
 	this.onDeath = function(){
@@ -433,10 +478,12 @@ function SlimeBall(){
 }
 
 function SqueakeyReed(){
-	this.damamge = 3;
+	this.w = 50;
+	this.h = 50;
+	this.damage = 4;
 	this.waitTime = 1000;
 	this.WAITTIME = 1000;
-	this.distance = 75;
+	this.distance = 20;
 }
 
 //******************************

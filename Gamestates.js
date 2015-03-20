@@ -4,11 +4,11 @@ function LoadingGamestate(){
 	
 	this.update = function(time){
 		if(this.loaded == this.need){
-			music.intro.play();
-			gamestate = gamestates.intro;
+			//music.intro.play();
+			//gamestate = gamestates.intro;
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			//gamestate = gamestates.mainRoom;
+			gamestate = gamestates.mainRoom;
 		}
 	}
 	
@@ -249,7 +249,7 @@ function Room2(){
 
 
 function LeftPath(){
-	this.enemies = [new Slime(100,200), new Slime(100,400)];//add something else here
+	this.enemies = [new Slime(100,200), new Slime(100,400), new Saxaphone(100,300)];//add something else here
 	this.items = [];
 	this.walls = [
 		new Box(-10,0,820,20), //top wall
