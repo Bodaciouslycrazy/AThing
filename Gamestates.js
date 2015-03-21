@@ -4,11 +4,11 @@ function LoadingGamestate(){
 	
 	this.update = function(time){
 		if(this.loaded == this.need){
-			//music.intro.play();
-			//gamestate = gamestates.intro;
+			playMusic(music.intro);
+			gamestate = gamestates.intro;
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			gamestate = gamestates.mainRoom;
+			//gamestate = gamestates.mainRoom;
 		}
 	}
 	
@@ -31,8 +31,10 @@ function Intro(){
 	
 	this.update = function(time){
 		this.timeIn += time;
-		if(this.timeIn > 23000)
+		if(this.timeIn > 23000){
+			playMusic(music.leander);
 			gamestate = gamestates.mainRoom;
+		}
 	};
 	
 	this.draw = function(){
