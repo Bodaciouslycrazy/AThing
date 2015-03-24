@@ -38,16 +38,6 @@
 	var UPDATEINTERVAL = 1000 / 60;
 	var accumulate = 0;
 	
-	var gamestate;
-	var gamestates = {
-		intro: new Intro(),
-		mainRoom: new MainRoom(),
-		room2: new Room2(),
-		gameOver: new GameOver(),
-		leftPath: new LeftPath(),
-		rightPath: new RightPath(),
-	};
-	
 	var player;
 	
 	var damageCounters = [];
@@ -60,7 +50,7 @@
 	
 	
 	
-	var drawBoxes = false;
+	var drawBoxes = true;
 	
 	
 	

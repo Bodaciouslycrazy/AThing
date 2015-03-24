@@ -251,7 +251,6 @@ function Player(){
 		this.health -= num;
 		if(this.health <= 0){
 			this.health = 0;
-			//gamestate = gamestates.gameOver;
 		}
 		
 		new DamageCounter(this.x + (this.w / 2.0),this.y + (this.h / 2.0), num, c);

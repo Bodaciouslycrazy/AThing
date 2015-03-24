@@ -10,6 +10,7 @@ var images = {
 		leftPath: new Image(),
 		effects: new Image(),
 		rightPath: new Image(),
+		forest: new Image(),
 	};
 	
 	var sounds = {
@@ -56,6 +57,7 @@ function loadSoundsAndImages(){
 	images.leftPath.onload = function(){ gamestate.loaded++; };
 	images.effects.onload = function(){ gamestate.loaded++; };
 	images.rightPath.onload = function(){ gamestate.loaded++; };
+	images.forest.onload = function(){ gamestate.loaded++; };
 	images.frame.src = "Images/Frame.png";
 	images.life.src = "Images/Life.png";
 	images.weapons.src = "Images/Weapons.png";
@@ -64,9 +66,10 @@ function loadSoundsAndImages(){
 	images.enemies.src = "Images/Enemies.png";
 	images.room2.src = "Images/Room2.png";
 	images.bodie.src = "Images/Bodie.png";
-	images.leftPath.src = "Images/EndOfRoad.png";
+	images.leftPath.src = "Images/LeftPath.png";
 	images.effects.src = "Images/Swipe.png";
 	images.rightPath.src = "Images/RightPath.png";
+	images.forest.src = "Images/Forest.png";
 	music.intro = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ['Sounds/SadSong.wav'],

@@ -69,8 +69,10 @@ function cleanUpBodies(){
 		}
 	}
 	
-	if(player.health <= 0)
+	if(player.health <= 0){
+		clearScreen();
 		gamestate = gamestates.gameOver;
+	}
 }
 
 //damage Counter Stuff

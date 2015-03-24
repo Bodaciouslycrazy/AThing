@@ -1,14 +1,38 @@
+var gamestate;
+var gamestates = {
+	intro: new Intro(),
+	mainRoom: new MainRoom(),
+	room2: new Room2(),
+	gameOver: new GameOver(),
+	leftPath: new LeftPath(),
+	rightPath: new RightPath(),
+	forest: new Forest(),
+};
+
+
+
+/*
+██╗      ██████╗  █████╗ ██████╗ ██╗███╗   ██╗ ██████╗ 
+██║     ██╔═══██╗██╔══██╗██╔══██╗██║████╗  ██║██╔════╝ 
+██║     ██║   ██║███████║██║  ██║██║██╔██╗ ██║██║  ███╗
+██║     ██║   ██║██╔══██║██║  ██║██║██║╚██╗██║██║   ██║
+███████╗╚██████╔╝██║  ██║██████╔╝██║██║ ╚████║╚██████╔╝
+╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝ 
+*/
+
+
+
 function LoadingGamestate(){
 	this.loaded = 0;
 	this.need = 0;
 	
 	this.update = function(time){
 		if(this.loaded == this.need){
-			playMusic(music.intro);
-			gamestate = gamestates.intro;
+			//playMusic(music.intro);
+			//gamestate = gamestates.intro;
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			//gamestate = gamestates.mainRoom;
+			gamestate = gamestates.leftPath;
 		}
 	}
 	
@@ -79,6 +103,15 @@ function Intro(){
 }
 
 
+
+/*
+███╗   ███╗ █████╗ ██╗███╗   ██╗    ██████╗  ██████╗  ██████╗ ███╗   ███╗
+████╗ ████║██╔══██╗██║████╗  ██║    ██╔══██╗██╔═══██╗██╔═══██╗████╗ ████║
+██╔████╔██║███████║██║██╔██╗ ██║    ██████╔╝██║   ██║██║   ██║██╔████╔██║
+██║╚██╔╝██║██╔══██║██║██║╚██╗██║    ██╔══██╗██║   ██║██║   ██║██║╚██╔╝██║
+██║ ╚═╝ ██║██║  ██║██║██║ ╚████║    ██║  ██║╚██████╔╝╚██████╔╝██║ ╚═╝ ██║
+╚═╝     ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝    ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝     ╚═╝
+*/
 
 
 
@@ -155,6 +188,15 @@ function MainRoom(){
 }
 
 
+
+/*
+██████╗  ██████╗  ██████╗ ███╗   ███╗    ██████╗ 
+██╔══██╗██╔═══██╗██╔═══██╗████╗ ████║    ╚════██╗
+██████╔╝██║   ██║██║   ██║██╔████╔██║     █████╔╝
+██╔══██╗██║   ██║██║   ██║██║╚██╔╝██║    ██╔═══╝ 
+██║  ██║╚██████╔╝╚██████╔╝██║ ╚═╝ ██║    ███████╗
+╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝     ╚═╝    ╚══════╝
+*/
 
 
 
@@ -248,6 +290,15 @@ function Room2(){
 
 
 
+/*
+██╗     ███████╗███████╗████████╗    ██████╗  █████╗ ████████╗██╗  ██╗
+██║     ██╔════╝██╔════╝╚══██╔══╝    ██╔══██╗██╔══██╗╚══██╔══╝██║  ██║
+██║     █████╗  █████╗     ██║       ██████╔╝███████║   ██║   ███████║
+██║     ██╔══╝  ██╔══╝     ██║       ██╔═══╝ ██╔══██║   ██║   ██╔══██║
+███████╗███████╗██║        ██║       ██║     ██║  ██║   ██║   ██║  ██║
+╚══════╝╚══════╝╚═╝        ╚═╝       ╚═╝     ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
+*/
+
 
 
 function LeftPath(){
@@ -256,9 +307,11 @@ function LeftPath(){
 	this.walls = [
 		new Box(-10,0,820,20), //top wall
 		new Box(-10,600,820,20), //bottom wall
+		new Box(0,432,76,368) //tree
 		];
 	
 	this.rightDoor = new Box(800,0,20,600);
+	this.leftDoor = new Box(-20,0,20,800);
 	
 	this.update = function(time){
 		
@@ -295,6 +348,13 @@ function LeftPath(){
 			clearScreen();
 			
 			gamestate = gamestates.room2;
+		
+		}
+		else if(collide(player,this.leftDoor)){
+			player.x = 760;
+			clearScreen();
+			
+			gamestate = gamestates.forest;
 		}
 		
 		cleanUpBodies();
@@ -323,6 +383,15 @@ function LeftPath(){
 }
 
 
+
+/*
+██████╗ ██╗ ██████╗ ██╗  ██╗████████╗    ██████╗  █████╗ ████████╗██╗  ██╗
+██╔══██╗██║██╔════╝ ██║  ██║╚══██╔══╝    ██╔══██╗██╔══██╗╚══██╔══╝██║  ██║
+██████╔╝██║██║  ███╗███████║   ██║       ██████╔╝███████║   ██║   ███████║
+██╔══██╗██║██║   ██║██╔══██║   ██║       ██╔═══╝ ██╔══██║   ██║   ██╔══██║
+██║  ██║██║╚██████╔╝██║  ██║   ██║       ██║     ██║  ██║   ██║   ██║  ██║
+╚═╝  ╚═╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝       ╚═╝     ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
+*/
 
 
 
@@ -400,9 +469,101 @@ function RightPath(){
 
 
 
+/*
+███████╗ ██████╗ ██████╗ ███████╗███████╗████████╗
+██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔════╝╚══██╔══╝
+█████╗  ██║   ██║██████╔╝█████╗  ███████╗   ██║   
+██╔══╝  ██║   ██║██╔══██╗██╔══╝  ╚════██║   ██║   
+██║     ╚██████╔╝██║  ██║███████╗███████║   ██║   
+╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝   
+*/
 
 
-//needs to be redone
+
+function Forest(){
+	this.enemies = [];
+	this.items = [];
+	this.walls = [
+		new Box(276,0,524,12), //top wall
+		new Box(0,0,44,600), //left wall
+		];
+	
+	this.rightDoor = new Box(800,0,20,600);
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		if(collide(player,this.rightDoor)){
+			player.x = 10;
+			clearDamageCounters();
+			
+			gamestate = gamestates.leftPath;
+		}
+		
+		cleanUpBodies();
+	};
+	
+	this.draw = function(){
+		ctx.drawImage(images.forest,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		sortEnemies(drw);
+		
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		player.drawHUD();
+	};
+}
+
+
+
+/*
+████████╗███████╗███╗   ███╗██████╗ ██╗      █████╗ ████████╗███████╗
+╚══██╔══╝██╔════╝████╗ ████║██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝
+   ██║   █████╗  ██╔████╔██║██████╔╝██║     ███████║   ██║   █████╗  
+   ██║   ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██╔══██║   ██║   ██╔══╝  
+   ██║   ███████╗██║ ╚═╝ ██║██║     ███████╗██║  ██║   ██║   ███████╗
+   ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+*/
+
+
+
 function EmptyGamestate(){
 	this.enemies = [];
 	this.items = [];
@@ -437,13 +598,7 @@ function EmptyGamestate(){
 			}
 		}
 		
-		if(collide(player,this.downDoor)){
-			//player.x = 0;
-			player.y = 20;
-			clearDamageCounters();
-			
-			gamestate = gamestates.mainRoom;
-		}
+		//doors
 		
 		cleanUpBodies();
 	};
@@ -471,6 +626,15 @@ function EmptyGamestate(){
 }
 
 
+
+/*
+ ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ 
+██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗
+██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║██║   ██║█████╗  ██████╔╝
+██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗
+╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║
+ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝
+*/
 
 
 
