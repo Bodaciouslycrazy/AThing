@@ -32,7 +32,7 @@ function LoadingGamestate(){
 			//gamestate = gamestates.intro;
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			gamestate = gamestates.leftPath;
+			gamestate = gamestates.forest;
 		}
 	}
 	
@@ -481,11 +481,16 @@ function RightPath(){
 
 
 function Forest(){
-	this.enemies = [];
+	this.enemies = [new Saxaphone(700,350), new Saxaphone(300,100), new Slime(600,300), new Slime(600,350)];
 	this.items = [];
 	this.walls = [
 		new Box(276,0,524,12), //top wall
 		new Box(0,0,44,600), //left wall
+		new Box(292,152,104,160), //tree
+		new Box(228,496,572,104), // bottom wall
+		new Box(248,440,64,56), // left tree
+		new Box(544,460,48,36), //right tree
+		new Box(776,432,30,200), //Right Log
 		];
 	
 	this.rightDoor = new Box(800,0,20,600);
@@ -531,6 +536,71 @@ function Forest(){
 	
 	this.draw = function(){
 		ctx.drawImage(images.forest,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		sortEnemies(drw);
+		
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		player.drawHUD();
+	};
+}
+
+
+
+
+
+function RenfestEntrance(){
+	this.enemies = [];
+	this.items = [];
+	this.walls = [];
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		//doors
+		
+		cleanUpBodies();
+	};
+	
+	this.draw = function(){
+		//ctx.drawImage( ,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
 		sortEnemies(drw);
