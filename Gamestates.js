@@ -1,14 +1,3 @@
-var gamestate;
-var gamestates = {
-	intro: new Intro(),
-	mainRoom: new MainRoom(),
-	room2: new Room2(),
-	gameOver: new GameOver(),
-	leftPath: new LeftPath(),
-	rightPath: new RightPath(),
-	forest: new Forest(),
-};
-
 
 
 /*
@@ -494,6 +483,7 @@ function Forest(){
 		];
 	
 	this.rightDoor = new Box(800,0,20,600);
+	this.downDoor = new Box(0,600,200,20);
 	
 	this.update = function(time){
 		
@@ -526,9 +516,15 @@ function Forest(){
 		
 		if(collide(player,this.rightDoor)){
 			player.x = 10;
-			clearDamageCounters();
+			clearScreen();
 			
 			gamestate = gamestates.leftPath;
+		}
+		else if(collide(player, this.downDoor)){
+			player.y = 10;
+			clearScreen();
+			
+			gamestate = gamestates.renfestEntrance;
 		}
 		
 		cleanUpBodies();
@@ -558,12 +554,29 @@ function Forest(){
 
 
 
+/*
+██████╗ ███████╗███╗   ██╗███████╗███████╗███████╗████████╗    ███████╗███╗   ██╗████████╗██████╗  █████╗ ███╗   ██╗ ██████╗███████╗
+██╔══██╗██╔════╝████╗  ██║██╔════╝██╔════╝██╔════╝╚══██╔══╝    ██╔════╝████╗  ██║╚══██╔══╝██╔══██╗██╔══██╗████╗  ██║██╔════╝██╔════╝
+██████╔╝█████╗  ██╔██╗ ██║█████╗  █████╗  ███████╗   ██║       █████╗  ██╔██╗ ██║   ██║   ██████╔╝███████║██╔██╗ ██║██║     █████╗  
+██╔══██╗██╔══╝  ██║╚██╗██║██╔══╝  ██╔══╝  ╚════██║   ██║       ██╔══╝  ██║╚██╗██║   ██║   ██╔══██╗██╔══██║██║╚██╗██║██║     ██╔══╝  
+██║  ██║███████╗██║ ╚████║██║     ███████╗███████║   ██║       ███████╗██║ ╚████║   ██║   ██║  ██║██║  ██║██║ ╚████║╚██████╗███████╗
+╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═╝     ╚══════╝╚══════╝   ╚═╝       ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝
+
+*/
+
 
 
 function RenfestEntrance(){
 	this.enemies = [];
 	this.items = [];
-	this.walls = [];
+	this.walls = [
+		new Box(0,0,44,600), //left wall
+		new Box(228,0,572,80), // top wall
+		new Box(0,504,360,10), //left fence
+		new Box(440,504,360,10), //right fence
+		];
+	
+	this.upDoor = new Box(0,-20,200,20);
 	
 	this.update = function(time){
 		
@@ -594,15 +607,29 @@ function RenfestEntrance(){
 			}
 		}
 		
-		//doors
-		
 		cleanUpBodies();
+		
+		if(collide(player,this.upDoor)){
+			player.y = 540;
+			clearDamageCounters();
+			
+			gamestate = gamestates.forest;
+		}
+
 	};
 	
 	this.draw = function(){
-		//ctx.drawImage( ,0,0,200,150,0,0,800,600);
+		ctx.drawImage( images.renfestEntrance,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
+		
+		var l2 = new Box(0,400,800,144);
+		
+		l2.draw = function(){
+			ctx.drawImage( images.renfestEntranceLayer2,0,0,200,150,0,0,800,600);
+		};
+		
 		drw.push(player);
+		drw.push(l2);
 		sortEnemies(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
@@ -723,3 +750,17 @@ function GameOver(){
 		ctx.fillText("YOU HAVE DIED", 400 - (0.5 * ctx.measureText("YOU HAVE DIED").width), 350);
 	};
 }
+
+
+
+var gamestate;
+var gamestates = {
+	intro: new Intro(),
+	mainRoom: new MainRoom(),
+	room2: new Room2(),
+	gameOver: new GameOver(),
+	leftPath: new LeftPath(),
+	rightPath: new RightPath(),
+	forest: new Forest(),
+	renfestEntrance: new RenfestEntrance(),
+};

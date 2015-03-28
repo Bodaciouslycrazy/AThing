@@ -11,6 +11,8 @@ var images = {
 		effects: new Image(),
 		rightPath: new Image(),
 		forest: new Image(),
+		renfestEntrance: new Image(),
+		renfestEntranceLayer2: new Image(),
 	};
 	
 	var sounds = {
@@ -58,6 +60,8 @@ function loadSoundsAndImages(){
 	images.effects.onload = function(){ gamestate.loaded++; };
 	images.rightPath.onload = function(){ gamestate.loaded++; };
 	images.forest.onload = function(){ gamestate.loaded++; };
+	images.renfestEntrance.onload = function(){ gamestate.loaded++ };
+	images.renfestEntranceLayer2.onload = function(){ gamestate.loaded++ };
 	images.frame.src = "Images/Frame.png";
 	images.life.src = "Images/Life.png";
 	images.weapons.src = "Images/Weapons.png";
@@ -70,6 +74,8 @@ function loadSoundsAndImages(){
 	images.effects.src = "Images/Swipe.png";
 	images.rightPath.src = "Images/RightPath.png";
 	images.forest.src = "Images/Forest.png";
+	images.renfestEntrance.src = "Images/RenfestEntrance.png";
+	images.renfestEntranceLayer2.src = "Images/RenfestEntranceLayer2.png";
 	music.intro = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ['Sounds/SadSong.wav'],
