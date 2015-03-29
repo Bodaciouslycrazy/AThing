@@ -21,7 +21,7 @@ function LoadingGamestate(){
 			//gamestate = gamestates.intro;
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			gamestate = gamestates.forest;
+			gamestate = gamestates.rightPath;
 		}
 	}
 	
@@ -157,6 +157,9 @@ function MainRoom(){
 		var drw = this.enemies.slice();
 		drw.push(player);
 		drw.push(this.bodie);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
 		sortEnemies(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
@@ -259,6 +262,9 @@ function Room2(){
 		ctx.drawImage(images.room2,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
 		sortEnemies(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
@@ -353,6 +359,9 @@ function LeftPath(){
 		ctx.drawImage(images.leftPath,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
 		sortEnemies(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
@@ -385,7 +394,7 @@ function LeftPath(){
 
 
 function RightPath(){
-	this.enemies = [];
+	this.enemies = [new EarthPony(400,300)];
 	this.items = [];
 	this.walls = [
 		new Box(0,0,292,20), //top left wall
@@ -438,6 +447,9 @@ function RightPath(){
 		ctx.drawImage(images.rightPath,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
 		sortEnemies(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
@@ -534,6 +546,9 @@ function Forest(){
 		ctx.drawImage(images.forest,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
 		sortEnemies(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
@@ -627,6 +642,9 @@ function RenfestEntrance(){
 		l2.draw = function(){
 			ctx.drawImage( images.renfestEntranceLayer2,0,0,200,150,0,0,800,600);
 		};
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
 		
 		drw.push(player);
 		drw.push(l2);
@@ -704,6 +722,9 @@ function EmptyGamestate(){
 		//ctx.drawImage( ,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
 		sortEnemies(drw);
 		
 		for(var i = 0; i < this.items.length; i++){

@@ -503,9 +503,127 @@ function Saxaphone(a,b){//Needs to be finished
 	this.onDeath = function(){
 		sounds.saxDeath.play();
 		
-		gamestate.items.push( new Item(this.x + (this.w / 2.0) - 10, this.y + (this.h / 2.0) - 10, new Oboe() ) );
+		var num = Math.random();
+		
+		if(num > 0.85){
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Oboe ) );
+		}
+		else if(num > 0.60){
+			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
+			thing.canPickUp = false;
+			thing.onCollide = function(){
+				player.heal(5);
+				return true;
+			};
+			gamestate.items.push( thing );
+		}
 	};
 	
+}
+
+
+
+function EarthPony(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 30;
+	this.h = 30;
+	this.health = 12;
+	this.weaknesses = ["ren"];
+	this.angle = 0;
+	this.speed = 60;
+	this.weapon = new Hooves();
+	this.attackDelay = 300;
+	this.ATTACKDELAY = 300;
+	this.moving = true;
+	
+	this.frameNumber = 0;
+	this.frameTime = 400;
+	
+	this.update = function(time){
+		if(this.moving){
+			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
+			this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+			this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+			
+			var b = new Box( this.x + (this.w * 0.5) - (this.weapon.w * 0.5), this.y + (this.h * 0.5) - (this.weapon.h * 0.5) ,this.weapon.w, this.weapon.h);
+			b.x += Math.cos(this.angle) * this.weapon.distance;
+			b.y += Math.sin(this.angle) * this.weapon.distance;
+			
+			this.weapon.waitTime -= time;
+			if(this.weapon.waitTime < 0)
+				this.weapon.waitTime = 0;
+			
+			if(collide(player,b) && this.weapon.waitTime == 0){
+				this.moving = false;
+				this.attackDelay = this.ATTACKDELAY;
+			}
+			
+			this.frameTime -= time;
+		}
+		else{
+			this.attackDelay -= time;
+			if(this.attackDelay <= 0){
+				var b = new Box( this.x + (this.w * 0.5) - (this.weapon.w * 0.5), this.y + (this.h * 0.5) - (this.weapon.h * 0.5) ,this.weapon.w, this.weapon.h);
+				b.x += Math.cos(this.angle) * this.weapon.distance;
+				b.y += Math.sin(this.angle) * this.weapon.distance;
+				
+				sounds.saxHit.play();
+				new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, this.angle);
+				
+				if(collide(player,b))
+					player.hurt(this.weapon.damage, "pony");
+				
+				this.weapon.waitTime = this.weapon.WAITTIME;
+				this.moving = true;
+			}
+		}
+	};
+	
+	this.draw = function(){
+		if(this.frameTime <= 0 && this.frame == 1){
+			this.frameTime += 400;
+			this.frame = 0;
+		}
+		else if(this.frameTime <= 0){
+			this.frameTime += 400;
+			this.frame = 1;
+		}
+		
+		var cropX = 190;
+		var cropY = 0;
+		
+		if(this.frame == 1)
+			cropY += 30;
+		
+		if(this.angle < (-Math.PI / 4 ) && this.angle >= ( (-Math.PI * 3) / 4 ) ) //facing up
+			cropX = 160;
+		else if(this.angle > (Math.PI / 4) && this.angle <= ( ( Math.PI * 3) / 4) ) //facing down
+			cropX = 100;
+		else if(this.angle < ( (-Math.PI * 3) / 4 ) || this.angle > ( (Math.PI * 3) / 4 ) ) //facing left
+			cropX = 130;
+			
+		ctx.drawImage(images.enemies, cropX, cropY, 30,30, this.x, this.y, this.w, this.h);
+	};
+	
+	this.onDeath = function(){
+		sounds.saxDeath.play();
+		
+		var num = Math.random();
+		
+		if(num > 0.85){
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Oboe ) );
+		}
+		else if(num > 0.60){
+			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
+			thing.canPickUp = false;
+			thing.onCollide = function(){
+				player.heal(5);
+				return true;
+			};
+			gamestate.items.push( thing );
+		}
+	};
 }
 
 //enemy weapons
@@ -528,6 +646,15 @@ function SqueakeyReed(){
 	this.distance = 40;
 }
 
+function Hooves(){
+	this.w = 50;
+	this.h = 50;
+	this.damage = 3;
+	this.waitTime = 400;
+	this.WAITTIME = 400;
+	this.distance = 30;
+}
+
 
 
 /*
@@ -537,8 +664,12 @@ function SqueakeyReed(){
 ██║███╗██║██╔══╝  ██╔══██║██╔═══╝ ██║   ██║██║╚██╗██║╚════██║
 ╚███╔███╔╝███████╗██║  ██║██║     ╚██████╔╝██║ ╚████║███████║
  ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+ 
+ Current types:
+ "normal"
+ "ren"
+ 
 */
-
 
 
 //normal damage
@@ -624,7 +755,7 @@ function Oboe(){
 		
 		for(var j = 0; j < gamestate.enemies.length; j++){
 			if(collide(b,gamestate.enemies[j])){
-				hurtEnemy(gamestate.enemies[j] , this.damage, "musical");
+				hurtEnemy(gamestate.enemies[j] , this.damage, "normal");
 			}
 		}
 		
