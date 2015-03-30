@@ -569,7 +569,7 @@ function EarthPony(a,b){
 				b.y += Math.sin(this.angle) * this.weapon.distance;
 				
 				sounds.saxHit.play();
-				new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, this.angle);
+				new Effect(images.effects, 0, 52, 30, 28, b.x, b.y, b.w, b.h, this.angle);
 				
 				if(collide(player,b))
 					player.hurt(this.weapon.damage, "pony");
@@ -650,8 +650,8 @@ function Hooves(){
 	this.w = 50;
 	this.h = 50;
 	this.damage = 3;
-	this.waitTime = 400;
-	this.WAITTIME = 400;
+	this.waitTime = 600;
+	this.WAITTIME = 600;
 	this.distance = 30;
 }
 
@@ -795,8 +795,7 @@ function Bow(){
 	};
 	
 	this.draw = function(x,y,w,h){
-		ctx.fillStyle = "#ff0000";
-		ctx.fillRect(x,y,w,h);
+		ctx.drawImage(images.weapons,0,20,20,20,x,y,w,h);
 	};
 	
 	this.fire = function(px, py, ang){
@@ -839,6 +838,8 @@ function Bow(){
 		}
 		
 		this.waitTime += this.WAITTIME;
+		
+		sounds.bow.play();
 	};
 	
 	this.canFire = function(){
@@ -850,11 +851,16 @@ function Bow(){
 	};
 	
 	this.onPickup = function(){
-		
+		player.weaknesses.push("scifi");
 	};
 	
 	this.onDrop = function(){
-		
+		var ind = player.weaknesses.indexOf("scifi");
+		if( ind > -1){
+			player.weaknesses.splice(ind,1);
+		}
+		else
+			console.log("ERROR: tried to remove weakness that doesn't exist.");
 	};
 }
 

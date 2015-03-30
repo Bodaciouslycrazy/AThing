@@ -24,6 +24,7 @@ var images = {
 		slimeDeath: false,
 		saxHit: false,
 		saxDeath: false,
+		bow: false,
 	};
 	
 	var music = {
@@ -71,7 +72,7 @@ function loadSoundsAndImages(){
 	images.room2.src = "Images/Room2.png";
 	images.bodie.src = "Images/Bodie.png";
 	images.leftPath.src = "Images/LeftPath.png";
-	images.effects.src = "Images/Swipe.png";
+	images.effects.src = "Images/Effects.png";
 	images.rightPath.src = "Images/RightPath.png";
 	images.forest.src = "Images/Forest.png";
 	images.renfestEntrance.src = "Images/RenfestEntrance.png";
@@ -118,6 +119,10 @@ function loadSoundsAndImages(){
 	sounds.saxDeath = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ["Sounds/SaxDeath.wav"],
+	});
+	sounds.bow = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Bow.wav"],
 	});
 }
 
