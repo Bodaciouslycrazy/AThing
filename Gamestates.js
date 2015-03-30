@@ -589,6 +589,7 @@ function RenfestEntrance(){
 		new Box(228,0,572,80), // top wall
 		new Box(0,504,360,10), //left fence
 		new Box(440,504,360,10), //right fence
+		new Box(464,156,104,152), //tree
 		];
 	
 	this.upDoor = new Box(0,-20,200,20);

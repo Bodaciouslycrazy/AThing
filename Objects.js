@@ -560,6 +560,17 @@ function EarthPony(a,b){
 			}
 			
 			this.frameTime -= time;
+			
+			if(this.frameTime <= 0 && this.frame == 1){
+				this.frameTime += 400;
+				this.frame = 0;
+				sounds.clop1.play();
+			}
+			else if(this.frameTime <= 0){
+				this.frameTime += 400;
+				this.frame = 1;
+				sounds.clop2.play();
+			}
 		}
 		else{
 			this.attackDelay -= time;
@@ -568,11 +579,14 @@ function EarthPony(a,b){
 				b.x += Math.cos(this.angle) * this.weapon.distance;
 				b.y += Math.sin(this.angle) * this.weapon.distance;
 				
-				sounds.saxHit.play();
-				new Effect(images.effects, 0, 52, 30, 28, b.x, b.y, b.w, b.h, this.angle);
+				sounds.partyHorn.play();
+				var e = new Effect(images.effects, 0, 52, 30, 28, b.x, b.y, b.w, b.h, this.angle);
+				e.timeLeft = 200;
 				
-				if(collide(player,b))
+				if(collide(player,b)){
 					player.hurt(this.weapon.damage, "pony");
+					sounds.punch.play();
+				}
 				
 				this.weapon.waitTime = this.weapon.WAITTIME;
 				this.moving = true;
@@ -581,14 +595,6 @@ function EarthPony(a,b){
 	};
 	
 	this.draw = function(){
-		if(this.frameTime <= 0 && this.frame == 1){
-			this.frameTime += 400;
-			this.frame = 0;
-		}
-		else if(this.frameTime <= 0){
-			this.frameTime += 400;
-			this.frame = 1;
-		}
 		
 		var cropX = 190;
 		var cropY = 0;
@@ -607,7 +613,7 @@ function EarthPony(a,b){
 	};
 	
 	this.onDeath = function(){
-		sounds.saxDeath.play();
+		sounds.whinny.play();
 		
 		var num = Math.random();
 		
@@ -753,11 +759,18 @@ function Oboe(){
 		b.x += Math.cos(ang) * this.distance;
 		b.y += Math.sin(ang) * this.distance;
 		
+		var h = false;
 		for(var j = 0; j < gamestate.enemies.length; j++){
 			if(collide(b,gamestate.enemies[j])){
 				hurtEnemy(gamestate.enemies[j] , this.damage, "normal");
+				h = true;
 			}
 		}
+		
+		if(h)
+			sounds.punch.play();
+		else
+			sounds.swing.play();
 		
 		new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, ang);
 		

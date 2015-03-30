@@ -25,6 +25,10 @@ var images = {
 		saxHit: false,
 		saxDeath: false,
 		bow: false,
+		clop1: false,
+		clop2: false,
+		whinny: false,
+		partyHorn: false,
 	};
 	
 	var music = {
@@ -123,6 +127,22 @@ function loadSoundsAndImages(){
 	sounds.bow = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ["Sounds/Bow.wav"],
+	});
+	sounds.clop1 = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Clop1.wav"],
+	});
+	sounds.clop2 = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Clop2.wav"],
+	});
+	sounds.whinny = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Whinny.wav"],
+	});
+	sounds.partyHorn = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/PartyHorn.wav"],
 	});
 }
 
