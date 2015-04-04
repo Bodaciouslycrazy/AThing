@@ -533,8 +533,8 @@ function EarthPony(a,b){
 	this.angle = 0;
 	this.speed = 60;
 	this.weapon = new Hooves();
-	this.attackDelay = 300;
-	this.ATTACKDELAY = 300;
+	this.attackDelay = 400;
+	this.ATTACKDELAY = 400;
 	this.moving = true;
 	
 	this.frameNumber = 0;

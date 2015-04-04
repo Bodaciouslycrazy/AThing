@@ -18,10 +18,10 @@ function LoadingGamestate(){
 	this.update = function(time){
 		if(this.loaded == this.need){
 			//playMusic(music.intro);
-			//gamestate = gamestates.intro;
+			//setGamestate(gamestates.intro);
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			gamestate = gamestates.rightPath;
+			setGamestate(gamestates.room2);
 		}
 	}
 	
@@ -46,7 +46,7 @@ function Intro(){
 		this.timeIn += time;
 		if(this.timeIn > 23000){
 			playMusic(music.leander);
-			gamestate = gamestates.mainRoom;
+			setGamestate(gamestates.mainRoom);
 		}
 	};
 	
@@ -105,6 +105,7 @@ function Intro(){
 
 
 function MainRoom(){
+	this.name = "Bodie's House";
 	this.enemies = [new TutorialDoor(366,40)];
 	this.items = [new Item(400,300, new DrPepper())];
 	this.walls = [
@@ -143,11 +144,8 @@ function MainRoom(){
 		cleanUpBodies();
 		
 		if(collide(player,this.door)){
-			//player.x = 400;
 			player.y = 530;
-			clearScreen();
-			
-			gamestate = gamestates.room2;
+			setGamestate(gamestates.room2);
 		}
 	}
 	
@@ -176,6 +174,7 @@ function MainRoom(){
 		
 		this.bodie.talk();
 		player.drawHUD();
+		drawTitle();
 	}
 }
 
@@ -193,6 +192,7 @@ function MainRoom(){
 
 
 function Room2(){
+	this.name = "Stagecoach Bend";
 	this.enemies = [new Slime(200,100), new Slime(500,200)];
 	this.items = [new Item(100, 100, new Bow() )];
 	this.walls = [
@@ -236,23 +236,16 @@ function Room2(){
 		}
 		
 		if(collide(player,this.downDoor)){
-			//player.x = 0;
 			player.y = 20;
-			clearScreen();
-			
-			gamestate = gamestates.mainRoom;
+			setGamestate(gamestates.mainRoom);
 		}
 		else if(collide(player,this.leftDoor)){
 			player.x = 760;
-			clearScreen();
-			
-			gamestate = gamestates.leftPath;
+			setGamestate( gamestates.leftPath);
 		}
 		else if( collide( player, this.rightDoor)){
 			player.x = 10;
-			clearScreen();
-			
-			gamestate = gamestates.rightPath;
+			setGamestate( gamestates.rightPath);
 		}
 		
 		cleanUpBodies();
@@ -280,6 +273,7 @@ function Room2(){
 		}
 		
 		player.drawHUD();
+		drawTitle();
 	}
 }
 
@@ -297,6 +291,7 @@ function Room2(){
 
 
 function LeftPath(){
+	this.name = "End of Road";
 	this.enemies = [new Slime(100,200), new Slime(100,400), new Saxaphone(100,300)];//add something else here
 	this.items = [];
 	this.walls = [
@@ -340,16 +335,12 @@ function LeftPath(){
 		//collide with doors here.
 		if(collide(player,this.rightDoor)){
 			player.x = 10;
-			clearScreen();
-			
-			gamestate = gamestates.room2;
+			setGamestate( gamestates.room2 );
 		
 		}
 		else if(collide(player,this.leftDoor)){
 			player.x = 760;
-			clearScreen();
-			
-			gamestate = gamestates.forest;
+			setGamestate(gamestates.forest);
 		}
 		
 		cleanUpBodies();
@@ -377,6 +368,7 @@ function LeftPath(){
 		}
 		
 		player.drawHUD();
+		drawTitle();
 	};
 }
 
@@ -394,7 +386,8 @@ function LeftPath(){
 
 
 function RightPath(){
-	this.enemies = [new EarthPony(400,300)];
+	this.name = "More Stagecoach Bend";
+	this.enemies = [new Slime(400,300), new Slime(400,400), new Slime(400,200), new Slime(500,300)];
 	this.items = [];
 	this.walls = [
 		new Box(0,0,292,20), //top left wall
@@ -402,6 +395,7 @@ function RightPath(){
 		new Box(-10,600,820,20), //bottom wall
 		];
 	this.leftDoor = new Box(-20,-10,20,620);
+	this.upDoor = new Box(0,-20,800,20);
 	
 	this.update = function(time){
 		
@@ -435,9 +429,11 @@ function RightPath(){
 		//doors
 		if( collide( player, this.leftDoor)){
 			player.x = 760;
-			clearScreen();
-			
-			gamestate = gamestates.room2;
+			setGamestate( gamestates.room2);
+		}
+		else if(collide(player,this.upDoor)){
+			player.y = 540;
+			setGamestate( gamestates.ranch);
 		}
 		
 		cleanUpBodies();
@@ -465,6 +461,7 @@ function RightPath(){
 		}
 		
 		player.drawHUD();
+		drawTitle();
 	};
 }
 
@@ -482,6 +479,7 @@ function RightPath(){
 
 
 function Forest(){
+	this.name = "Forest";
 	this.enemies = [new Saxaphone(700,350), new Saxaphone(300,100), new Slime(600,300), new Slime(600,350)];
 	this.items = [];
 	this.walls = [
@@ -528,15 +526,11 @@ function Forest(){
 		
 		if(collide(player,this.rightDoor)){
 			player.x = 10;
-			clearScreen();
-			
-			gamestate = gamestates.leftPath;
+			setGamestate(gamestates.leftPath);
 		}
 		else if(collide(player, this.downDoor)){
 			player.y = 10;
-			clearScreen();
-			
-			gamestate = gamestates.renfestEntrance;
+			setGamestate(gamestates.renfestEntrance);
 		}
 		
 		cleanUpBodies();
@@ -564,6 +558,7 @@ function Forest(){
 		}
 		
 		player.drawHUD();
+		drawTitle();
 	};
 }
 
@@ -582,6 +577,7 @@ function Forest(){
 
 
 function RenfestEntrance(){
+	this.name = "Sherwood Entrance";
 	this.enemies = [];
 	this.items = [];
 	this.walls = [
@@ -627,9 +623,7 @@ function RenfestEntrance(){
 		
 		if(collide(player,this.upDoor)){
 			player.y = 540;
-			clearDamageCounters();
-			
-			gamestate = gamestates.forest;
+			setGamestate(gamestates.forest);
 		}
 
 	};
@@ -664,21 +658,37 @@ function RenfestEntrance(){
 		}
 		
 		player.drawHUD();
+		drawTitle();
 	};
 }
 
 
 
 /*
-Ranch
+██████╗  █████╗ ███╗   ██╗ ██████╗██╗  ██╗
+██╔══██╗██╔══██╗████╗  ██║██╔════╝██║  ██║
+██████╔╝███████║██╔██╗ ██║██║     ███████║
+██╔══██╗██╔══██║██║╚██╗██║██║     ██╔══██║
+██║  ██║██║  ██║██║ ╚████║╚██████╗██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝
 */
 
 
 
-function EmptyGamestate(){
+function Ranch(){
+	this.name = "Ranch";
 	this.enemies = [new EarthPony(385,150), new Slime(200,300), new Slime(600,300)];
 	this.items = [];
-	this.walls = [];
+	this.walls = [
+		new Box(0,536,292,64), //bottom left wall
+		new Box(508,536,292,64), //bottom right wall
+		new Box(0,0,28,600), //left wall
+		new Box(772,0,28,600), //right wall
+		new Box(0,-30,292,64), //top left wall
+		new Box(508,-30,292,64), //top right wall
+		];
+	
+	this.downDoor = new Box(0,600,800,20);
 	
 	this.update = function(time){
 		
@@ -709,13 +719,16 @@ function EmptyGamestate(){
 			}
 		}
 		
-		//doors
+		if(collide(player,this.downDoor)){
+			player.y = 10;
+			setGamestate(gamestates.rightPath);
+		}
 		
 		cleanUpBodies();
 	};
 	
 	this.draw = function(){
-		//ctx.drawImage(images.ranch,0,0,200,150,0,0,800,600);
+		ctx.drawImage(images.ranch,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
 		for(var i = 0; i < effects.length; i++){
@@ -736,6 +749,7 @@ function EmptyGamestate(){
 		}
 		
 		player.drawHUD();
+		drawTitle();
 	};
 }
 
@@ -753,6 +767,7 @@ function EmptyGamestate(){
 
 
 function EmptyGamestate(){
+	this.name = "Empty";
 	this.enemies = [];
 	this.items = [];
 	this.walls = [];
@@ -813,6 +828,7 @@ function EmptyGamestate(){
 		}
 		
 		player.drawHUD();
+		drawTitle();
 	};
 }
 
@@ -857,4 +873,7 @@ var gamestates = {
 	rightPath: new RightPath(),
 	forest: new Forest(),
 	renfestEntrance: new RenfestEntrance(),
+	ranch: new Ranch(),
 };
+
+var timeInGamestate = 0;

@@ -13,6 +13,7 @@ var images = {
 		forest: new Image(),
 		renfestEntrance: new Image(),
 		renfestEntranceLayer2: new Image(),
+		ranch: new Image(),
 	};
 	
 	var sounds = {
@@ -67,6 +68,7 @@ function loadSoundsAndImages(){
 	images.forest.onload = function(){ gamestate.loaded++; };
 	images.renfestEntrance.onload = function(){ gamestate.loaded++ };
 	images.renfestEntranceLayer2.onload = function(){ gamestate.loaded++ };
+	images.ranch.onload = function(){ gamestate.loaded++; };
 	images.frame.src = "Images/Frame.png";
 	images.life.src = "Images/Life.png";
 	images.weapons.src = "Images/Weapons.png";
@@ -81,6 +83,7 @@ function loadSoundsAndImages(){
 	images.forest.src = "Images/Forest.png";
 	images.renfestEntrance.src = "Images/RenfestEntrance.png";
 	images.renfestEntranceLayer2.src = "Images/RenfestEntranceLayer2.png";
+	images.ranch.src = "Images/Ranch.png";
 	music.intro = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ['Sounds/SadSong.wav'],
@@ -149,11 +152,13 @@ function loadSoundsAndImages(){
 
 
 function playMusic(song){
-	stopMusic();
-	
-	currentMusic = song;
-	currentMusic.loop = true;
-	currentMusic.play();
+	if(song != currentMusic){
+		stopMusic();
+		
+		currentMusic = song;
+		currentMusic.loop = true;
+		currentMusic.play();
+	}
 }
 
 function stopMusic(){

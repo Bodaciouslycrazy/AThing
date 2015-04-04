@@ -77,6 +77,7 @@
 			accumulate -= UPDATEINTERVAL;
 			updateAllKeys();
 			allIntervals += UPDATEINTERVAL;
+			timeInGamestate += UPDATEINTERVAL;
 		}
 		updateEffects(allIntervals);
 		updateDamageCounters(allIntervals);
@@ -120,7 +121,7 @@
 		
 		//This is to help with image smoothing (which looks like crap)
 		ctx.mozImageSmoothingEnabled = false;
-		ctx.webkitImageSmoothingEnabled = false;
+		//ctx.webkitImageSmoothingEnabled = false; //apparently, they don't like me using this smoothing thing...
 		ctx.msImageSmoothingEnabled = false;
 		ctx.imageSmoothingEnabled = false;
 		

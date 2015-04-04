@@ -171,3 +171,23 @@ function stillInBounds(box){
 	
 	return true;
 }
+
+//should have made this function a long time ago
+function setGamestate(gmst){
+	clearScreen();
+	timeInGamestate = 0;
+	gamestate = gmst;
+}
+
+function drawTitle(){
+	if(timeInGamestate <= 3000){
+		ctx.font = "30px Impact";
+		ctx.fillStyle = "#303030";
+		ctx.textAlign = "right";
+		var bot = 40;
+		if(timeInGamestate > 2000 )
+			bot -= 0.04 * (timeInGamestate - 2000);
+		ctx.fillText(gamestate.name, 790, bot);
+		ctx.textAlign = "left";
+	}
+}
