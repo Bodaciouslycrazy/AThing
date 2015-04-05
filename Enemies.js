@@ -28,10 +28,8 @@ function TutorialDoor(a,b){
 	};
 	
 	this.draw = function(){
-		//ctx.fillStyle = "#FF0000";
-		//ctx.fillRect(this.x, this.y, this.w, this.h);
 		ctx.drawImage(images.enemies,0,0,100,30,this.x, this.y, this.w, this.h);
-	}
+	};
 	
 	this.onDeath = function(){
 	
@@ -408,8 +406,8 @@ function Bowman(a,b){
 function EarthPony(a,b){
 	this.x = a;
 	this.y = b;
-	this.w = 30;
-	this.h = 30;
+	this.w = 35;
+	this.h = 35;
 	this.health = 12;
 	this.weaknesses = ["ren"];
 	this.angle = 0;

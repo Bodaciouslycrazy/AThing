@@ -20,9 +20,9 @@ function Player(){
 	this.health = 30;
 	this.weaknesses = [];
 	this.weapons = [
-		false,
-		false,
-		false,
+		new Doorstop(),
+		new Phaser(),
+		new TurkeyLeg(),
 		false,
 	];//up, down, left, right
 	this.keys = {
