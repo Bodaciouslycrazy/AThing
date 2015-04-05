@@ -21,7 +21,7 @@ function LoadingGamestate(){
 			//setGamestate(gamestates.intro);
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			setGamestate(gamestates.ponyville);
+			setGamestate(gamestates.forest);
 			playMusic(music.leander);
 		}
 	}
@@ -579,7 +579,7 @@ function Forest(){
 
 function RenfestEntrance(){
 	this.name = "Sherwood Entrance";
-	this.enemies = [];
+	this.enemies = [new Bowman(400,400)];
 	this.items = [];
 	this.walls = [
 		new Box(0,0,44,600), //left wall

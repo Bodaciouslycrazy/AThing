@@ -265,7 +265,7 @@ function Saxaphone(a,b){//Needs to be finished
 		var num = Math.random();
 		
 		if(num > 0.85){
-			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Oboe ) );
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Oboe() ) );
 		}
 		else if(num > 0.60){
 			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
@@ -280,6 +280,118 @@ function Saxaphone(a,b){//Needs to be finished
 	
 }
 
+
+
+/*
+Bowman
+*/
+
+
+
+function Bowman(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 30;
+	this.h = 50;
+	this.health = 7;
+	this.weaknesses = ["scifi"];
+	this.angle = 0;
+	this.speed = 50;
+	this.weapon = new CrapBow();
+	this.attackDelay = 500;
+	this.ATTACKDELAY = 500;
+	this.moving = true;
+	
+	this.maxRunDistance = 200;
+	this.minAttackDistance = 75;
+	
+	this.frameNumber = 0;
+	this.frameTime = 300;
+	
+	this.update = function(time){
+		if(this.moving){
+			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
+			if(findDistanceFromCenters(player,this) < this.maxRunDistance){
+				var ang = Math.atan2(this.y + (this.h * 0.5) - (player.y + (player.h * 0.5) ), this.x + (this.w * 0.5) - (player.x + (player.w * 0.5)));
+				this.x += Math.cos(ang) * this.speed * time * 0.001;
+				this.y += Math.sin(ang) * this.speed * time * 0.001;
+			}
+			
+			this.weapon.waitTime -= time;
+			if(this.weapon.waitTime < 0)
+				this.weapon.waitTime = 0;
+			
+			if(findDistanceFromCenters(player,this) > this.minAttackDistance && this.weapon.waitTime == 0){
+				this.moving = false;
+				this.attackDelay = this.ATTACKDELAY;
+			}
+		}
+		else{
+			this.attackDelay -= time;
+			if(this.attackDelay <= 0){
+				
+				var path = [];
+				var xs = this.x + (this.w * 0.5) - (this.weapon.w * 0.5);
+				var ys = this.y + (this.h * 0.5) - (this.weapon.h * 0.5);
+				
+				var timeToAdd = 0;
+				do{
+					path.push(new Box(xs,ys,this.weapon.w, this.weapon.h) );
+					
+					var eff = new Effect(images.effects, 50, 0, 10, 10, xs, ys, this.weapon.w, this.weapon.h, this.angle);
+					eff.timeLeft += timeToAdd;
+					timeToAdd += 20;
+					
+					xs += Math.cos(this.angle) * this.weapon.distance;
+					ys += Math.sin(this.angle) * this.weapon.distance;
+				}while( stillInBounds(new Box(xs,ys, this.weapon.w, this.weapon.h)) );
+				
+				var hurtPlayer = false;
+				
+				for(var j = 0; j < path.length; j++){
+					
+					if(collide(player,path[j])){
+						hurtPlayer = true;
+						break;
+					}
+					
+				}
+				
+				if(hurtPlayer){
+					player.hurt(this.weapon.damage, "ren");
+				}
+				
+				this.weapon.waitTime += this.weapon.WAITTIME;
+				
+				sounds.bow.play();
+				
+				this.moving = true;
+			}
+		}
+	};
+	
+	this.draw = function(){
+		ctx.fillStyle = "#FF0000";
+		ctx.fillRect(this.x, this.y, this.w, this.h);
+	};
+	
+	this.onDeath = function(){
+		var num = Math.random();
+		
+		if(num > 0.85){
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Bow() ) );
+		}
+		else if(num > 0.60){
+			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
+			thing.canPickUp = false;
+			thing.onCollide = function(){
+				player.heal(5);
+				return true;
+			};
+			gamestate.items.push( thing );
+		}
+	};
+}
 
 
 /*
@@ -432,4 +544,13 @@ function Hooves(){
 	this.waitTime = 500;
 	this.WAITTIME = 500;
 	this.distance = 30;
+}
+
+function CrapBow(){
+	this.w = 10;
+	this.h = 10;
+	this.damage = 5;
+	this.waitTime = 2000;
+	this.WAITTIME = 2000;
+	this.distance = 10;
 }

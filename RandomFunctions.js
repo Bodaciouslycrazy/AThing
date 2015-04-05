@@ -191,3 +191,7 @@ function drawTitle(){
 		ctx.textAlign = "left";
 	}
 }
+
+function findDistanceFromCenters(a,b){
+	return Math.sqrt( Math.pow( (b.x + (b.w * 0.5)) - (a.x + (a.w * 0.5)) ,2) + Math.pow( (b.y + (b.h * 0.5)) - (a.y + (a.h * 0.5)) ,2) );
+}
