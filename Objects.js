@@ -617,8 +617,8 @@ function EarthPony(a,b){
 		
 		var num = Math.random();
 		
-		if(num > 0.85){
-			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Oboe ) );
+		if(num > 0.90){
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new PartyHorn() ) );
 		}
 		else if(num > 0.60){
 			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
@@ -653,11 +653,11 @@ function SqueakeyReed(){
 }
 
 function Hooves(){
-	this.w = 50;
-	this.h = 50;
+	this.w = 30;
+	this.h = 30;
 	this.damage = 3;
-	this.waitTime = 600;
-	this.WAITTIME = 600;
+	this.waitTime = 500;
+	this.WAITTIME = 500;
 	this.distance = 30;
 }
 
@@ -674,6 +674,7 @@ function Hooves(){
  Current types:
  "normal"
  "ren"
+ "pony"
  
 */
 
@@ -737,9 +738,9 @@ function Textbook(){
 }
 
 function Oboe(){
-	this.w = 40;
-	this.h = 40;
-	this.distance = 50;
+	this.w = 50;
+	this.h = 50;
+	this.distance = 20;
 	this.damage = 2;
 	this.WAITTIME = 300;
 	this.waitTime = 300;
@@ -954,6 +955,69 @@ function Armor(){
 		player.baseHealth -= 10;
 		if(player.health > player.baseHealth)
 			player.health = player.baseHealth;
+	};
+}
+
+function PartyHorn(){
+	this.w = 40;
+	this.h = 40;
+	this.distance = 30;
+	this.damage = 4;
+	this.WAITTIME = 600;
+	this.waitTime = 600;
+	
+	this.update = function(time){
+		this.waitTime -= time;
+		if(this.waitTime < 0 )
+			this.waitTime = 0;
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.drawImage(images.weapons,20,20,20,20,x,y,w,h);
+	};
+	
+	this.fire = function(px,py,ang){
+		var b = new Box(px - (this.w * 0.5), py - (this.h * 0.5), this.w, this.h);
+		b.x += Math.cos(ang) * this.distance;
+		b.y += Math.sin(ang) * this.distance;
+		
+		var h = false;
+		for(var j = 0; j < gamestate.enemies.length; j++){
+			if(collide(b,gamestate.enemies[j])){
+				hurtEnemy(gamestate.enemies[j] , this.damage, "pony");
+				h = true;
+			}
+		}
+		
+		sounds.partyHorn.play();
+		
+		if(h)
+			sounds.punch.play();
+		
+		var e = new Effect(images.effects, 0, 50, 30, 30, b.x, b.y, b.w, b.h, ang);
+		e.timeLeft = 200;
+		
+		this.waitTime = this.WAITTIME;
+	};
+	
+	this.canFire = function(){
+		if(this.waitTime == 0)
+			return true;
+		
+		return false;
+	};
+	
+	this.onPickup = function(){
+		player.weaknesses.push("ren");
+	};
+	
+	this.onDrop = function(){
+		var ind = player.weaknesses.indexOf("ren");
+		if( ind > -1){
+			player.weaknesses.splice(ind,1);
+		}
+		else
+			console.log("ERROR: tried to remove weakness that doesn't exist.");
 	};
 }
 

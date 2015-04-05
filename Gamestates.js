@@ -21,7 +21,8 @@ function LoadingGamestate(){
 			//setGamestate(gamestates.intro);
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			setGamestate(gamestates.room2);
+			setGamestate(gamestates.ponyville);
+			playMusic(music.leander);
 		}
 	}
 	
@@ -689,6 +690,7 @@ function Ranch(){
 		];
 	
 	this.downDoor = new Box(0,600,800,20);
+	this.upDoor = new Box(0,-20,800,20);
 	
 	this.update = function(time){
 		
@@ -723,6 +725,10 @@ function Ranch(){
 			player.y = 10;
 			setGamestate(gamestates.rightPath);
 		}
+		else if(collide(player,this.upDoor)){
+			player.y = 540;
+			setGamestate(gamestates.ponyville);
+		}
 		
 		cleanUpBodies();
 	};
@@ -753,6 +759,104 @@ function Ranch(){
 	};
 }
 
+
+
+/*
+██████╗  ██████╗ ███╗   ██╗██╗   ██╗██╗   ██╗██╗██╗     ██╗     ███████╗
+██╔══██╗██╔═══██╗████╗  ██║╚██╗ ██╔╝██║   ██║██║██║     ██║     ██╔════╝
+██████╔╝██║   ██║██╔██╗ ██║ ╚████╔╝ ██║   ██║██║██║     ██║     █████╗  
+██╔═══╝ ██║   ██║██║╚██╗██║  ╚██╔╝  ╚██╗ ██╔╝██║██║     ██║     ██╔══╝  
+██║     ╚██████╔╝██║ ╚████║   ██║    ╚████╔╝ ██║███████╗███████╗███████╗
+╚═╝      ╚═════╝ ╚═╝  ╚═══╝   ╚═╝     ╚═══╝  ╚═╝╚══════╝╚══════╝╚══════╝
+*/
+
+
+
+function Ponyville(){
+	this.name = "Ponyville";
+	this.enemies = [ new EarthPony(500,200)];
+	this.items = [new Item(200,300, new PartyHorn()) ];
+	this.walls = [
+		new Box(0,0,216,218), //house
+		new Box(0,0,236,104), //house Top
+		new Box(0,240,28,360), //left wall
+		new Box(0,540,292,60), //bottom left wall
+		new Box(508,540,288,60), //bottom right wall
+		new Box(760,0,40,80), //top river
+		new Box(760,164,40,456), //bottom river
+		new Box(684,68,120,16), //bridge top
+		new Box(684,160,120,1), //bridge bottom
+		];
+	
+	this.downDoor = new Box(0,600,800,20);
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		cleanUpBodies();
+		
+		if(collide(player,this.downDoor)){
+			player.y = 10;
+			setGamestate(gamestates.ranch);
+		}
+	};
+	
+	this.draw = function(){
+		ctx.drawImage(images.ponyville,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		
+		var l2 = new Box(684,148,116,30);
+		l2.draw = function(){ ctx.drawImage(images.ponyvilleLayer2,0,0,200,150,0,0,800,600); };
+		drw.push(l2);
+		
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
+		sortEnemies(drw);
+		
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		player.drawHUD();
+		drawTitle();
+	};
+}
 
 
 /*
@@ -874,6 +978,7 @@ var gamestates = {
 	forest: new Forest(),
 	renfestEntrance: new RenfestEntrance(),
 	ranch: new Ranch(),
+	ponyville: new Ponyville(),
 };
 
 var timeInGamestate = 0;

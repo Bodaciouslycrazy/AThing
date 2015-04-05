@@ -14,6 +14,8 @@ var images = {
 		renfestEntrance: new Image(),
 		renfestEntranceLayer2: new Image(),
 		ranch: new Image(),
+		ponyville: new Image(),
+		ponyvilleLayer2: new Image(),
 	};
 	
 	var sounds = {
@@ -69,6 +71,8 @@ function loadSoundsAndImages(){
 	images.renfestEntrance.onload = function(){ gamestate.loaded++ };
 	images.renfestEntranceLayer2.onload = function(){ gamestate.loaded++ };
 	images.ranch.onload = function(){ gamestate.loaded++; };
+	images.ponyville.onload = function(){ gamestate.loaded++; };
+	images.ponyvilleLayer2.onload = function(){ gamestate.loaded++; };
 	images.frame.src = "Images/Frame.png";
 	images.life.src = "Images/Life.png";
 	images.weapons.src = "Images/Weapons.png";
@@ -84,6 +88,8 @@ function loadSoundsAndImages(){
 	images.renfestEntrance.src = "Images/RenfestEntrance.png";
 	images.renfestEntranceLayer2.src = "Images/RenfestEntranceLayer2.png";
 	images.ranch.src = "Images/Ranch.png";
+	images.ponyville.src = "Images/Ponyville.png";
+	images.ponyvilleLayer2.src = "Images/PonyvilleLayer2.png";
 	music.intro = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ['Sounds/SadSong.wav'],
@@ -93,7 +99,7 @@ function loadSoundsAndImages(){
 		onload: function(){ gamestate.loaded++; },
 		urls: ['Sounds/LeanderTheme.wav'],
 		volume: 0.5,
-		onend: function(){ playMusic(currentMusic); },
+		onend: function(){ repeatMusic(); },
 	});
 	sounds.punch = new Howl({
 		onload: function(){ gamestate.loaded++; },
@@ -156,9 +162,12 @@ function playMusic(song){
 		stopMusic();
 		
 		currentMusic = song;
-		currentMusic.loop = true;
 		currentMusic.play();
 	}
+}
+
+function repeatMusic(){
+	currentMusic.play();
 }
 
 function stopMusic(){
