@@ -678,7 +678,7 @@ function RenfestEntrance(){
 
 function Ranch(){
 	this.name = "Ranch";
-	this.enemies = [new EarthPony(385,150), new Slime(200,300), new Slime(600,300)];
+	this.enemies = [new Saxaphone(385,150), new Slime(200,300), new Slime(600,300)];
 	this.items = [];
 	this.walls = [
 		new Box(0,536,292,64), //bottom left wall
@@ -774,7 +774,7 @@ function Ranch(){
 
 function Ponyville(){
 	this.name = "Ponyville";
-	this.enemies = [ new EarthPony(500,200)];
+	this.enemies = [ new EarthPony(500,200), new EarthPony(150,350)];
 	this.items = [new Item(200,300, new PartyHorn()) ];
 	this.walls = [
 		new Box(0,0,216,218), //house
