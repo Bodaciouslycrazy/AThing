@@ -503,9 +503,9 @@ function Cupcake(){
 }
 
 function Doorstop(){
-	this.w = 20;
-	this.h = 20;
-	this.distance = 100;
+	this.w = 40;
+	this.h = 40;
+	this.distance = 110;
 	this.damage = 4;
 	this.WAITTIME = 500;
 	this.waitTime = 500;
@@ -538,8 +538,8 @@ function Doorstop(){
 		if(h)
 			sounds.punch.play();
 		
-		var e = new Effect(images.effects, 0, 50, 30, 30, b.x, b.y, b.w, b.h, ang);
-		e.timeLeft = 200;
+		var e = new Effect(images.effects, 30, 50, 30, 30, b.x, b.y, b.w, b.h, ang);
+		e.timeLeft = 150;
 		
 		this.waitTime = this.WAITTIME;
 	};
@@ -582,9 +582,7 @@ function Phaser(){
 	};
 	
 	this.draw = function(x,y,w,h){
-		ctx.fillStyle = "#0000FF";
-		ctx.fillRect(x,y,w,h);
-		//ctx.drawImage(images.weapons,0,20,20,20,x,y,w,h);
+		ctx.drawImage(images.weapons,80,20,20,20,x,y,w,h);
 	};
 	
 	this.fire = function(px, py, ang){
@@ -595,7 +593,7 @@ function Phaser(){
 		do{
 			path.push(new Box(xs,ys,this.w, this.h) );
 			
-			var eff = new Effect(images.effects, 50, 0, 10, 10, xs, ys, this.w, this.h, ang);
+			var eff = new Effect(images.effects, 50, 10, 10, 10, xs, ys, this.w, this.h, ang);
 			
 			xs += Math.cos(ang) * this.distance;
 			ys += Math.sin(ang) * this.distance;
@@ -667,9 +665,7 @@ function TurkeyLeg(){
 	};
 	
 	this.draw = function(x,y,w,h){
-		ctx.fillStyle = "#FF0000";
-		ctx.fillRect(x,y,w,h);
-		//ctx.drawImage(images.weapons,60,20,20,20,x,y,w,h);
+		ctx.drawImage(images.weapons,0,40,20,20,x,y,w,h);
 	};
 	
 	this.fire = function(px,py,ang){
@@ -733,9 +729,7 @@ function Batleth(){
 	};
 	
 	this.draw = function(x,y,w,h){
-		ctx.fillStyle = "#FF00FF";
-		ctx.fillRect(x,y,w,h);
-		//ctx.drawImage(images.weapons,60,20,20,20,x,y,w,h);
+		ctx.drawImage(images.weapons,20,40,20,20,x,y,w,h);
 	};
 	
 	this.fire = function(px,py,ang){

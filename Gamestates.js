@@ -481,7 +481,7 @@ function RightPath(){
 
 function Forest(){
 	this.name = "Forest";
-	this.enemies = [new Saxaphone(700,350), new Saxaphone(300,100), new Slime(600,300), new Slime(600,350)];
+this.enemies = [new Saxaphone(700,350), new Saxaphone(300,100), new Slime(600,300), new Slime(600,350)];
 	this.items = [];
 	this.walls = [
 		new Box(276,0,524,12), //top wall

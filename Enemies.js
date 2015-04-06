@@ -376,10 +376,13 @@ function Bowman(a,b){
 	this.onDeath = function(){
 		var num = Math.random();
 		
-		if(num > 0.85){
+		if(num > 0.95){
+			gamestate.push(new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new TurkeyLeg() ) );
+		}
+		else if(num > 0.80){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Bow() ) );
 		}
-		else if(num > 0.60){
+		else if(num > 0.55){
 			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
 			thing.canPickUp = false;
 			thing.onCollide = function(){
