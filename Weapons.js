@@ -718,6 +718,78 @@ function TurkeyLeg(){
 
 
 
+function Batleth(){
+	this.w = 30;
+	this.h = 30;
+	this.distance = 20;
+	this.damage = 3;
+	this.WAITTIME = 800;
+	this.waitTime = 800;
+	
+	this.update = function(time){
+		this.waitTime -= time;
+		if(this.waitTime < 0 )
+			this.waitTime = 0;
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.fillStyle = "#FF00FF";
+		ctx.fillRect(x,y,w,h);
+		//ctx.drawImage(images.weapons,60,20,20,20,x,y,w,h);
+	};
+	
+	this.fire = function(px,py,ang){
+		var b = new Box(px - (this.w * 0.5), py - (this.h * 0.5), this.w, this.h);
+		b.x += Math.cos(ang) * this.distance;
+		b.y += Math.sin(ang) * this.distance;
+		
+		var h = false;
+		for(var j = 0; j < gamestate.enemies.length; j++){
+			if(collide(b,gamestate.enemies[j])){
+				hurtEnemy(gamestate.enemies[j] , this.damage, "scifi");
+				
+				gamestate.enemies[j].x += Math.cos(ang) * 75;
+				gamestate.enemies[j].y += Math.sin(ang) * 75;
+				
+				h = true;
+			}
+		}
+		
+		
+		
+		if(h)
+			sounds.punch.play();//change this to a sword sound
+		else 
+			sounds.swing.play();
+		
+		var e = new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, ang);
+		
+		this.waitTime = this.WAITTIME;
+	};
+	
+	this.canFire = function(){
+		if(this.waitTime == 0)
+			return true;
+		
+		return false;
+	};
+	
+	this.onPickup = function(){
+		player.weaknesses.push("pony");
+	};
+	
+	this.onDrop = function(){
+		var ind = player.weaknesses.indexOf("pony");
+		if( ind > -1){
+			player.weaknesses.splice(ind,1);
+		}
+		else
+			console.log("ERROR: tried to remove weakness that doesn't exist.");
+	};
+}
+
+
+
 function Item(a,b,c){
 	this.x = a;
 	this.y = b;

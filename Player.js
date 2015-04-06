@@ -23,7 +23,7 @@ function Player(){
 		new Doorstop(),
 		new Phaser(),
 		new TurkeyLeg(),
-		false,
+		new Batleth(),
 	];//up, down, left, right
 	this.keys = {
 		w: new Key(87),
