@@ -25,6 +25,8 @@ function Player(){
 		new TurkeyLeg(),
 		new Batleth(),
 	];//up, down, left, right
+	//Remember that if you start with a weapon, it doesn't run onPickup()
+	
 	this.keys = {
 		w: new Key(87),
 		a: new Key(65),

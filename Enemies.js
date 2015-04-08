@@ -369,8 +369,29 @@ function Bowman(a,b){
 	};
 	
 	this.draw = function(){
-		ctx.fillStyle = "#FF0000";
-		ctx.fillRect(this.x, this.y, this.w, this.h);
+		if(this.frameTime <= 0 && this.frame == 1){
+			this.frameTime += 300;
+			this.frame = 0;
+		}
+		else if(this.frameTime <= 0){
+			this.frameTime += 300;
+			this.frame = 1;
+		}
+		
+		var cropX = 170;
+		var cropY = 60;
+		
+		if(this.frame == 1)
+			cropY += 50;
+		
+		if(this.angle < (-Math.PI / 4 ) && this.angle >= ( (-Math.PI * 3) / 4 ) ) //facing up
+			cropX -= 30;
+		else if(this.angle > (Math.PI / 4) && this.angle <= ( ( Math.PI * 3) / 4) ) //facing down
+			cropX -= 90;
+		else if(this.angle < ( (-Math.PI * 3) / 4 ) || this.angle > ( (Math.PI * 3) / 4 ) ) //facing left
+			cropX -= 60;
+			
+		ctx.drawImage(images.enemies, cropX, cropY, 30,50, this.x, this.y, this.w, this.h);
 	};
 	
 	this.onDeath = function(){
