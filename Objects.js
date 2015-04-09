@@ -53,17 +53,17 @@ function Bodie(a,b){
 			}
 			
 			if(hasPepper && collide(player, new Box(this.x - 20, this.y - 20, this.w + 40, this.h + 40) )){
-				ctx.font = "12px Impact";
+				ctx.font = "14px Impact";
 				ctx.fillText("Hold \"E\" and press the arrow key to drop an item.", 400,400);
 			}
 			else if( !hasPepper ){
 				if(collide(gamestate.items[0],new Box(this.x - 40, this.y - 40, this.w + 80, this.h + 80) ) ){
 					gamestate.items.splice(0,1);
-					gamestate.items.push(new Item(500,500,new Textbook() ) );
+					gamestate.items.push(new Item(550,300,new Textbook() ) );
 					this.status = 1;
 				}
 				else{
-					ctx.font = "12px Impact";
+					ctx.font = "14px Impact";
 					ctx.fillText("Hold \"E\" and press an arrow key to pick up an item.", 400,400);
 				}
 			}
@@ -76,8 +76,8 @@ function Bodie(a,b){
 			ctx.fillText("the door down and start searching. I need my Dr.P!!!",400,240);
 			
 			if(collide(player, new Box(356,0,120,100) ) ){
-				ctx.font = "12px Impact";
-				ctx.fillText("Press an item's arrow key to use it.",400,400);
+				ctx.font = "14px Impact";
+				ctx.fillText("Press an item's arrow key to use it.",200,750);
 			}
 		}
 		

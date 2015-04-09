@@ -32,6 +32,9 @@ var images = {
 		clop2: false,
 		whinny: false,
 		partyHorn: false,
+		slash: false,
+		laser: false,
+		magic: false,
 	};
 	
 	var music = {
@@ -152,6 +155,19 @@ function loadSoundsAndImages(){
 	sounds.partyHorn = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ["Sounds/PartyHorn.wav"],
+	});
+	sounds.slash = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Slash.wav"],
+		volume: 0.5,
+	});
+	sounds.laser = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Laser.wav"],
+	});
+	sounds.magic = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Magic.wav"],
 	});
 }
 

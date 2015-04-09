@@ -21,9 +21,9 @@ function Player(){
 	this.weaknesses = [];
 	this.weapons = [
 		new Doorstop(),
-		new Phaser(),
-		new TurkeyLeg(),
-		new Batleth(),
+		false,
+		false,
+		false,
 	];//up, down, left, right
 	//Remember that if you start with a weapon, it doesn't run onPickup()
 	
