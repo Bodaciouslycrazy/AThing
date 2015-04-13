@@ -952,7 +952,7 @@ function EmptyGamestate(){
 function GameOver(){
 	
 	this.update = function(time){
-		
+		stopMusic();
 	};
 	
 	this.draw = function(){

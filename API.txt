@@ -1,0 +1,519 @@
+Welcome to the API for my project! Here, you can find every single object, variable, or function I made for this game.
+
+ ██████╗ ██╗      ██████╗ ██████╗  █████╗ ██╗     
+██╔════╝ ██║     ██╔═══██╗██╔══██╗██╔══██╗██║     
+██║  ███╗██║     ██║   ██║██████╔╝███████║██║     
+██║   ██║██║     ██║   ██║██╔══██╗██╔══██║██║     
+╚██████╔╝███████╗╚██████╔╝██████╔╝██║  ██║███████╗
+ ╚═════╝ ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+
+ 
+ 
+These are global variables or objects. These can be refferenced at any time.
+
+
+
+var can
+	the canvas
+	
+var ctx
+	context. Typically used to draw images.
+	
+var lastTickTime
+	the time of the last time the tick() function was called
+	
+var UPDATEINTERVAL
+	the "frame rate" of the game.
+	
+var accumulate
+	stores the ammount of time needed to update that was left over from the last tick. You probably don't need to change this.
+	
+var player
+	This is the Player() object! access the player through this global variable.
+	
+var damageCounters
+	an Array of damageCounter() objects. These are the numbers that display when you hit an enemy, or get hit.
+	
+var effects
+	an Array of Effect() objects. These are the visual effects of swinging/shooting a weapon.
+	
+var keys
+	an Array of Key() objects. These objects update all of the key inputs, and let them interact with other objects.
+	
+var drawBoxes
+	a boolean used for testing. Turn to true if you want to see every physical wall.
+	
+var images
+	a record containing all of the images used in the game.
+	
+var sounds
+	a record of all the sound effects in the game. They are all Howl() objects.
+	
+var songs
+	a record of all the music in the game. They are all Howl() objects.
+	
+var currentMusic
+	the song that is currently playing. If no music, then it = false.
+	
+var gamestate
+	the current gamestate object. Holds all of the enemies, items, and knows exactly what to draw or update.
+	
+var gamestates
+	a record of every gamestate object in the game.
+
+var timeInGamestate
+	the amount of time that we have been in the current gamestate.
+	
+	
+	
+function tick(time)
+	the centerpiece function of the entire game. creates the loop that updates and draws everything.
+	
+function handleKeyDown(evt)
+	when a button on the keyboard is pressed, it runs this function. This function will update the key() object for that button.
+	
+function handleKeyUp(evt)
+	when a button on the keyboard is released, it runs this function. This function will update the key() object for that button.
+	
+function updateAllKeys()
+	this will update all key() objects. (used to reset the pressed variable).
+	
+function loadSoundsAndImages()
+	this is called once in the main() function. It will begin loading every image and Howl() sound object.
+	
+function playMusic( song )
+	sets currentMusic to [song] and plays currentMusic
+	
+function stopMusic()
+	stops currentMusic.
+	
+function repeatMusic()
+	called whenever a song ends. You will not need to call this function.
+	
+function collide( box1, box2 )
+	returns true if [box1] and [box2] are colliding.
+	
+function adjust(moveable,stationary)
+	repositions the [moveable] box to not be colliding with the [stationary] box while moving the least distance possible.
+	
+function cleanUpBodies()
+	finds and deletes all enemies in the current gamestate that have health <= 0. Also calls onDeath().
+
+function updateDamageCounters()
+	updates all damageCounters. Will alaso delete any damage counters that have existed for too long.
+	
+function drawDamageCounters()
+	draws all damage counters on the screen.
+	
+function clearDamageCounters()
+	deletes everything in damageCounters.
+	
+function updateEffects()
+	updates all effects. Will alaso delete any effects that have existed for too long.
+	
+function drawEffects()
+	draws all effects on the screen.
+	
+function clearEffects()
+	deletes everything in effects.
+	
+function clearScreen()
+	deletes everything in damageCounters and effects.
+	
+function hurtEnemy( enemy, damage, type )
+	deals [damage] damage to [enemy]. If [enemy] is weak to [type], it will do double damage.
+	
+function sortEnemies( boxes )
+	sorts [boxes] based from highest y value to lowest y value. CAN BE USED TO SORT ANY BOXES, NOT JUST ENEMIES.
+	
+function sortDamageCounters( damageCounters )
+	sorts [damageCounters] based off their y values, just like sortEnemies().
+	
+function stillInBounds( box )
+	returns true if [box] is still within the boundries of the screen AND has not ran into any of the walls in the current gamestate. This is used for projectile weapons.
+	
+function setGamestate( gamest )
+	sets gamestate to [gamest]. also calls clearScreen() and sets timeInGamestate = 0.
+	
+function drawTitle()
+	draws the title/name of the current gamestate in the top right corner.
+	
+function findDistanceFromCenters( box1 , box2 )
+	returns the distance between the centers of [box1] and [box2].
+
+function main()
+	The function called at the very beginning of the code. Put code here if you only want it to be run once at the very begining.
+	
+	
+ 
+██████╗ ██╗      █████╗ ██╗   ██╗███████╗██████╗ 
+██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗
+██████╔╝██║     ███████║ ╚████╔╝ █████╗  ██████╔╝
+██╔═══╝ ██║     ██╔══██║  ╚██╔╝  ██╔══╝  ██╔══██╗
+██║     ███████╗██║  ██║   ██║   ███████╗██║  ██║
+╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+
+
+
+Object Player
+	This is the player (aka Kim). everything revolves around Kim!!!
+	Things to remember: there is onle one player. It is stored in the global variable "player". You will never need to make another player.
+	
+	
+	
+	var x
+		x position
+	
+	var y
+		y position
+	
+	var w
+		width. Default is 30.
+	
+	var h
+		height. Default is 50.
+		
+	var speed
+		how fast the player can walk, measured in pixels per second.
+		
+	var angle
+		the angle the player is looking. (This is not always the angle at which the player is moving).
+		
+	var baseHealth
+		this is the max health the player is allowed to have.
+		
+	var health
+		this is the current health of the player.
+		
+	var weapons
+		an Array of the weapon objects that the player has. The array length is always 4. The order of inventory for the array is up, down, left, right.
+		
+	var keys
+		an Array of key() objects that the player uses. These are the buttons used to control the player.
+		
+	var frame
+		this is the current frame that is displaying. if == 0, then the player is standing in place. if == 1, then the left foot is forward. if == 2, then the right foot os forward.
+		
+	var frameTime
+		the ammount of time left on this frame before it needs to switch frames.
+		
+	function update(time)
+		updates the player.
+		moves the player.
+		updates all the weapons that the player is using. can also pick up, drop, and fire weapons.
+		
+	function draw()
+		draws the player.
+		
+	function drawHUD()
+		Draws the Heads Up Display. This is the health bar and numbers and the inventory icons.
+		
+	function getWeaknesses()
+		returns an Array of Strings of all the weaknesses the player currently has.
+		
+	function hurt( number, type )
+		Does damage [number] to the player. If the player is weak to [type], it will deal twice as much damage
+		
+	function heal( number )
+		gives [number] health back to the player. It will not heal over baseHealth.
+		
+		
+		
+███████╗███╗   ██╗███████╗███╗   ███╗██╗███████╗███████╗
+██╔════╝████╗  ██║██╔════╝████╗ ████║██║██╔════╝██╔════╝
+█████╗  ██╔██╗ ██║█████╗  ██╔████╔██║██║█████╗  ███████╗
+██╔══╝  ██║╚██╗██║██╔══╝  ██║╚██╔╝██║██║██╔══╝  ╚════██║
+███████╗██║ ╚████║███████╗██║ ╚═╝ ██║██║███████╗███████║
+╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝     ╚═╝╚═╝╚══════╝╚══════╝
+
+
+
+These are all the variables that make up an enemy Object. There are multiple different enemy objects, like Slime() or Saxaphone(), but they all have these same properties.
+If you need to add more variables to a weapon, you may. For instance, you can add a "clip" to a weapon, so that it can only shoot so many times. You would have to manage that within the weapon.
+
+
+
+var x 
+	the x position.
+	
+var y
+	the y position.
+
+var w 
+	the width
+	
+var h
+	the height
+
+var health
+	the current health of the enemy. (Unlike the player, enemies don't have a base health.)
+	
+var weaknesses
+	an Array of Strings of all of the weapon types that the enemy is weak to.
+
+var angle
+	the angle that the enemy is looking.
+	
+var speed
+	the speed at which the enemy moves, measured in pixels per second.
+	
+var weapon
+	the weapon which the enemy uses. enemies have different weapons than the player.
+	
+var ATTACKDELAY
+	the amount of time that the enemy pauses before attacking. This gives the player time to react before the enemy attacks. This is a base variable, and should never be changed.
+	
+var attackDelay
+	the time left before the enemy may attack.
+	
+var moving
+	a boolean that is true when the enemy is walking, and false when the enemy is trying to attack.
+
+var frameNumber
+	the number frame that the enemy is on.
+	
+var frameTime
+	the time left for this frame.
+	
+function update( time )
+	updates the enemy. Moves the enemy, and attacks (when the enemy is allowed to attack).
+	
+function draw()
+	draws the enemy.
+	
+function onDeath()
+	this function runs when the enemy dies. It can be used to drop items (and whatever you want really).
+	
+	
+	
+██╗    ██╗███████╗ █████╗ ██████╗  ██████╗ ███╗   ██╗███████╗
+██║    ██║██╔════╝██╔══██╗██╔══██╗██╔═══██╗████╗  ██║██╔════╝
+██║ █╗ ██║█████╗  ███████║██████╔╝██║   ██║██╔██╗ ██║███████╗
+██║███╗██║██╔══╝  ██╔══██║██╔═══╝ ██║   ██║██║╚██╗██║╚════██║
+╚███╔███╔╝███████╗██║  ██║██║     ╚██████╔╝██║ ╚████║███████║
+ ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+ 
+ 
+ 
+These are all the properties of weapons in the game. Just like enemies, there are different types of weapons that do different things, but they use all the same properties.
+
+
+
+var w
+	the width of the box that will hurt enemies.
+	
+var h
+	the height of the box that will hurt enemies.
+	
+var distance
+	the distance the attack will go.
+	
+var damage
+	the amount of damage the weapon will do.
+	
+var type
+	a String of the type of damage it will do. If an enemy is weak to this type, the wepon will do double damage.
+	
+var weakness
+	a String of a type of damage that this weapon is weak to. The player gains it's weaknesses from ALL of the weapons they pick up. THIS VARIABLE IS NOT REQUIRED.
+	
+var WAITTIME
+	the time you must wait inbetween firing the weapon.
+	
+var waitTime
+	the current time left until the weapon may be fired again.
+	
+function update( time )
+	updates the waitTime by how much time has passed.
+	
+function draw( x, y, w, h )
+	draws the weapon's icon in the box made by x, y, w, h.
+	
+function fire()
+	fires the weapon. Hurts any enemies in the box it makes. Creates effects, like the swing effect. Plays sound effects too.
+	
+function canFire()
+	returns true if the weapon can currently fire.
+	
+function onPickup()
+	this is called whenever the playre picks the weapon up.
+
+function onDrop()
+	this is called whenever the player drops the weapon.
+
+	
+	
+██████╗  █████╗ ███╗   ██╗██████╗  ██████╗ ███╗   ███╗     ██████╗ ██████╗      ██╗███████╗ ██████╗████████╗███████╗
+██╔══██╗██╔══██╗████╗  ██║██╔══██╗██╔═══██╗████╗ ████║    ██╔═══██╗██╔══██╗     ██║██╔════╝██╔════╝╚══██╔══╝██╔════╝
+██████╔╝███████║██╔██╗ ██║██║  ██║██║   ██║██╔████╔██║    ██║   ██║██████╔╝     ██║█████╗  ██║        ██║   ███████╗
+██╔══██╗██╔══██║██║╚██╗██║██║  ██║██║   ██║██║╚██╔╝██║    ██║   ██║██╔══██╗██   ██║██╔══╝  ██║        ██║   ╚════██║
+██║  ██║██║  ██║██║ ╚████║██████╔╝╚██████╔╝██║ ╚═╝ ██║    ╚██████╔╝██████╔╝╚█████╔╝███████╗╚██████╗   ██║   ███████║
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ ╚═╝     ╚═╝     ╚═════╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝
+
+
+
+These are random objects that are used... Randomly. They can have multiple uses sometimes.
+
+
+
+Object Box( x, y, w, h )
+	
+	this object is litterally a box, and nothing else.
+	
+	var x
+		x position
+	
+	var y
+		y position
+		
+	var w
+		width
+		
+	var h
+		height
+	
+	function update( time )
+		updates the box over time. (This is pretty much always empty. A box never needs to be updated.)
+	
+	function draw()
+		draws the box. Some boxes, like walls, need to be drawn, especially for testing purposes.
+
+
+
+Object Item( x, y, weapon)
+	
+	item objects are represented as an icon laying on the ground. They essencially are a box that contains a weapon object. when the player picks up the item, the box is discarded, but they keep the weapon.
+	
+	var x
+		x location
+	
+	var y
+		y location
+		
+	var w
+		width. This should always be 20.
+		
+	var h
+		height. This should always be 20.
+		
+	var canPickUp
+		boolean that is true if the player is allowed to pick up the item. Turn this false if you are trying to make a health pickup.
+		
+	var weapon
+		weapon object that the player may get from picking up this item.
+		
+	function onCollide()
+		this is called whenever the player is colliding with the item.
+		
+	function update( time )
+		if the object needs to be updated over time, that is what this function is for.
+		
+	function draw()
+		draws the item's weapon at it's location.
+
+		
+		
+Object DamageCounter( x, y, number, color)
+	
+	this object is used to display the ammount of damage you do to an enemy when you hit it (vice versa when it hits you).
+	when this object is made, it automatically pushes it's self to damageCounters global array.
+	
+	var x
+		x position
+		
+	var y
+		y position
+		
+	var number
+		the number displayed by the counter.
+		
+	var color
+		the color that the damageCounter displays in. This is stored as a sting in hex code. Example: "#FF0000" (this is the hex code for red).
+		
+	var timeLeft
+		the time left for the damage counter to live
+		
+	var distance
+		every time the damageCounter is drawn, it shakes a bit with this as it's max distance.
+		
+	function update( time )
+		updates timeLeft for the damageCounter.
+		
+	function draw()
+		draws the damageCounter.
+		
+	
+	
+Object Effect( image, cropX, cropY, cropW, cropH, x, y, w, h, angle)
+
+	this object displays the effects like the swing effect or lasers.
+	
+	var x
+		x position
+	
+	var y
+		y position
+		
+	var w
+		width
+		
+	var h
+		height
+		
+	var angle
+		angle that the effect will be drawn at.
+		
+	var image
+		source image used to get the image of the effect.
+		
+	var cropX
+		the x position of the source image that the picture comes from.
+		
+	var cropY 
+		the y position of the source image that the picture comes from.
+		
+	var cropW
+		the width of the source image that the picture comes from.
+		
+	var cropH
+		the height of the cource image that the picture comes from.
+		
+	var timeLeft
+		time left fot the effect to live.
+		
+	function update( time )
+		updates the time left for the effect
+		
+	function draw()
+		draws the effect
+		
+	
+	
+Object Key( keyCode )
+	
+	This object is used to simplify the inputs from the keyboard.
+	This object is automatically pushed to the global keys variable when it is created.
+	
+	var down
+		boolean that is true if the key is currently down.
+		
+	var pressed
+		boolean that is true ONLY ON THE FIRST FRAME that the key is pressed on.
+		
+	var keyCode
+		the number of the key code.
+		
+	function update()
+		updates pressed so that it is only true on the frame it is pressed.
+		
+	function press()
+		sets "down" and "pressed" = true.
+		
+	function release()
+		sets "down" = false.
+		
+	
+	
+Object Bodie()
+
+	This object is Bodie, who is used as a tutorial in the first room. DON'T MESS WITH THIS OBJECT.

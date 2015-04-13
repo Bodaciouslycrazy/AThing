@@ -10,6 +10,7 @@
  "normal"
  "ren"
  "pony"
+ "scifi"
  
 */
 
@@ -32,6 +33,7 @@ function Textbook(){
 	this.damage = 2;
 	this.WAITTIME = 1000;
 	this.waitTime = 1000;
+	this.type = "normal";
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -51,7 +53,7 @@ function Textbook(){
 		var hurt = false;
 		for(var j = 0; j < gamestate.enemies.length; j++){
 			if(collide(b,gamestate.enemies[j])){
-				hurtEnemy(gamestate.enemies[j] , this.damage, "normal");
+				hurtEnemy(gamestate.enemies[j] , this.damage, this.type);
 				hurt = true;
 			}
 		}
@@ -102,6 +104,7 @@ function Oboe(){
 	this.damage = 2;
 	this.WAITTIME = 300;
 	this.waitTime = 300;
+	this.type = "normal";
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -121,7 +124,7 @@ function Oboe(){
 		var h = false;
 		for(var j = 0; j < gamestate.enemies.length; j++){
 			if(collide(b,gamestate.enemies[j])){
-				hurtEnemy(gamestate.enemies[j] , this.damage, "normal");
+				hurtEnemy(gamestate.enemies[j] , this.damage, this.type);
 				h = true;
 			}
 		}
@@ -172,6 +175,8 @@ function Bow(){
 	this.damage = 5;
 	this.WAITTIME = 1500;
 	this.waitTime = 1500;
+	this.type = "ren";
+	this.weakness = "scifi";
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -218,7 +223,7 @@ function Bow(){
 		
 		for(var i = 0; i < ens.length; i++){
 			if(ens[i]){
-				hurtEnemy(gamestate.enemies[i], this.damage, "ren");
+				hurtEnemy(gamestate.enemies[i], this.damage, this.type);
 			}
 		}
 		
@@ -236,16 +241,11 @@ function Bow(){
 	};
 	
 	this.onPickup = function(){
-		player.weaknesses.push("scifi");
+		
 	};
 	
 	this.onDrop = function(){
-		var ind = player.weaknesses.indexOf("scifi");
-		if( ind > -1){
-			player.weaknesses.splice(ind,1);
-		}
-		else
-			console.log("ERROR: tried to remove weakness that doesn't exist.");
+		 
 	};
 }
 
@@ -340,6 +340,7 @@ function Armor(){
 	this.damage = 0;
 	this.WAITTIME = 10;
 	this.waitTime = 10;
+	this.weakness = "scifi";
 	
 	this.update = function(time){
 		
@@ -388,6 +389,8 @@ function PartyHorn(){
 	this.damage = 4;
 	this.WAITTIME = 600;
 	this.waitTime = 600;
+	this.type = "pony";
+	this.weakness = "ren";
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -407,7 +410,7 @@ function PartyHorn(){
 		var h = false;
 		for(var j = 0; j < gamestate.enemies.length; j++){
 			if(collide(b,gamestate.enemies[j])){
-				hurtEnemy(gamestate.enemies[j] , this.damage, "pony");
+				hurtEnemy(gamestate.enemies[j] , this.damage, this.type);
 				h = true;
 			}
 		}
@@ -431,16 +434,11 @@ function PartyHorn(){
 	};
 	
 	this.onPickup = function(){
-		player.weaknesses.push("ren");
+		
 	};
 	
 	this.onDrop = function(){
-		var ind = player.weaknesses.indexOf("ren");
-		if( ind > -1){
-			player.weaknesses.splice(ind,1);
-		}
-		else
-			console.log("ERROR: tried to remove weakness that doesn't exist.");
+		
 	};
 }
 
@@ -464,6 +462,7 @@ function Cupcake(){
 	this.damage = 8;
 	this.WAITTIME = 10000;
 	this.waitTime = 10000;
+	this.weakness = "ren";
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -489,16 +488,11 @@ function Cupcake(){
 	};
 	
 	this.onPickup = function(){
-		player.weaknesses.push("ren");
+		
 	};
 	
 	this.onDrop = function(){
-		var ind = player.weaknesses.indexOf("ren");
-		if( ind > -1){
-			player.weaknesses.splice(ind,1);
-		}
-		else
-			console.log("ERROR: tried to remove weakness that doesn't exist.");
+		
 	};
 }
 
@@ -522,6 +516,8 @@ function Doorstop(){
 	this.damage = 4;
 	this.WAITTIME = 700;
 	this.waitTime = 700;
+	this.type = "pony";
+	this.weakness = "ren";
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -541,7 +537,7 @@ function Doorstop(){
 		var h = false;
 		for(var j = 0; j < gamestate.enemies.length; j++){
 			if(collide(b,gamestate.enemies[j])){
-				hurtEnemy(gamestate.enemies[j] , this.damage, "pony");
+				hurtEnemy(gamestate.enemies[j] , this.damage, this.type);
 				h = true;
 			}
 		}
@@ -565,16 +561,11 @@ function Doorstop(){
 	};
 	
 	this.onPickup = function(){
-		player.weaknesses.push("ren");
+		
 	};
 	
 	this.onDrop = function(){
-		var ind = player.weaknesses.indexOf("ren");
-		if( ind > -1){
-			player.weaknesses.splice(ind,1);
-		}
-		else
-			console.log("ERROR: tried to remove weakness that doesn't exist.");
+		
 	};
 }
 
@@ -598,6 +589,8 @@ function Phaser(){
 	this.damage = 3;
 	this.WAITTIME = 800;
 	this.waitTime = 800;
+	this.type = "scifi";
+	this.weakness = "pony";
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -641,7 +634,7 @@ function Phaser(){
 		
 		for(var i = 0; i < ens.length; i++){
 			if(ens[i]){
-				hurtEnemy(gamestate.enemies[i], this.damage, "scifi");
+				hurtEnemy(gamestate.enemies[i], this.damage, this.type);
 			}
 		}
 		
@@ -659,16 +652,11 @@ function Phaser(){
 	};
 	
 	this.onPickup = function(){
-		player.weaknesses.push("pony");
+		
 	};
 	
 	this.onDrop = function(){
-		var ind = player.weaknesses.indexOf("pony");
-		if( ind > -1){
-			player.weaknesses.splice(ind,1);
-		}
-		else
-			console.log("ERROR: tried to remove weakness that doesn't exist.");
+		
 	};
 }
 
@@ -692,6 +680,7 @@ function TurkeyLeg(){
 	this.damage = 8;
 	this.WAITTIME = 2000;
 	this.waitTime = 2000;
+	this.type = "ren";
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -711,7 +700,7 @@ function TurkeyLeg(){
 		var h = false;
 		for(var j = 0; j < gamestate.enemies.length; j++){
 			if(collide(b,gamestate.enemies[j])){
-				hurtEnemy(gamestate.enemies[j] , this.damage, "ren");
+				hurtEnemy(gamestate.enemies[j] , this.damage, this.type);
 				h = true;
 			}
 		}
@@ -734,16 +723,11 @@ function TurkeyLeg(){
 	};
 	
 	this.onPickup = function(){
-		player.weaknesses.push("scifi");
+		
 	};
 	
 	this.onDrop = function(){
-		var ind = player.weaknesses.indexOf("scifi");
-		if( ind > -1){
-			player.weaknesses.splice(ind,1);
-		}
-		else
-			console.log("ERROR: tried to remove weakness that doesn't exist.");
+		
 	};
 }
 
@@ -767,6 +751,7 @@ function Batleth(){
 	this.damage = 3;
 	this.WAITTIME = 800;
 	this.waitTime = 800;
+	this.type = "scifi";
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -786,7 +771,7 @@ function Batleth(){
 		var h = false;
 		for(var j = 0; j < gamestate.enemies.length; j++){
 			if(collide(b,gamestate.enemies[j])){
-				hurtEnemy(gamestate.enemies[j] , this.damage, "scifi");
+				hurtEnemy(gamestate.enemies[j] , this.damage, this.type);
 				
 				gamestate.enemies[j].x += Math.cos(ang) * 75;
 				gamestate.enemies[j].y += Math.sin(ang) * 75;
@@ -815,16 +800,11 @@ function Batleth(){
 	};
 	
 	this.onPickup = function(){
-		player.weaknesses.push("pony");
+		
 	};
 	
 	this.onDrop = function(){
-		var ind = player.weaknesses.indexOf("pony");
-		if( ind > -1){
-			player.weaknesses.splice(ind,1);
-		}
-		else
-			console.log("ERROR: tried to remove weakness that doesn't exist.");
+		
 	};
 }
 

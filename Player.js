@@ -18,9 +18,9 @@ function Player(){
 	this.angle = 0;
 	this.baseHealth = 30
 	this.health = 30;
-	this.weaknesses = [];
+	//this.weaknesses = [];
 	this.weapons = [
-		new Doorstop(),
+		false,
 		false,
 		false,
 		false,
@@ -241,15 +241,41 @@ function Player(){
 		ctx.drawImage(images.frame,0,0,140,95,660,505,140,95);
 	};
 	
+	this.getWeaknesses = function(){
+		var weak = [];
+		
+		for(var i = 0; i < this.weapons.length; i++){
+			if(this.weapons[i].hasOwnProperty("weakness") ){
+				
+				var psh = true;
+				
+				for(var j = 0; j < weak.length; j++){
+					if(weak[j] == this.weapons[i].weakness){
+						psh = false;
+						break;
+					}
+				}
+				
+				if(psh)
+					weak.push(this.weapons[i].weakness);
+			}
+		}
+		
+		return weak;
+	};
+	
 	this.hurt = function(num, type){
 		var c = "#FF0000";
-		for(var i = 0; i < this.weaknesses.length; i++){
-			if(this.weaknesses[i] == type){
+		var weaknesses = this.getWeaknesses();
+		
+		for(var i = 0; i < weaknesses.length; i++){
+			if(weaknesses[i] == type){
 				num *= 2;
 				c = "#FFCC00";
 				break;
 			}
 		}
+		
 		this.health -= num;
 		if(this.health <= 0){
 			this.health = 0;

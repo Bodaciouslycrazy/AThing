@@ -55,7 +55,7 @@ function Slime(a,b){
 	this.w = 20;
 	this.h = 20;
 	this.health = 5;
-	this.weaknesses = ["fire"];
+	this.weaknesses = [];
 	this.angle = 0;
 	this.speed = 50;
 	this.weapon = new SlimeBall();
