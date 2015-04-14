@@ -30,10 +30,6 @@ function TutorialDoor(a,b){
 	this.draw = function(){
 		ctx.drawImage(images.enemies,0,0,100,30,this.x, this.y, this.w, this.h);
 	};
-	
-	this.onDeath = function(){
-	
-	};
 }
 
 
@@ -54,6 +50,7 @@ function Slime(a,b){
 	this.y = b;
 	this.w = 20;
 	this.h = 20;
+	this.baseHealth = 5;
 	this.health = 5;
 	this.weaknesses = [];
 	this.angle = 0;
@@ -179,6 +176,7 @@ function Saxaphone(a,b){//Needs to be finished
 	this.y = b;
 	this.w = 20;
 	this.h = 30;
+	this.baseHealth = 8;
 	this.health = 8;
 	this.weaknesses = [];
 	this.angle = 0;
@@ -291,6 +289,7 @@ function Bowman(a,b){
 	this.y = b;
 	this.w = 30;
 	this.h = 50;
+	this.baseHealth = 7;
 	this.health = 7;
 	this.weaknesses = ["scifi"];
 	this.angle = 0;
@@ -432,6 +431,7 @@ function EarthPony(a,b){
 	this.y = b;
 	this.w = 35;
 	this.h = 35;
+	this.baseHealth = 12;
 	this.health = 12;
 	this.weaknesses = ["ren"];
 	this.angle = 0;
@@ -539,6 +539,131 @@ function EarthPony(a,b){
 	};
 }
 
+function Minion(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 10;
+	this.h = 10;
+	this.speed = 170;
+	this.angle = 0;
+	this.baseHealth = 1;
+	this.health = 1;
+	this.weaknesses = ["scifi"];
+	this.dontDrawHealth = true;
+	
+	this.timeLeft = 3000;
+	
+	this.update = function(time){
+		this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+		this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+		
+		this.timeLeft -= time;
+		
+		if( collide(this,player) ){
+			player.hurt(2,"normal");
+			deleteEnemy( this );
+		}
+		else if(this.timeLeft <=0 )
+			deleteEnemy( this );
+	};
+	
+	this.draw = function(){
+		
+		ctx.drawImage(images.enemies, 0,110,10,10, this.x, this.y, this.w, this.h );
+	};
+	
+}
+
+function Gundersen(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 30;
+	this.h = 60;
+	this.speed = 80;
+	this.angle = 0;
+	this.baseHeath = 100;
+	this.health = 100;
+	this.weaknesses = [];
+	this.weapon = new Baton();
+	
+	this.timing = 3000;
+	this.timing2 = 50;
+	
+	this.status = "walking";
+	this.attacks = ["fury","laser"];
+	
+	this.update = function(time){
+		if(this.status == "walking"){
+			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
+			this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+			this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+			
+			
+			this.timing -= time;
+			if(this.timing <= 0){
+				var r = Math.floor(Math.random() * this.attacks.length);
+				this.status = this.attacks[r];
+				console.log(this.status);
+				if(this.status == this.attacks[0]){//"fury"
+					this.timing = 1000;
+					this.timing2 = 50;
+				}
+				else if(this.status == this.attacks[1]){//"laser"
+					this.timing = 1000;
+					this.timing2 = 50;
+				}
+			}
+		}
+		else if(this.status == this.attacks[0]){
+			this.timing2 -= time;
+			if(this.timing2 <= 0){
+				this.timing2 += 50;
+				var min = new Minion(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5);
+				min.angle = this.angle;
+				gamestate.enemies.push( min );
+				this.angle += Math.PI / 8.0;
+				if(this.angle > Math.PI)
+					this.angle -= 2 * Math.PI;
+			}
+			
+			this.timing -= time;
+			if(this.timing <= 0){
+				this.timing += 3000;
+				this.status = "walking";
+			}
+		}
+		else if(this.status == this.attacks[1]){
+			this.timing2 -= time;
+			if(this.timing2 <= 0){
+				this.timing2 += 50;
+				var min = new Minion(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5);
+				var spread = this.angle + ( Math.random() * (Math.PI / 6.0) ) - (Math.PI / 12.0);
+				min.angle = min.angle + spread;
+				if(min.angle > Math.PI)
+					min.angle -= 2 * Math.PI;
+				else if(min.angle < -Math.PI)
+					min.angle += 2 * Math.PI;
+				gamestate.enemies.push( min );
+			}
+			
+			this.timing -= time;
+			if(this.timing <= 0){
+				this.timing += 3000;
+				this.status = "walking";
+			}
+		}
+	};
+	
+	this.draw = function(){
+		ctx.fillStyle = "#FF0000";
+		ctx.fillRect(this.x, this.y, this.w, this.h);
+	};
+	
+	this.onDeath = function(){
+		gamestate.items.push(new Item( this.x + (this.w * 0.5) - 10, this.y + (this.h * 0.5) - 10, new DrPepper() ));
+	}
+}
+
 //enemy weapons
 
 function SlimeBall(){
@@ -566,6 +691,15 @@ function Hooves(){
 	this.waitTime = 500;
 	this.WAITTIME = 500;
 	this.distance = 30;
+}
+
+function Baton(){
+	this.w = 10;
+	this.h = 10;
+	this.damage = 5;
+	this.waitTime = 100;
+	this.WAITTIME = 100;
+	this.distance = 50;
 }
 
 function CrapBow(){

@@ -63,7 +63,8 @@ function adjust(moveable,stationary){
 function cleanUpBodies(){
 	for(var i = 0; i < gamestate.enemies.length; i++){
 		if(gamestate.enemies[i].health <= 0){
-			gamestate.enemies[i].onDeath();
+			if(gamestate.enemies[i].onDeath )
+				gamestate.enemies[i].onDeath();
 			gamestate.enemies.splice(i,1);
 			i--;
 		}
@@ -194,4 +195,45 @@ function drawTitle(){
 
 function findDistanceFromCenters(a,b){
 	return Math.sqrt( Math.pow( (b.x + (b.w * 0.5)) - (a.x + (a.w * 0.5)) ,2) + Math.pow( (b.y + (b.h * 0.5)) - (a.y + (a.h * 0.5)) ,2) );
+}
+
+function drawEnemyHealth( en ){
+	if(!en.dontDrawHealth){
+		var box = new Box(en.x, en.y - 3, en.w, 3);
+		
+		var pixLeft = box.w;
+		var sections = pixLeft / 3.0;
+		if( (en.health * 1.0/ en.baseHealth) > (( box.w - 3.0) / box.w) ){
+			var n = (en.health * 1.0/ en.baseHealth) - ( (box.w - 3.0) / box.w);
+			n = n*box.w;
+			ctx.drawImage(images.life, 6, 60, n ,3, box.x + box.w - 3, box.y, n,3);
+		}
+		
+		if( (en.health * 1.0/ en.baseHealth) > ( 3.0 / box.w) ){
+			var n = 0; //(en.health * 1.0 / en.baseHealth) - ( 6.0 / box.w);
+			if( ( en.health * 1.0 / en.baseHealth ) > ( ( box.w - 6.0) / box.w) )
+				n = ( ( box.w - 6.0 ) / box.w );
+			else
+				n = (en.health * 1.0 / en.baseHealth)
+			n = n*box.w;
+			ctx.drawImage(images.life, 3, 60,3,3, box.x + 3, box.y, n, 3);
+		}
+		
+		var n = 0;
+		if( (en.health * 1.0 / en.baseHealth) > ( 3.0 / box.w) )
+			n = (3.0 / box.w);
+		else
+			n = (en.health * 1.0 / en.baseHealth);
+		n = n* box.w;
+		ctx.drawImage(images.life,0,60,n,3, box.x, box.y, n, 3);
+	}
+}
+
+function deleteEnemy( en ){
+	for(var i = 0; i < gamestate.enemies.length; i++){
+		if(gamestate.enemies[i] == en){
+			gamestate.enemies.splice(i,1);
+			break;
+		}
+	}
 }

@@ -145,6 +145,38 @@ function main()
 	The function called at the very beginning of the code. Put code here if you only want it to be run once at the very begining.
 	
 	
+
+GAMESTATES
+	
+
+	
+Gamestates define what the game should be doing. The only things that a gamestate needs are the update() and draw() functions. The rest are for enemies, items, maybe even interaction between objects.
+
+
+
+var name
+	A String of the name of the room. This is displayed in the top right corner of the screen if you call drawTitle() in the draw function.
+	
+var enemies
+	An Array of the enemy objects in that gamestate.
+	
+var items
+	An Array of the items on the ground in the room. The player can usually pick these up.
+	
+var walls
+	An Array of Box objects that make up the physical walls in the room.
+	
+function update( time )
+	This updates everything in the game. It updates the player, all the enemies, checks for collisions with walls, and checks if the player is leaving the room.
+
+function draw()
+	This draws everything. Here is how everything is normally drawn:
+	1) draw the gamestate's background.
+	2) Sort the array of items (using sortEnemies() ), and draw them. These icons will always be under everything else.
+	3) Make an array of all the other objects you need to draw. This will include the enemies, the player, and any second layer pictures. Sort using sortEnemies, and draw them.
+	4) Draw the player's HUD and the title using player.drawHUD() and drawTitle().
+
+	
  
 ██████╗ ██╗      █████╗ ██╗   ██╗███████╗██████╗ 
 ██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗
@@ -197,6 +229,9 @@ Object Player
 	var frameTime
 		the ammount of time left on this frame before it needs to switch frames.
 		
+	var dontDrawHealth
+		OPTIONAL VARIABLE. If this is true, the drawEnemyHealth function won't draw it's health.
+		
 	function update(time)
 		updates the player.
 		moves the player.
@@ -211,7 +246,7 @@ Object Player
 	function getWeaknesses()
 		returns an Array of Strings of all the weaknesses the player currently has.
 		
-	function hurt( number, type )
+	function hurt( int number, string type )
 		Does damage [number] to the player. If the player is weak to [type], it will deal twice as much damage
 		
 	function heal( number )
@@ -245,8 +280,11 @@ var w
 var h
 	the height
 
+var baseHealth
+	the max health of the enemy.
+	
 var health
-	the current health of the enemy. (Unlike the player, enemies don't have a base health.)
+	the current health of the enemy.
 	
 var weaknesses
 	an Array of Strings of all of the weapon types that the enemy is weak to.

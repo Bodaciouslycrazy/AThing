@@ -21,7 +21,7 @@ function LoadingGamestate(){
 			//setGamestate(gamestates.intro);
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			setGamestate(gamestates.forest);
+			setGamestate(gamestates.room2);
 			playMusic(music.leander);
 		}
 	}
@@ -194,7 +194,7 @@ function MainRoom(){
 
 function Room2(){
 	this.name = "Stagecoach Bend";
-	this.enemies = [new Slime(200,100), new Slime(500,200)];
+	this.enemies = [new Slime(200,100), new Slime(500,200), new Gundersen(100,100)];
 	this.items = [new Item(100, 100, new Bow() )];
 	this.walls = [
 		//new Box(-20,-10,20,620), //left wall
@@ -271,6 +271,10 @@ function Room2(){
 		
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
 		}
 		
 		player.drawHUD();
@@ -368,6 +372,10 @@ function LeftPath(){
 			this.walls[i].draw();
 		}
 		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
+		}
+		
 		player.drawHUD();
 		drawTitle();
 	};
@@ -459,6 +467,10 @@ function RightPath(){
 		
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
 		}
 		
 		player.drawHUD();
@@ -556,6 +568,10 @@ this.enemies = [new Saxaphone(700,350), new Saxaphone(300,100), new Slime(600,30
 		
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
 		}
 		
 		player.drawHUD();
@@ -658,6 +674,10 @@ function RenfestEntrance(){
 			this.walls[i].draw();
 		}
 		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
+		}
+		
 		player.drawHUD();
 		drawTitle();
 	};
@@ -752,6 +772,10 @@ function Ranch(){
 		
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
 		}
 		
 		player.drawHUD();
@@ -853,6 +877,10 @@ function Ponyville(){
 			this.walls[i].draw();
 		}
 		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
+		}
+		
 		player.drawHUD();
 		drawTitle();
 	};
@@ -929,6 +957,10 @@ function EmptyGamestate(){
 		
 		for(var i = 0; i < this.walls.length; i++){
 			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
 		}
 		
 		player.drawHUD();
