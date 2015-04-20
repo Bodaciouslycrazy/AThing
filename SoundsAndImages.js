@@ -16,6 +16,8 @@ var images = {
 		ranch: new Image(),
 		ponyville: new Image(),
 		ponyvilleLayer2: new Image(),
+		shipEntrance: new Image(),
+		shipEntranceLayer2: new Image(),
 	};
 	
 	var sounds = {
@@ -76,6 +78,8 @@ function loadSoundsAndImages(){
 	images.ranch.onload = function(){ gamestate.loaded++; };
 	images.ponyville.onload = function(){ gamestate.loaded++; };
 	images.ponyvilleLayer2.onload = function(){ gamestate.loaded++; };
+	images.shipEntrance.onload = function(){ gamestate.loaded++; };
+	images.shipEntranceLayer2.onload = function(){ gamestate.loaded++; };
 	images.frame.src = "Images/Frame.png";
 	images.life.src = "Images/Life.png";
 	images.weapons.src = "Images/Weapons.png";
@@ -93,6 +97,8 @@ function loadSoundsAndImages(){
 	images.ranch.src = "Images/Ranch.png";
 	images.ponyville.src = "Images/Ponyville.png";
 	images.ponyvilleLayer2.src = "Images/PonyvilleLayer2.png";
+	images.shipEntrance.src = "Images/ShipEntrance.png";
+	images.shipEntranceLayer2.src = "Images/ShipEntranceLayer2.png";
 	music.intro = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ['Sounds/SadSong.wav'],

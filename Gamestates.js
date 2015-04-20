@@ -405,6 +405,7 @@ function RightPath(){
 		];
 	this.leftDoor = new Box(-20,-10,20,620);
 	this.upDoor = new Box(0,-20,800,20);
+	this.rightDoor = new Box(800,0,20,600);
 	
 	this.update = function(time){
 		
@@ -443,6 +444,10 @@ function RightPath(){
 		else if(collide(player,this.upDoor)){
 			player.y = 540;
 			setGamestate( gamestates.ranch);
+		}
+		else if(collide(player, this.rightDoor)){
+			player.x = 10;
+			setGamestate(gamestates.enterpriseEntrance);
 		}
 		
 		cleanUpBodies();
@@ -887,6 +892,95 @@ function Ponyville(){
 }
 
 
+
+function EnterpriseEntrance(){
+	this.name = "Enterprise Entrance";
+	this.enemies = [new Saxaphone(190,285), new Saxaphone( 190, 485), new Slime( 300,290)];
+	this.items = [];
+	this.walls = [
+		new Box(0,0,800,20), //top wall
+		new Box(0,600,800,20), //bottom wall
+		new Box(505,0,50,600), //right wall
+		];
+	
+	this.leftDoor = new Box(-20,0,20,600);
+	this.rightDoor = new Box(510, 224, 20, 152);
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		cleanUpBodies();
+		
+		//doors
+		
+		if(collide(player, this.leftDoor)){
+			player.x = 760;
+			setGamestate(gamestates.rightPath);
+		}
+		else if(collide(player, this.rightDoor)){
+			
+		}
+	};
+	
+	this.draw = function(){
+		ctx.drawImage( images.shipEntrance,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
+		sortEnemies(drw);
+		
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		ctx.drawImage( images.shipEntranceLayer2, 0,0,200,150,0,0,800,600);
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
+		}
+		
+		player.drawHUD();
+		drawTitle();
+	};
+}
+
+
 /*
 ████████╗███████╗███╗   ███╗██████╗ ██╗      █████╗ ████████╗███████╗
 ╚══██╔══╝██╔════╝████╗ ████║██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝
@@ -933,9 +1027,9 @@ function EmptyGamestate(){
 			}
 		}
 		
-		//doors
-		
 		cleanUpBodies();
+		
+		//doors
 	};
 	
 	this.draw = function(){
@@ -1011,6 +1105,7 @@ var gamestates = {
 	renfestEntrance: new RenfestEntrance(),
 	ranch: new Ranch(),
 	ponyville: new Ponyville(),
+	enterpriseEntrance: new EnterpriseEntrance(),
 };
 
 var timeInGamestate = 0;
