@@ -590,7 +590,7 @@ function Gundersen(a,b){
 	this.timing2 = 50;
 	
 	this.status = "walking";
-	this.attacks = ["fury","laser"];
+	this.attacks = ["fury","laser","dash"];
 	
 	this.update = function(time){
 		if(this.status == "walking"){
@@ -611,6 +611,10 @@ function Gundersen(a,b){
 				else if(this.status == this.attacks[1]){//"laser"
 					this.timing = 1000;
 					this.timing2 = 50;
+				}
+				else if(this.status == this.attacks[2]){//"dash"
+					this.timing = 1200;
+					this.timing2 = 800;
 				}
 			}
 		}
@@ -644,6 +648,35 @@ function Gundersen(a,b){
 				else if(min.angle < -Math.PI)
 					min.angle += 2 * Math.PI;
 				gamestate.enemies.push( min );
+			}
+			
+			this.timing -= time;
+			if(this.timing <= 0){
+				this.timing += 3000;
+				this.status = "walking";
+			}
+		}
+		else if(this.status == this.attacks[2]){
+			this.timing2 -= time;
+			
+			if(this.timing2 <= 0){
+				this.timing2 += 2000;
+				var hitPlayer = false;
+				var distance = 250;
+				
+				do{
+					this.x += Math.cos(this.angle) * 5;
+					this.y += Math.sin(this.angle) * 5;
+					distance -= 5;
+					
+					if(collide(this,player))
+						hitPlayer = true;
+					
+				}while(stillInBounds(this) && distance > 0)
+					
+				if(hitPlayer){
+					player.hurt(8,"normal");
+				}
 			}
 			
 			this.timing -= time;
