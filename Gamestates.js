@@ -297,7 +297,7 @@ function Room2(){
 
 function LeftPath(){
 	this.name = "End of Road";
-	this.enemies = [new Slime(100,200), new Slime(100,400), new Saxaphone(100,300)];//add something else here
+	this.enemies = [new Slime(100,200), new Slime(100,400), new Saxaphone(100,300), new Knight(100,100)];//add something else here
 	this.items = [];
 	this.walls = [
 		new Box(-10,0,820,20), //top wall
@@ -896,7 +896,7 @@ function Ponyville(){
 function EnterpriseEntrance(){
 	this.name = "Enterprise Entrance";
 	this.enemies = [new Saxaphone(190,285), new Saxaphone( 190, 485), new Slime( 300,290)];
-	this.items = [];
+	this.items = [new Item(395, 295, new Batleth()) ];
 	this.walls = [
 		new Box(0,0,800,20), //top wall
 		new Box(0,600,800,20), //bottom wall

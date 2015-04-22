@@ -171,7 +171,7 @@ function Slime(a,b){
 
 
 
-function Saxaphone(a,b){//Needs to be finished
+function Saxaphone(a,b){
 	this.x = a;
 	this.y = b;
 	this.w = 20;
@@ -415,6 +415,101 @@ function Bowman(a,b){
 }
 
 
+
+/*
+Kinght
+*/
+
+
+
+function Knight(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 30;
+	this.h = 50;
+	this.angle = 0;
+	this.speed = 100;
+	this.baseHealth = 15;
+	this.health = 15;
+	this.weaknesses = ["scifi"];
+	this.walking = true;
+	this.weapon = new Sword();
+	
+	this.attackDelay = 0;
+	this.ATTACKDELAY = 300;
+	
+	this.frameNumber = 0;
+	this.frameTime = 300;
+	
+	this.update = function(time){
+		if(this.moving){
+			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
+			this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+			this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+			
+			var b = new Box( this.x + (this.w * 0.5) - (this.weapon.w * 0.5), this.y + (this.h * 0.5) - (this.weapon.h * 0.5) ,this.weapon.w, this.weapon.h);
+			b.x += Math.cos(this.angle) * this.weapon.distance;
+			b.y += Math.sin(this.angle) * this.weapon.distance;
+			
+			this.weapon.waitTime -= time;
+			if(this.weapon.waitTime < 0)
+				this.weapon.waitTime = 0;
+			
+			if(collide(player,b) && this.weapon.waitTime == 0){
+				this.moving = false;
+				this.attackDelay = this.ATTACKDELAY;
+			}
+			
+			this.frameTime -= time;
+		}
+		else{
+			this.attackDelay -= time;
+			if(this.attackDelay <= 0){
+				var b = new Box( this.x + (this.w * 0.5) - (this.weapon.w * 0.5), this.y + (this.h * 0.5) - (this.weapon.h * 0.5) ,this.weapon.w, this.weapon.h);
+				b.x += Math.cos(this.angle) * this.weapon.distance;
+				b.y += Math.sin(this.angle) * this.weapon.distance;
+				
+				sounds.saxHit.play();
+				new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, this.angle);
+				
+				if(collide(player,b))
+					player.hurt(this.weapon.damage, "normal");
+				
+				this.weapon.waitTime = this.weapon.WAITTIME;
+				this.moving = true;
+			}
+		}
+	};
+	
+	this.draw = function(){
+		if(this.frameTime <= 0 && this.frame == 1){
+			this.frameTime += 300;
+			this.frame = 0;
+		}
+		else if(this.frameTime <= 0){
+			this.frameTime += 300;
+			this.frame = 1;
+		}
+		
+		var cropX = 290;
+		var cropY = 60;
+		
+		if(this.frame == 1)
+			cropY += 50;
+		
+		if(this.angle < (-Math.PI / 4 ) && this.angle >= ( (-Math.PI * 3) / 4 ) ) //facing up
+			cropX -= 30;
+		else if(this.angle > (Math.PI / 4) && this.angle <= ( ( Math.PI * 3) / 4) ) //facing down
+			cropX -= 90;
+		else if(this.angle < ( (-Math.PI * 3) / 4 ) || this.angle > ( (Math.PI * 3) / 4 ) ) //facing left
+			cropX -= 60;
+			
+		ctx.drawImage(images.enemies, cropX, cropY, 30,50, this.x, this.y, this.w, this.h);
+	};
+}
+
+
+
 /*
 ███████╗ █████╗ ██████╗ ████████╗██╗  ██╗    ██████╗  ██████╗ ███╗   ██╗██╗   ██╗
 ██╔════╝██╔══██╗██╔══██╗╚══██╔══╝██║  ██║    ██╔══██╗██╔═══██╗████╗  ██║╚██╗ ██╔╝
@@ -544,7 +639,7 @@ function Minion(a,b){
 	this.y = b;
 	this.w = 10;
 	this.h = 10;
-	this.speed = 170;
+	this.speed = 200;
 	this.angle = 0;
 	this.baseHealth = 1;
 	this.health = 1;
@@ -574,6 +669,34 @@ function Minion(a,b){
 	
 }
 
+function Mine(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 50;
+	this.h = 50;
+	this.baseHealth = 1;
+	this.health = 1;
+	this.weaknesses = [];
+	this.dontDrawHealth = true;
+	
+	this.timeLeft = 1000;
+	
+	this.update = function(time){
+		this.timeLeft -= time;
+		
+		if(this.timeLeft <= 0){
+			if(collide(player,this))
+				player.hurt(8,"normal");
+			
+			deleteEnemy(this);
+		}
+	};
+	
+	this.draw = function(){
+		ctx.drawImage(images.enemies, 10, 110,20,20, this.x, this.y, this.w, this.h);
+	};
+}
+
 function Gundersen(a,b){
 	this.x = a;
 	this.y = b;
@@ -590,7 +713,7 @@ function Gundersen(a,b){
 	this.timing2 = 50;
 	
 	this.status = "walking";
-	this.attacks = ["fury","laser","dash"];
+	this.attacks = ["fury","laser","dash","mine"];
 	
 	this.update = function(time){
 		if(this.status == "walking"){
@@ -615,6 +738,10 @@ function Gundersen(a,b){
 				else if(this.status == this.attacks[2]){//"dash"
 					this.timing = 1200;
 					this.timing2 = 800;
+				}
+				else if(this.status == this.attacks[3]){//"mine"
+					this.timing = 2000;
+					this.timing2 = 100;
 				}
 			}
 		}
@@ -641,7 +768,7 @@ function Gundersen(a,b){
 			if(this.timing2 <= 0){
 				this.timing2 += 50;
 				var min = new Minion(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5);
-				var spread = this.angle + ( Math.random() * (Math.PI / 6.0) ) - (Math.PI / 12.0);
+				var spread = this.angle + ( Math.random() * (Math.PI / 4.0) ) - (Math.PI / 8.0);
 				min.angle = min.angle + spread;
 				if(min.angle > Math.PI)
 					min.angle -= 2 * Math.PI;
@@ -677,6 +804,20 @@ function Gundersen(a,b){
 				if(hitPlayer){
 					player.hurt(8,"normal");
 				}
+			}
+			
+			this.timing -= time;
+			if(this.timing <= 0){
+				this.timing += 3000;
+				this.status = "walking";
+			}
+		}
+		else if(this.status == this.attacks[3]){
+			this.timing2 -= time;
+			
+			if(this.timing2 <= 0){
+				this.timing2 += 100;
+				gamestate.enemies.push(new Mine(Math.random() * (can.width - 20), Math.random() * (can.height - 20) ) );
 			}
 			
 			this.timing -= time;
@@ -742,4 +883,13 @@ function CrapBow(){
 	this.waitTime = 2000;
 	this.WAITTIME = 2000;
 	this.distance = 10;
+}
+
+function Sword(){
+	this.w = 50;
+	this.h = 50;
+	this.damage = 7;
+	this.waitTime = 1200;
+	this.WAITTIME = 1200;
+	this.distance = 40;
 }
