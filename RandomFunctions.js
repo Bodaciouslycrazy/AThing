@@ -60,6 +60,17 @@ function adjust(moveable,stationary){
 		moveable.y = stationary.y + stationary.h;
 }
 
+function circleAdjust(moveable, circle){
+	var box = new Box(circle.x, circle.y, 0,0);
+	var dist = findDistanceFromCenters(moveable,box);
+	if(dist > circle.r){
+		dist -= circle.r;
+		var ang = Math.atan2(circle.y - (moveable.y + (moveable.h * 0.5)), circle.x - (moveable.x + (moveable.w * 0.5)) );
+		moveable.x += Math.cos(ang) * dist;
+		moveable.y += Math.sin(ang) * dist;
+	}
+}
+
 function cleanUpBodies(){
 	for(var i = 0; i < gamestate.enemies.length; i++){
 		if(gamestate.enemies[i].health <= 0){

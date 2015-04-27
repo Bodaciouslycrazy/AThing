@@ -167,6 +167,22 @@ function Effect(im, cx, cy, cw, ch, a, b, c, d, ang){
 
 
 
+function Circle(a,b,c){
+	this.x = a;
+	this.y = b;
+	this.r = c;
+	
+	this.update = function(time){
+	};
+	
+	this.draw = function(){
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+	};
+}
+
+
+
 function Key(kc){
 	this.down = false;
 	this.pressed = false;

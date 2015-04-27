@@ -21,7 +21,7 @@ function LoadingGamestate(){
 			//setGamestate(gamestates.intro);
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			setGamestate(gamestates.room2);
+			setGamestate(gamestates.renfestEntrance);
 			playMusic(music.leander);
 		}
 	}
@@ -605,12 +605,14 @@ function RenfestEntrance(){
 	this.walls = [
 		new Box(0,0,44,600), //left wall
 		new Box(228,0,572,80), // top wall
-		new Box(0,504,360,10), //left fence
-		new Box(440,504,360,10), //right fence
+		new Box(0,504,360,50), //left fence
+		new Box(440,504,360,50), //right fence
 		new Box(464,156,104,152), //tree
+		new Box(740,0,50,600), //Right Wall
 		];
 	
 	this.upDoor = new Box(0,-20,200,20);
+	this.downDoor = new Box(0,600,800,20);
 	
 	this.update = function(time){
 		
@@ -646,6 +648,10 @@ function RenfestEntrance(){
 		if(collide(player,this.upDoor)){
 			player.y = 540;
 			setGamestate(gamestates.forest);
+		}
+		else if(collide(player,this.downDoor)){
+			player.y = 10;
+			setGamestate(gamestates.renfestFront);
 		}
 
 	};
@@ -981,6 +987,82 @@ function EnterpriseEntrance(){
 }
 
 
+
+function RenfestFront(){
+	this.name = "Renfest Front";
+	this.enemies = [];
+	this.items = [];
+	this.walls = [];
+	this.edges = new Circle(400, 300, 280);
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		cleanUpBodies();
+		
+		//doors
+	};
+	
+	this.draw = function(){
+		ctx.drawImage(images.renfestFront ,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
+		sortEnemies(drw);
+		
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		this.edges.draw();
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
+		}
+		
+		player.drawHUD();
+		drawTitle();
+	};
+}
+
+
+
 /*
 ████████╗███████╗███╗   ███╗██████╗ ██╗      █████╗ ████████╗███████╗
 ╚══██╔══╝██╔════╝████╗ ████║██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝
@@ -1106,6 +1188,7 @@ var gamestates = {
 	ranch: new Ranch(),
 	ponyville: new Ponyville(),
 	enterpriseEntrance: new EnterpriseEntrance(),
+	renfestFront: new RenfestFront()
 };
 
 var timeInGamestate = 0;

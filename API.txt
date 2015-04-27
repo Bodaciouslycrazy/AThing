@@ -96,6 +96,9 @@ function collide( box1, box2 )
 function adjust(moveable,stationary)
 	repositions the [moveable] box to not be colliding with the [stationary] box while moving the least distance possible.
 	
+function circleAdjust(moveable,circle)
+	repositions the [moveable] box so that it's center stays inside [circle].
+	
 function cleanUpBodies()
 	finds and deletes all enemies in the current gamestate that have health <= 0. Also calls onDeath().
 
@@ -525,6 +528,23 @@ Object Effect( image, cropX, cropY, cropW, cropH, x, y, w, h, angle)
 	function draw()
 		draws the effect
 		
+		
+		
+Object Circle( x, y, r )
+	this holds all the information needed to make a circle.
+	
+	var x
+		x position (of center)
+		
+	var y
+		y position (of center)
+		
+	var r
+		radius
+		
+	function draw()
+		draws circle
+	
 	
 	
 Object Key( keyCode )
