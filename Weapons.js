@@ -795,7 +795,62 @@ function Batleth(){
 	this.canFire = function(){
 		if(this.waitTime == 0)
 			return true;
+		return false;
+	};
+	
+	this.onPickup = function(){
 		
+	};
+	
+	this.onDrop = function(){
+		
+	};
+}
+
+
+function Boots(){
+	this.distance = 175;
+	this.damage = 5;
+	this.type = "ren";
+	this.WAITTIME = 4000;
+	this.waitTime = 4000;
+	
+	this.update = function(time){
+		this.waitTime -= time;
+		if(this.waitTime < 0)
+			this.waitTime = 0;
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.drawImage(images.weapons, 40,40,20,20,x,y,w,h);
+	};
+	
+	this.fire = function(px,py,ang){
+		var dist = this.distance;
+		var ens = new Array(gamestate.enemies.length);
+		do{
+			
+			dist -= 5;
+			player.x += Math.cos(ang) * 5;
+			player.y += Math.sin(ang) * 5;
+			for(var i = 0; i < gamestate.enemies.length; i++){
+				if(collide(player,gamestate.enemies[i]))
+					ens[i] = true;
+			}
+			
+		}while( stillInBounds(player) && dist > 0);
+		
+		for(var i = 0; i < gamestate.enemies.length; i++){
+			if(ens[i])
+				hurtEnemy(gamestate.enemies[i], this.damage, this.type);
+		}
+		
+		this.waitTime = this.WAITTIME;
+	};
+	
+	this.canFire = function(){
+		if(this.waitTime == 0)
+			return true;
 		return false;
 	};
 	

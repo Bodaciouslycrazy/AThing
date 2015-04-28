@@ -279,7 +279,12 @@ function Saxaphone(a,b){
 
 
 /*
-Bowman
+██████╗  ██████╗ ██╗    ██╗███╗   ███╗ █████╗ ███╗   ██╗
+██╔══██╗██╔═══██╗██║    ██║████╗ ████║██╔══██╗████╗  ██║
+██████╔╝██║   ██║██║ █╗ ██║██╔████╔██║███████║██╔██╗ ██║
+██╔══██╗██║   ██║██║███╗██║██║╚██╔╝██║██╔══██║██║╚██╗██║
+██████╔╝╚██████╔╝╚███╔███╔╝██║ ╚═╝ ██║██║  ██║██║ ╚████║
+╚═════╝  ╚═════╝  ╚══╝╚══╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
 */
 
 
@@ -397,7 +402,7 @@ function Bowman(a,b){
 		var num = Math.random();
 		
 		if(num > 0.95){
-			gamestate.push(new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new TurkeyLeg() ) );
+			gamestate.items.push(new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new TurkeyLeg() ) );
 		}
 		else if(num > 0.80){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Bow() ) );
@@ -417,7 +422,12 @@ function Bowman(a,b){
 
 
 /*
-Kinght
+██╗  ██╗███╗   ██╗██╗ ██████╗ ██╗  ██╗████████╗
+██║ ██╔╝████╗  ██║██║██╔════╝ ██║  ██║╚══██╔══╝
+█████╔╝ ██╔██╗ ██║██║██║  ███╗███████║   ██║   
+██╔═██╗ ██║╚██╗██║██║██║   ██║██╔══██║   ██║   
+██║  ██╗██║ ╚████║██║╚██████╔╝██║  ██║   ██║   
+╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
 */
 
 
@@ -469,7 +479,7 @@ function Knight(a,b){
 				b.x += Math.cos(this.angle) * this.weapon.distance;
 				b.y += Math.sin(this.angle) * this.weapon.distance;
 				
-				sounds.saxHit.play();
+				sounds.swing.play();
 				new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, this.angle);
 				
 				if(collide(player,b))
@@ -506,6 +516,24 @@ function Knight(a,b){
 			
 		ctx.drawImage(images.enemies, cropX, cropY, 30,50, this.x, this.y, this.w, this.h);
 	};
+	
+	this.onDeath = function(){
+		var num = Math.random();
+		
+		if(num > 0.9)
+			gamestate.items.push(new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new TurkeyLeg() ) );
+		else if(num > 0.7)
+			gamestate.items.push(new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Armor() ) );
+		else if(num > 0.6){
+			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
+			thing.canPickUp = false;
+			thing.onCollide = function(){
+				player.heal(5);
+				return true;
+			};
+			gamestate.items.push( thing );
+		}
+	}
 }
 
 
@@ -634,68 +662,20 @@ function EarthPony(a,b){
 	};
 }
 
-function Minion(a,b){
-	this.x = a;
-	this.y = b;
-	this.w = 10;
-	this.h = 10;
-	this.speed = 200;
-	this.angle = 0;
-	this.baseHealth = 1;
-	this.health = 1;
-	this.weaknesses = ["scifi"];
-	this.dontDrawHealth = true;
-	
-	this.timeLeft = 3000;
-	
-	this.update = function(time){
-		this.x += Math.cos(this.angle) * this.speed * time * 0.001;
-		this.y += Math.sin(this.angle) * this.speed * time * 0.001;
-		
-		this.timeLeft -= time;
-		
-		if( collide(this,player) ){
-			player.hurt(2,"normal");
-			deleteEnemy( this );
-		}
-		else if(this.timeLeft <=0 )
-			deleteEnemy( this );
-	};
-	
-	this.draw = function(){
-		
-		ctx.drawImage(images.enemies, 0,110,10,10, this.x, this.y, this.w, this.h );
-	};
-	
-}
 
-function Mine(a,b){
-	this.x = a;
-	this.y = b;
-	this.w = 50;
-	this.h = 50;
-	this.baseHealth = 1;
-	this.health = 1;
-	this.weaknesses = [];
-	this.dontDrawHealth = true;
-	
-	this.timeLeft = 1000;
-	
-	this.update = function(time){
-		this.timeLeft -= time;
-		
-		if(this.timeLeft <= 0){
-			if(collide(player,this))
-				player.hurt(8,"normal");
-			
-			deleteEnemy(this);
-		}
-	};
-	
-	this.draw = function(){
-		ctx.drawImage(images.enemies, 10, 110,20,20, this.x, this.y, this.w, this.h);
-	};
-}
+
+/*
+ ██████╗ ██╗   ██╗███╗   ██╗██████╗ ███████╗██████╗ ███████╗███████╗███╗   ██╗
+██╔════╝ ██║   ██║████╗  ██║██╔══██╗██╔════╝██╔══██╗██╔════╝██╔════╝████╗  ██║
+██║  ███╗██║   ██║██╔██╗ ██║██║  ██║█████╗  ██████╔╝███████╗█████╗  ██╔██╗ ██║
+██║   ██║██║   ██║██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗╚════██║██╔══╝  ██║╚██╗██║
+╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝███████╗██║  ██║███████║███████╗██║ ╚████║
+ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝
+ 
+(and gundersen related enemies)
+*/
+
+
 
 function Gundersen(a,b){
 	this.x = a;
@@ -749,7 +729,7 @@ function Gundersen(a,b){
 			this.timing2 -= time;
 			if(this.timing2 <= 0){
 				this.timing2 += 50;
-				var min = new Minion(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5);
+				var min = new Original(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5);
 				min.angle = this.angle;
 				gamestate.enemies.push( min );
 				this.angle += Math.PI / 8.0;
@@ -767,7 +747,7 @@ function Gundersen(a,b){
 			this.timing2 -= time;
 			if(this.timing2 <= 0){
 				this.timing2 += 50;
-				var min = new Minion(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5);
+				var min = new Original(this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5);
 				var spread = this.angle + ( Math.random() * (Math.PI / 4.0) ) - (Math.PI / 8.0);
 				min.angle = min.angle + spread;
 				if(min.angle > Math.PI)
@@ -836,6 +816,69 @@ function Gundersen(a,b){
 	this.onDeath = function(){
 		gamestate.items.push(new Item( this.x + (this.w * 0.5) - 10, this.y + (this.h * 0.5) - 10, new DrPepper() ));
 	}
+}
+
+function Original(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 10;
+	this.h = 10;
+	this.speed = 200;
+	this.angle = 0;
+	this.baseHealth = 1;
+	this.health = 1;
+	this.weaknesses = ["scifi"];
+	this.dontDrawHealth = true;
+	
+	this.timeLeft = 3000;
+	
+	this.update = function(time){
+		this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+		this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+		
+		this.timeLeft -= time;
+		
+		if( collide(this,player) ){
+			player.hurt(2,"normal");
+			deleteEnemy( this );
+		}
+		else if(this.timeLeft <=0 )
+			deleteEnemy( this );
+	};
+	
+	this.draw = function(){
+		
+		ctx.drawImage(images.enemies, 0,110,10,10, this.x, this.y, this.w, this.h );
+	};
+	
+}
+
+function Mine(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 50;
+	this.h = 50;
+	this.baseHealth = 1;
+	this.health = 1;
+	this.weaknesses = [];
+	this.dontDrawHealth = true;
+	
+	this.timeLeft = 1000;
+	
+	this.update = function(time){
+		this.timeLeft -= time;
+		
+		if(this.timeLeft <= 0){
+			if(collide(player,this))
+				player.hurt(8,"normal");
+			
+			deleteEnemy(this);
+		}
+	};
+	
+	this.draw = function(){
+		ctx.drawImage(images.enemies, 10, 110,20,20, this.x, this.y, this.w, this.h);
+	};
 }
 
 //enemy weapons
