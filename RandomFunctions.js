@@ -60,7 +60,7 @@ function adjust(moveable,stationary){
 		moveable.y = stationary.y + stationary.h;
 }
 
-function circleAdjust(moveable, circle){
+function circleBoundryAdjust(moveable, circle){
 	var box = new Box(circle.x, circle.y, 0,0);
 	var dist = findDistanceFromCenters(moveable,box);
 	if(dist > circle.r){
@@ -115,6 +115,7 @@ function clearDamageCounters(){
 
 function updateEffects(time){
 	for(var i = 0; i < effects.length; i++){
+		
 		effects[i].update(time);
 		
 		if(effects[i].timeLeft <= 0){

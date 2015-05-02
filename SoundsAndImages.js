@@ -19,6 +19,8 @@ var images = {
 		shipEntrance: new Image(),
 		shipEntranceLayer2: new Image(),
 		renfestFront: new Image(),
+		beamRoom: new Image(),
+		beamRoomLayer2: new Image(),
 	};
 	
 	var sounds = {
@@ -82,6 +84,8 @@ function loadSoundsAndImages(){
 	images.shipEntrance.onload = function(){ gamestate.loaded++; };
 	images.shipEntranceLayer2.onload = function(){ gamestate.loaded++; };
 	images.renfestFront.onload = function(){ gamestate.loaded++; };
+	images.beamRoom.onload = function(){ gamestate.loaded++; };
+	images.beamRoomLayer2.onload = function(){ gamestate.loaded++; };
 	images.frame.src = "Images/Frame.png";
 	images.life.src = "Images/Life.png";
 	images.weapons.src = "Images/Weapons.png";
@@ -102,6 +106,8 @@ function loadSoundsAndImages(){
 	images.shipEntrance.src = "Images/ShipEntrance.png";
 	images.shipEntranceLayer2.src = "Images/ShipEntranceLayer2.png";
 	images.renfestFront.src = "Images/RenfestFront.png";
+	images.beamRoom.src = "Images/BeamRoom.png";
+	images.beamRoomLayer2.src = "Images/BeamRoomLayer2.png";
 	music.intro = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ['Sounds/SadSong.wav'],

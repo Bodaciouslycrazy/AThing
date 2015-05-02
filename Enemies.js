@@ -483,7 +483,7 @@ function Knight(a,b){
 				new Effect(images.effects, 0, 0, 50, 50, b.x, b.y, b.w, b.h, this.angle);
 				
 				if(collide(player,b))
-					player.hurt(this.weapon.damage, "normal");
+					player.hurt(this.weapon.damage, "ren");
 				
 				this.weapon.waitTime = this.weapon.WAITTIME;
 				this.moving = true;
@@ -660,6 +660,32 @@ function EarthPony(a,b){
 			gamestate.items.push( thing );
 		}
 	};
+}
+
+
+
+function Tribble(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 20;
+	this.h = 20;
+	this.angle = 0;
+	this.speed = 50;
+	this.baseHealth = 10;
+	this.health = 10;
+	
+	this.update = function(time){
+		
+	};
+	
+	this.draw = function(){
+		
+	};
+	
+	this.onDeath = function(){
+		
+	};
+	
 }
 
 
@@ -922,7 +948,7 @@ function Baton(){
 function CrapBow(){
 	this.w = 10;
 	this.h = 10;
-	this.damage = 5;
+	this.damage = 4;
 	this.waitTime = 2000;
 	this.WAITTIME = 2000;
 	this.distance = 10;
@@ -931,7 +957,7 @@ function CrapBow(){
 function Sword(){
 	this.w = 50;
 	this.h = 50;
-	this.damage = 7;
+	this.damage = 6;
 	this.waitTime = 1200;
 	this.WAITTIME = 1200;
 	this.distance = 40;

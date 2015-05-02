@@ -86,6 +86,31 @@ function Bodie(a,b){
 
 
 
+function Tele(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 60;
+	this.h = 100;
+	
+	this.RATE = 2000;
+	this.currentTime = 2000;
+	
+	this.update = function(time){
+		this.currentTime -= time;
+		if(this.currentTime < 0)
+			this.currentTime += this.RATE;
+	};
+	
+	this.draw = function(){
+		var percent = 1.0 - ((this.currentTime * 1.0) / (this.RATE * 1.0));
+		ctx.drawImage(images.effects,60,50 * percent,30,50 * (1.0 - percent), this.x, this.y, this.w, this.h * (1.0 - percent) ); // cutting bottom part
+		ctx.drawImage(images.effects,60,0,30,50 * percent, this.x, this.y + (this.h * (1.0 - percent)), this.w, this.h * percent); //cutting top part
+	};
+	
+}
+
+
+
 function Box(a,b,c,d){
 	this.x = a;
 	this.y = b;
@@ -164,7 +189,6 @@ function Effect(im, cx, cy, cw, ch, a, b, c, d, ang){
 	
 	effects.push(this);
 }
-
 
 
 function Circle(a,b,c){
