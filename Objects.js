@@ -140,11 +140,12 @@ function DamageCounter(a, b, c, d){
 	this.color = d;
 	this.timeLeft = 1000;
 	this.distance = 5;
+	this.dx = this.x;
+	this.dy = this.y;
 	
 	this.draw = function(){
 		ctx.fillStyle = this.color;
 		ctx.font = "bold 30px Impact";
-		var a = (Math.random() * 2 * Math.PI) - Math.PI;
 		ctx.fillText(this.number + "", this.x + (Math.cos(a) * this.distance), this.y + (Math.sin(a) * this.distance));
 	};
 	
@@ -153,6 +154,9 @@ function DamageCounter(a, b, c, d){
 		this.distance -= (time / 100);
 		if(this.distance < 0)
 			this.distance = 0;
+		
+		var a = (Math.random() * 2 * Math.PI) - Math.PI;
+		this.dx 
 	};
 	
 	damageCounters.push(this);
@@ -228,4 +232,19 @@ function Key(kc){
 	}
 	
 	keys.push(this);
+}
+
+function MenuEnemy(n,en){
+	this.name = n;
+	this.enemy = en;
+	this.ammount = 0;
+	
+	this.add = function(){
+		this.ammount++;
+	};
+	
+	this.subtract = function(){
+		if(this.ammount > 0)
+			this.ammount--;
+	};
 }

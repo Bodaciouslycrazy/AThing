@@ -681,6 +681,7 @@ function TurkeyLeg(){
 	this.WAITTIME = 2000;
 	this.waitTime = 2000;
 	this.type = "ren";
+	this.weakness = "scifi";
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -748,10 +749,11 @@ function Batleth(){
 	this.w = 30;
 	this.h = 30;
 	this.distance = 20;
-	this.damage = 3;
-	this.WAITTIME = 800;
-	this.waitTime = 800;
+	this.damage = 4;
+	this.WAITTIME = 1200;
+	this.waitTime = 1200;
 	this.type = "scifi";
+	this.weakness = "pony";
 	
 	this.update = function(time){
 		this.waitTime -= time;

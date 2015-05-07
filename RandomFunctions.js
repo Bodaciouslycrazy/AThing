@@ -249,3 +249,19 @@ function deleteEnemy( en ){
 		}
 	}
 }
+
+function makeHitBox(en){
+	var b = new Box(en.x + (en.w * 0.5) - (en.weapon.w * 0.5), en.y + (en.h * 0.5) - (en.weapon.h), en.weapon.w, en.weapon.h);
+	b.x += (Math.cos(en.angle) * en.weapon.distance);
+	b.y += (Math.sin(en.angle) * en.weapon.distance);
+	return b
+}
+
+function pressPause(){
+	if(gamestate == gamestates.pause)
+		gamestate = gamestates.pause.state;
+	else{
+		gamestates.pause.state = gamestate;
+		gamestate = gamestates.pause;
+	}
+}

@@ -19,8 +19,8 @@ function LoadingGamestate(){
 			//setGamestate(gamestates.intro);
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			setGamestate(gamestates.enterpriseEntrance);
-			playMusic(music.leander);
+			setGamestate(gamestates.arenaMenu);
+			//playMusic(music.leander);
 		}
 	}
 	
@@ -911,7 +911,7 @@ function Ponyville(){
 function EnterpriseEntrance(){
 	this.name = "Enterprise Entrance";
 	this.enemies = [new Saxaphone(190,285), new Saxaphone( 190, 485), new Slime( 300,290)];
-	this.items = [new Item(395, 295, new Batleth()) ];
+	this.items = [new Item(276, 480, new Oboe() ) ];
 	this.walls = [
 		new Box(0,0,800,20), //top wall
 		new Box(0,600,800,20), //bottom wall
@@ -964,6 +964,7 @@ function EnterpriseEntrance(){
 		else if(collide(player, this.rightDoor)){
 			player.x = 376;
 			player.y = 104;
+			sounds.teleport.play();
 			setGamestate(gamestates.beamRoom);
 		}
 	};
@@ -1096,8 +1097,8 @@ function RenfestFront(){
 
 function BeamRoom(){
 	this.name = "Beam Room";
-	this.enemies = [];
-	this.items = [];
+	this.enemies = [new Tribble(300,500)];
+	this.items = [new Item(212, 524, new Batleth())];
 	this.walls = [
 		new Box(0,524,168,76), //left wall (bottom)
 		new Box(0,0,168,410), //left wall (top)
@@ -1159,6 +1160,7 @@ function BeamRoom(){
 		if(collide(player, this.rightDoor)){
 			player.x = 380;
 			player.y = 325;
+			sounds.teleport.play();
 			setGamestate(gamestates.enterpriseEntrance);
 		}
 		else if(collide(player,this.leftDoor)){
@@ -1199,6 +1201,82 @@ function BeamRoom(){
 	};
 }
 
+
+
+function Arena(){
+	this.name = "Arena";
+	this.enemies = [];
+	this.items = [];
+	this.walls = [
+		new Box(-20,-20,20,640), //left wall
+		new Box(-20,-20,840,20), //top wall
+		new Box(-20,600,840,20), //bottom wall
+		new Box(800,-20,20,640), //right wall
+		];
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		cleanUpBodies();
+		
+		//doors
+	};
+	
+	this.draw = function(){
+		//ctx.drawImage( ,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
+		sortEnemies(drw);
+		
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
+		}
+		
+		player.drawHUD();
+		drawTitle();
+	};
+}
 
 
 /*
@@ -1284,6 +1362,67 @@ function EmptyGamestate(){
 
 
 
+function ArenaMenu(){
+	
+	this.choices = [
+		new MenuEnemy("Slime", Slime),
+		new MenuEnemy("Saxaphone", Saxaphone),
+		];
+	
+	this.selected = 0;
+	
+	this.update = function(time){
+		if(player.keys.s.pressed && this.selected < this.choices.length + 1)
+			this.selected++;
+		else if(player.keys.w.pressed && this.selected > 0)
+			this.selected--;
+		
+		if(this.selected < this.choices.length){
+			if(player.keys.d.pressed)
+				this.choices[this.selected].add();
+			else if(player.keys.a.pressed)
+				this.choices[this.selected].subtract();
+		}
+		
+		if(this.selected == this.choices.length && player.keys.space.pressed)
+			setGamestate(gamestates.arena);
+		
+	};
+	
+	this.draw = function(){
+		ctx.drawImage(images.arenaMenuBackground, 0,0,200,150,0,0,800,600);
+		ctx.fillStyle = "#000000";
+		ctx.font = "20px Impact";
+		
+		var dx = 30;
+		var dy = 40;
+		
+		for(var i = 0; i < this.choices.length; i++){
+			ctx.fillText(this.choices[i].name, dx,dy);
+			ctx.fillText(this.choices[i].ammount + "", 400, dy);
+			
+			if(this.selected == i){
+				ctx.drawImage(images.arenaMenu, 0,0,10,10, 370, dy - 20, 20, 20);
+				ctx.drawImage(images.arenaMenu, 10,0,10,10, 430, dy - 20, 20, 20);
+			}
+			
+			dy += 24;
+		}
+		
+		dy += 10;
+		ctx.fillText("START",dx,dy);
+		if(this.selected == this.choices.length)
+			ctx.drawImage(images.arenaMenu,0,0,10,10, 100,dy - 20, 20, 20);
+		
+		dy += 24;
+		ctx.fillText("BACK",dx,dy);
+		if(this.selected == this.choices.length + 1)
+			ctx.drawImage(images.arenaMenu,0,0,10,10, 100,dy - 20, 20, 20);
+	};
+}
+
+
+
 /*
  ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ 
 ██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗
@@ -1312,6 +1451,25 @@ function GameOver(){
 }
 
 
+function Pause(){
+	
+	this.state = false;
+	
+	this.update = function(time){
+		
+	};
+	
+	this.draw = function(){
+		if(this.state != false)
+			this.state.draw();
+		
+		ctx.fillStyle = "#000000";
+		ctx.font = "50px Impact";
+		ctx.fillText("PAUSED",10,60);
+	};
+	
+}
+
 
 var gamestate;
 var gamestates = {
@@ -1328,6 +1486,9 @@ var gamestates = {
 	enterpriseEntrance: new EnterpriseEntrance(),
 	renfestFront: new RenfestFront(),
 	beamRoom: new BeamRoom(),
+	arenaMenu: new ArenaMenu(),
+	arena: new Arena(),
+	pause: new Pause(),
 };
 
 var timeInGamestate = 0;

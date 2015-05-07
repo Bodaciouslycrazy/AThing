@@ -21,6 +21,8 @@ var images = {
 		renfestFront: new Image(),
 		beamRoom: new Image(),
 		beamRoomLayer2: new Image(),
+		arenaMenu: new Image(),
+		arenaMenuBackground: new Image(),
 	};
 	
 	var sounds = {
@@ -40,6 +42,7 @@ var images = {
 		slash: false,
 		laser: false,
 		magic: false,
+		teleport: false,
 	};
 	
 	var music = {
@@ -86,6 +89,8 @@ function loadSoundsAndImages(){
 	images.renfestFront.onload = function(){ gamestate.loaded++; };
 	images.beamRoom.onload = function(){ gamestate.loaded++; };
 	images.beamRoomLayer2.onload = function(){ gamestate.loaded++; };
+	images.arenaMenu.onload = function(){ gamestate.loaded++; };
+	images.arenaMenuBackground.onload = function(){ gamestate.loaded++ };
 	images.frame.src = "Images/Frame.png";
 	images.life.src = "Images/Life.png";
 	images.weapons.src = "Images/Weapons.png";
@@ -108,6 +113,8 @@ function loadSoundsAndImages(){
 	images.renfestFront.src = "Images/RenfestFront.png";
 	images.beamRoom.src = "Images/BeamRoom.png";
 	images.beamRoomLayer2.src = "Images/BeamRoomLayer2.png";
+	images.arenaMenu.src = "Images/ArenaMenu.png";
+	images.arenaMenuBackground.src = "Images/ArenaBackground.png";
 	music.intro = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ['Sounds/SadSong.wav'],
@@ -183,6 +190,10 @@ function loadSoundsAndImages(){
 	sounds.magic = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ["Sounds/Magic.wav"],
+	});
+	sounds.teleport = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Teleport.wav"],
 	});
 }
 

@@ -47,7 +47,7 @@
 	var effects = [];
 	
 	var keys = [];
-	
+	var pKey = new Key(80);
 	
 	//TESTING VARS
 	
@@ -69,7 +69,6 @@
 		ctx.clearRect(0,0,can.width,can.height);
 		ctx.beginPath();//from what I know, this doesn't change anything, but clears all of the ctx.draw memory, keeping the process speed fast.
 		gamestate.draw();
-		//drawEffects();
 		drawDamageCounters();
 		
 		accumulate += deltaTime;
@@ -78,19 +77,26 @@
 		while(accumulate >= UPDATEINTERVAL){
 			gamestate.update(UPDATEINTERVAL);
 			accumulate -= UPDATEINTERVAL;
+			
+			if(pKey.pressed)
+				pressPause();
+			
 			updateAllKeys();
 			allIntervals += UPDATEINTERVAL;
 			timeInGamestate += UPDATEINTERVAL;
 		}
-		updateEffects(allIntervals);
-		updateDamageCounters(allIntervals);
+		
+		if(gamestate != gamestates.pause){
+			updateEffects(allIntervals);
+			updateDamageCounters(allIntervals);
+		}
+		
 		
 		lastTickTime = time;
 		window.requestAnimationFrame(tick);
 	}
 	
 	function handleKeyDown(evt){
-		
 		for(i = 0; i < keys.length; i ++){
 			if(evt.keyCode == keys[i].keyCode && keys[i].down != true)
 				keys[i].press();

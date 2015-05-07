@@ -671,15 +671,85 @@ function Tribble(a,b){
 	this.h = 20;
 	this.angle = 0;
 	this.speed = 50;
-	this.baseHealth = 10;
-	this.health = 10;
+	this.baseHealth = 7;
+	this.health = 7;
+	this.weaknesses = ["pony"];
+	this.walking = true;
+	this.weapon = new Tribs();
+	
+	this.ATTACKDELAY = 250;
+	this.attackDelay = 250;
+	
+	this.rep = 2000;
+	this.spawn = true;
+	
+	this.frameNumber = 0;
+	this.frameTime = 200;
 	
 	this.update = function(time){
-		
+		if(this.walking){
+			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
+			this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+			this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+			
+			this.frameTime -= time;
+			
+			var hitb = makeHitBox(this);
+			
+			this.weapon.waitTime -= time;
+			if(this.weapon.waitTime < 0)
+				this.weapon.waitTime = 0;
+			
+			this.rep -= time;
+			if(this.rep < 0)
+				this.rep = 0;
+			
+			if(this.weapon.waitTime == 0 && collide(player,hitb)){
+				this.walking = false;
+				this.attackDelay = this.ATTACKDELAY;
+			}
+			else if(this.rep == 0 && this.spawn){
+				var ang = Math.random() * 2 * Math.PI;
+				ang - Math.PI;
+				gamestate.enemies.push(new Tribble(this.x +(Math.cos(ang) * 30 ), this.y + (Math.sin(ang) * 30 ) ) );
+				this.spawn = false;
+			}
+		}
+		else{
+			this.attackDelay -= time;
+			
+			if(this.attackDelay <= 0){
+				
+				var b = makeHitBox(this)
+				if(collide(player,b) )
+					player.hurt(this.weapon.damage, "scifi");
+				
+				new Effect(images.effects,0,0,50,50, b.x, b.y, b.w, b.h, this.angle);
+				sounds.swing.play();
+				
+				this.weapon.waitTime = this.weapon.WAITTIME;
+				this.walking = true;
+			}
+		}
 	};
 	
 	this.draw = function(){
+		//ctx.fillStyle = "#FF0000";
+		//ctx.fillRect(this.x, this.y, this.w, this.h);
 		
+		if(this.frameTime < 0){
+			this.frameNumber++;
+			this.frameTime += 200;
+			if(this.frameNumber == 4)
+				this.frameNumber = 0;
+		}
+		
+		if(!this.walking || this.frameNumber == 0)
+			ctx.drawImage(images.enemies,0,130,20,20,this.x, this.y, this.w, this.h);
+		else if(this.frameNumber == 2)
+			ctx.drawImage(images.enemies, 40,130,20,20,this.x, this.y, this.w, this.h);
+		else
+			ctx.drawImage(images.enemies,20,130,20,20,this.x, this.y, this.w, this.h);
 	};
 	
 	this.onDeath = function(){
@@ -961,4 +1031,13 @@ function Sword(){
 	this.waitTime = 1200;
 	this.WAITTIME = 1200;
 	this.distance = 40;
+}
+
+function Tribs(){
+	this.w = 20;
+	this.h = 20;
+	this.damage = 1;
+	this.waitTime = 1000;
+	this.WAITTIME = 1000;
+	this.distance = 20;
 }
