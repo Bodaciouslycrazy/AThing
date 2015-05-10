@@ -23,6 +23,7 @@ var images = {
 		beamRoomLayer2: new Image(),
 		arenaMenu: new Image(),
 		arenaMenuBackground: new Image(),
+		arena: new Image(),
 	};
 	
 	var sounds = {
@@ -91,6 +92,7 @@ function loadSoundsAndImages(){
 	images.beamRoomLayer2.onload = function(){ gamestate.loaded++; };
 	images.arenaMenu.onload = function(){ gamestate.loaded++; };
 	images.arenaMenuBackground.onload = function(){ gamestate.loaded++ };
+	images.arena.onload = function(){ gamestate.loaded++ };
 	images.frame.src = "Images/Frame.png";
 	images.life.src = "Images/Life.png";
 	images.weapons.src = "Images/Weapons.png";
@@ -115,6 +117,7 @@ function loadSoundsAndImages(){
 	images.beamRoomLayer2.src = "Images/BeamRoomLayer2.png";
 	images.arenaMenu.src = "Images/ArenaMenu.png";
 	images.arenaMenuBackground.src = "Images/ArenaBackground.png";
+	images.arena.src = "Images/Arena.png";
 	music.intro = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ['Sounds/SadSong.wav'],

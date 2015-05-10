@@ -1208,11 +1208,13 @@ function Arena(){
 	this.enemies = [];
 	this.items = [];
 	this.walls = [
-		new Box(-20,-20,20,640), //left wall
-		new Box(-20,-20,840,20), //top wall
+		new Box(0,-20,20,640), //left wall
+		new Box(-20,0,840,50), //top wall
 		new Box(-20,600,840,20), //bottom wall
-		new Box(800,-20,20,640), //right wall
+		new Box(780,-20,20,640), //right wall
 		];
+		
+	this.exit = new Box(0,0,0,0);
 	
 	this.update = function(time){
 		
@@ -1246,10 +1248,13 @@ function Arena(){
 		cleanUpBodies();
 		
 		//doors
+		if(this.enemies.length == 0 && collide(player, this.exit) ){
+			//setGamestate();
+		}
 	};
 	
 	this.draw = function(){
-		//ctx.drawImage( ,0,0,200,150,0,0,800,600);
+		ctx.drawImage( images.arena,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
 		for(var i = 0; i < effects.length; i++){
@@ -1367,6 +1372,10 @@ function ArenaMenu(){
 	this.choices = [
 		new MenuEnemy("Slime", Slime),
 		new MenuEnemy("Saxaphone", Saxaphone),
+		new MenuEnemy("Bowman", Bowman),
+		new MenuEnemy("Knight", Knight),
+		new MenuEnemy("Earth Pony", EarthPony),
+		new MenuEnemy("Tribble", Tribble),
 		];
 	
 	this.selected = 0;
@@ -1384,18 +1393,30 @@ function ArenaMenu(){
 				this.choices[this.selected].subtract();
 		}
 		
-		if(this.selected == this.choices.length && player.keys.space.pressed)
+		if(this.selected == this.choices.length && player.keys.space.pressed){
+			for(var i = 0; i < this.choices.length; i++){
+				
+				while(this.choices[i].ammount > 0){
+					var en = new this.choices[i].enemy(0,0);
+					en.x = (Math.random() * (600 - en.w) ) + 100;
+					en.y = 100 + (Math.random() * (200 - en.h));
+					gamestates.arena.enemies.push(en);
+					this.choices[i].subtract();
+				}
+				
+			}
 			setGamestate(gamestates.arena);
+		}
 		
 	};
 	
 	this.draw = function(){
 		ctx.drawImage(images.arenaMenuBackground, 0,0,200,150,0,0,800,600);
-		ctx.fillStyle = "#000000";
+		ctx.fillStyle = "rgb(120,120,80)";
 		ctx.font = "20px Impact";
 		
-		var dx = 30;
-		var dy = 40;
+		var dx = 40;
+		var dy = 50;
 		
 		for(var i = 0; i < this.choices.length; i++){
 			ctx.fillText(this.choices[i].name, dx,dy);
