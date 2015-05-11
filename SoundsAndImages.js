@@ -13,6 +13,8 @@ var images = {
 		forest: new Image(),
 		renfestEntrance: new Image(),
 		renfestEntranceLayer2: new Image(),
+		renfestLeft: new Image(),
+		renfestContinued: new Image(),
 		ranch: new Image(),
 		ponyville: new Image(),
 		ponyvilleLayer2: new Image(),
@@ -82,6 +84,8 @@ function loadSoundsAndImages(){
 	images.forest.onload = function(){ gamestate.loaded++; };
 	images.renfestEntrance.onload = function(){ gamestate.loaded++ };
 	images.renfestEntranceLayer2.onload = function(){ gamestate.loaded++ };
+	images.renfestLeft.onload = function(){ gamestate.loaded++ };
+	images.renfestContinued.onload = function(){ gamestate.loaded++ };
 	images.ranch.onload = function(){ gamestate.loaded++; };
 	images.ponyville.onload = function(){ gamestate.loaded++; };
 	images.ponyvilleLayer2.onload = function(){ gamestate.loaded++; };
@@ -107,6 +111,8 @@ function loadSoundsAndImages(){
 	images.forest.src = "Images/Forest.png";
 	images.renfestEntrance.src = "Images/RenfestEntrance.png";
 	images.renfestEntranceLayer2.src = "Images/RenfestEntranceLayer2.png";
+	images.renfestLeft.src = "Images/RenfestLeft.png";
+	images.renfestContinued.src = "Images/RenfestContinued.png";
 	images.ranch.src = "Images/Ranch.png";
 	images.ponyville.src = "Images/Ponyville.png";
 	images.ponyvilleLayer2.src = "Images/PonyvilleLayer2.png";

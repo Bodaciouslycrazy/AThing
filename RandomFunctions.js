@@ -195,7 +195,7 @@ function setGamestate(gmst){
 function drawTitle(){
 	if(timeInGamestate <= 3000){
 		ctx.font = "30px Impact";
-		ctx.fillStyle = "#303030";
+		ctx.fillStyle = "rgba(0,0,0,0.5)";
 		ctx.textAlign = "right";
 		var bot = 40;
 		if(timeInGamestate > 2000 )

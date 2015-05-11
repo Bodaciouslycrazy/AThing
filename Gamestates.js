@@ -19,7 +19,7 @@ function LoadingGamestate(){
 			//setGamestate(gamestates.intro);
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			setGamestate(gamestates.mainRoom);
+			setGamestate(gamestates.renfestFront);
 			//playMusic(music.leander);
 		}
 	}
@@ -1030,6 +1030,7 @@ function RenfestFront(){
 		];
 	
 	this.upDoor = new Box(0,-20,800,20);
+	this.leftDoor = new Box(-20,0,20,600);
 	
 	this.update = function(time){
 		
@@ -1067,10 +1068,179 @@ function RenfestFront(){
 			player.y = 540;
 			setGamestate(gamestates.renfestEntrance);
 		}
+		else if(collide(player,this.leftDoor)){
+			player.x = 740;
+			setGamestate(gamestates.renfestLeft);
+		}
 	};
 	
 	this.draw = function(){
 		ctx.drawImage(images.renfestFront ,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
+		sortEnemies(drw);
+		
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
+		}
+		
+		player.drawHUD();
+		drawTitle();
+	};
+}
+
+
+
+function RenfestLeft(){
+	this.name = "Sherwood Left";
+	this.enemies = [];
+	this.items = [];
+	this.walls = [
+		new Box(0,0,800,20), //top wall
+		new Box(0,0,48,600), //left wall
+		new Box(652,548,148,52), //bottom right corner
+		];
+	
+	this.rightDoor = new Box(800,0,20,600);
+	this.downDoor = new Box(0,600,800,20);
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		cleanUpBodies();
+		
+		//doors
+		if(collide(player,this.rightDoor)){
+			player.x = 10;
+			setGamestate(gamestates.renfestFront);
+		}
+		else if(collide(player,this.downDoor)){
+			player.y = 10;
+			setGamestate(gamestates.renfestContinued);
+		}
+	};
+	
+	this.draw = function(){
+		ctx.drawImage( images.renfestLeft,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
+		sortEnemies(drw);
+		
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
+		}
+		
+		player.drawHUD();
+		drawTitle();
+	};
+}
+
+
+
+function RenfestContinued(){
+	this.name = "Lost in Sherwood";
+	this.enemies = [];
+	this.items = [];
+	this.walls = [];
+	
+	this.upDoor = new Box(0,-20,800,20);
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		cleanUpBodies();
+		
+		//doors
+		if(collide(player,this.upDoor)){
+			player.y = 540;
+			setGamestate(gamestates.renfestLeft);
+		}
+	};
+	
+	this.draw = function(){
+		ctx.drawImage( images.renfestContinued,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
 		for(var i = 0; i < effects.length; i++){
@@ -1545,6 +1715,8 @@ var gamestates = {
 	rightPath: new RightPath(),
 	forest: new Forest(),
 	renfestEntrance: new RenfestEntrance(),
+	renfestLeft: new RenfestLeft(),
+	renfestContinued: new RenfestContinued(),
 	ranch: new Ranch(),
 	ponyville: new Ponyville(),
 	enterpriseEntrance: new EnterpriseEntrance(),
