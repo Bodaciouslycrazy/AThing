@@ -664,6 +664,17 @@ function EarthPony(a,b){
 
 
 
+/*
+████████╗██████╗ ██╗██████╗ ██████╗ ██╗     ███████╗
+╚══██╔══╝██╔══██╗██║██╔══██╗██╔══██╗██║     ██╔════╝
+   ██║   ██████╔╝██║██████╔╝██████╔╝██║     █████╗  
+   ██║   ██╔══██╗██║██╔══██╗██╔══██╗██║     ██╔══╝  
+   ██║   ██║  ██║██║██████╔╝██████╔╝███████╗███████╗
+   ╚═╝   ╚═╝  ╚═╝╚═╝╚═════╝ ╚═════╝ ╚══════╝╚══════╝
+*/
+
+
+
 function Tribble(a,b){
 	this.x = a;
 	this.y = b;
@@ -753,7 +764,23 @@ function Tribble(a,b){
 	};
 	
 	this.onDeath = function(){
+		var num = Math.random();
 		
+		if(num > 0.95){
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Phaser() ) );
+		}
+		else if(num > 0.85){
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Batleth() ) );
+		}
+		else if(num > 0.55){
+			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
+			thing.canPickUp = false;
+			thing.onCollide = function(){
+				player.heal(5);
+				return true;
+			};
+			gamestate.items.push( thing );
+		}
 	};
 	
 }

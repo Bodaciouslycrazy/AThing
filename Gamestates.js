@@ -19,7 +19,7 @@ function LoadingGamestate(){
 			//setGamestate(gamestates.intro);
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			setGamestate(gamestates.arenaMenu);
+			setGamestate(gamestates.mainRoom);
 			//playMusic(music.leander);
 		}
 	}
@@ -120,6 +120,7 @@ function MainRoom(){
 	this.specialWall = new Box(376,0,80,50)
 	this.door = new Box(385,-10,100,20);
 	this.bodie = new Bodie(600,300);
+	this.arenaManager = new ArenaManager(200,500);
 	
 	this.update = function(time){
 		player.update(time);
@@ -146,6 +147,7 @@ function MainRoom(){
 			player.y = 530;
 			setGamestate(gamestates.room2);
 		}
+		this.arenaManager.update(time);
 	}
 	
 	this.draw = function(){
@@ -154,6 +156,7 @@ function MainRoom(){
 		var drw = this.enemies.slice();
 		drw.push(player);
 		drw.push(this.bodie);
+		drw.push(this.arenaManager);
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
@@ -172,6 +175,7 @@ function MainRoom(){
 			this.specialWall.draw();
 		
 		this.bodie.talk();
+		this.arenaManager.talk();
 		player.drawHUD();
 		drawTitle();
 	}
@@ -1095,6 +1099,19 @@ function RenfestFront(){
 	};
 }
 
+
+
+/*
+██████╗ ███████╗ █████╗ ███╗   ███╗    ██████╗  ██████╗  ██████╗ ███╗   ███╗
+██╔══██╗██╔════╝██╔══██╗████╗ ████║    ██╔══██╗██╔═══██╗██╔═══██╗████╗ ████║
+██████╔╝█████╗  ███████║██╔████╔██║    ██████╔╝██║   ██║██║   ██║██╔████╔██║
+██╔══██╗██╔══╝  ██╔══██║██║╚██╔╝██║    ██╔══██╗██║   ██║██║   ██║██║╚██╔╝██║
+██████╔╝███████╗██║  ██║██║ ╚═╝ ██║    ██║  ██║╚██████╔╝╚██████╔╝██║ ╚═╝ ██║
+╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝    ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝     ╚═╝
+*/
+
+
+
 function BeamRoom(){
 	this.name = "Beam Room";
 	this.enemies = [new Tribble(300,500)];
@@ -1203,6 +1220,17 @@ function BeamRoom(){
 
 
 
+/*
+ █████╗ ██████╗ ███████╗███╗   ██╗ █████╗ 
+██╔══██╗██╔══██╗██╔════╝████╗  ██║██╔══██╗
+███████║██████╔╝█████╗  ██╔██╗ ██║███████║
+██╔══██║██╔══██╗██╔══╝  ██║╚██╗██║██╔══██║
+██║  ██║██║  ██║███████╗██║ ╚████║██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═╝  ╚═╝
+*/
+
+
+
 function Arena(){
 	this.name = "Arena";
 	this.enemies = [];
@@ -1282,6 +1310,7 @@ function Arena(){
 		drawTitle();
 	};
 }
+
 
 
 /*
@@ -1367,6 +1396,17 @@ function EmptyGamestate(){
 
 
 
+/*
+ █████╗ ██████╗ ███████╗███╗   ██╗ █████╗     ███╗   ███╗███████╗███╗   ██╗██╗   ██╗
+██╔══██╗██╔══██╗██╔════╝████╗  ██║██╔══██╗    ████╗ ████║██╔════╝████╗  ██║██║   ██║
+███████║██████╔╝█████╗  ██╔██╗ ██║███████║    ██╔████╔██║█████╗  ██╔██╗ ██║██║   ██║
+██╔══██║██╔══██╗██╔══╝  ██║╚██╗██║██╔══██║    ██║╚██╔╝██║██╔══╝  ██║╚██╗██║██║   ██║
+██║  ██║██║  ██║███████╗██║ ╚████║██║  ██║    ██║ ╚═╝ ██║███████╗██║ ╚████║╚██████╔╝
+╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═╝  ╚═╝    ╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝ 
+*/
+
+
+
 function ArenaMenu(){
 	
 	this.choices = [
@@ -1406,6 +1446,9 @@ function ArenaMenu(){
 				
 			}
 			setGamestate(gamestates.arena);
+		}
+		else if(this.selected == this.choices.length + 1 && player.keys.space.pressed){
+			setGamestate(gamestates.mainRoom);
 		}
 		
 	};

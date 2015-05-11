@@ -86,6 +86,33 @@ function Bodie(a,b){
 
 
 
+function ArenaManager(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 30;
+	this.h = 50;
+	
+	this.update = function(time){
+		if(findDistanceFromCenters(this,player) < 125 && player.keys.space.pressed)
+			setGamestate(gamestates.arenaMenu);
+	};
+	
+	this.draw = function(){
+		ctx.fillStyle = "#00FF00";
+		ctx.fillRect(this.x, this.y, this.w, this.h);
+	};
+	
+	this.talk = function(){
+		if(findDistanceFromCenters(this,player) < 125){
+			ctx.font = "14px Impact";
+			ctx.fillStyle = "#000000";
+			ctx.fillText("Welcome to the Arena!",this.x - 10, this.y - 30);
+		}
+	};
+}
+
+
+
 function Tele(a,b){
 	this.x = a;
 	this.y = b;
