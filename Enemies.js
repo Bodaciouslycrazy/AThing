@@ -786,6 +786,68 @@ function Tribble(a,b){
 }
 
 
+function Larper(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 30;
+	this.h = 50;
+	this.speed = 50;
+	this.angle = 0;
+	this.baseHealth = 30;
+	this.health = 30;
+	this.weaknesses = ["scifi"];
+	
+	this.attacks = ["summon"];
+	this.status = "walking";
+	this.timer = 1500;
+	this.timer2 = 0;
+	
+	this.update = function(time){
+		if(this.status == "walking"){
+			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
+			this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+			this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+			
+			this.timer -= time;
+			if(this.timer <= 0){
+				//switch status
+				var r = Math.floor(Math.random() * this.attacks.length);
+				this.status = this.attacks[r];
+				if(this.status == this.attacks[0]){
+					this.timer += 1000;
+					this.timer2 = 1;
+				}
+			}
+			
+		}
+		else if(this.status == this.attacks[0]){ //summon
+			if(this.timer2 > 0){
+				var ang = (Math.random() * 2 * Math.PI) - Math.PI;
+				var bm = new Bowman(0,0);
+				bm.x = (this.x + (this.w * 0.5)) + (Math.cos(ang) * 30) - (this.w * 0.5);
+				bm.y = (this.y + (this.h * 0.5)) + (Math.sin(ang) * 30) - (this.h * 0.5);
+				gamestate.enemies.push(bm);
+				this.timer2--;
+			}
+			
+			this.timer -= time;
+			if(this.timer <= 0){
+				this.status = "walking";
+				this.timer += 2500;
+			}
+		}
+	};
+	
+	this.draw = function(){
+		ctx.fillStyle = "#FF0000";
+		ctx.fillRect(this.x, this.y, this.w, this.h);
+	};
+	
+	this.onDealth = function(){
+		gamestate.items.push( new Item( this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5, new DrPepper() ) );
+	};
+}
+
 
 /*
  ██████╗ ██╗   ██╗███╗   ██╗██████╗ ███████╗██████╗ ███████╗███████╗███╗   ██╗
@@ -829,7 +891,6 @@ function Gundersen(a,b){
 			if(this.timing <= 0){
 				var r = Math.floor(Math.random() * this.attacks.length);
 				this.status = this.attacks[r];
-				console.log(this.status);
 				if(this.status == this.attacks[0]){//"fury"
 					this.timing = 1000;
 					this.timing2 = 50;
