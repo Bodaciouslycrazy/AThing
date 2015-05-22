@@ -27,20 +27,28 @@ function Bodie(a,b){
 	this.y = b;
 	this.w = 30;
 	this.h = 50;
-	this.status = 0;
+	this.peppers = 0;
 	
 	this.update = function(time){
-		
+		for(var i = 0; i < gamestate.items.length; i++){
+			if(gamestate.items[i].weapon.isPepper && findDistanceFromCenters(this,gamestate.items[i]) < 100){
+				
+				if(this.peppers == 0)
+					gamestate.items.push(new Item(390,290, new Textbook() ) );
+				
+				this.peppers++;
+				gamestate.items.splice(i,1);
+				i--;
+			}
+		}
 	};
 	
 	this.draw = function(){
-		//ctx.fillStyle = "#0000FF";
-		//ctx.fillRect(this.x, this.y, this.w, this.h);
 		ctx.drawImage(images.bodie, 0,0,30,50,this.x,this.y,this.w,this.h);
 	};
 	
 	this.talk = function(){
-		if(this.status == 0){
+		if(this.peppers == 0){
 			ctx.font = "18px Impact";
 			ctx.fillStyle = "#000000";
 			ctx.fillText("I don't feel very good...",500,200);
@@ -56,19 +64,12 @@ function Bodie(a,b){
 				ctx.font = "14px Impact";
 				ctx.fillText("Hold \"E\" and press the arrow key to drop an item.", 400,400);
 			}
-			else if( !hasPepper ){
-				if(collide(gamestate.items[0],new Box(this.x - 40, this.y - 40, this.w + 80, this.h + 80) ) ){
-					gamestate.items.splice(0,1);
-					gamestate.items.push(new Item(550,300,new Textbook() ) );
-					this.status = 1;
-				}
-				else{
-					ctx.font = "14px Impact";
-					ctx.fillText("Hold \"E\" and press an arrow key to pick up an item.", 400,400);
-				}
+			else if(!hasPepper){
+				ctx.font = "14px Impact";
+				ctx.fillText("Hold \"E\" and press an arrow key to pick up an item.", 400,400);
 			}
 		}
-		else if(this.status == 1){
+		else if(this.peppers == 1 && gamestate.enemies.length > 0){
 			ctx.font = "18px Impact";
 			ctx.fillStyle = "#000000";
 			ctx.fillText("I feel a bit better... But I will need a lot more.",400,200);
@@ -80,7 +81,11 @@ function Bodie(a,b){
 				ctx.fillText("Press an item's arrow key to use it.",200,750);
 			}
 		}
-		
+		else if(this.peppers == 2){
+			ctx.font = "18px Impact";
+			ctx.fillStyle = "#000000";
+			ctx.fillText("OH, thank you Kim! There are still some Dr.Peppers left though! *poke*", 400,200);
+		}
 	};
 }
 
@@ -167,13 +172,13 @@ function DamageCounter(a, b, c, d){
 	this.color = d;
 	this.timeLeft = 1000;
 	this.distance = 5;
-	this.dx = this.x;
-	this.dy = this.y;
+	this.dx = 0;
+	this.dy = 0;
 	
 	this.draw = function(){
 		ctx.fillStyle = this.color;
 		ctx.font = "bold 30px Impact";
-		ctx.fillText(this.number + "", this.x + (Math.cos(a) * this.distance), this.y + (Math.sin(a) * this.distance));
+		ctx.fillText(this.number + "", this.x + this.dx, this.y + this.dy);
 	};
 	
 	this.update = function(time){
@@ -183,7 +188,8 @@ function DamageCounter(a, b, c, d){
 			this.distance = 0;
 		
 		var a = (Math.random() * 2 * Math.PI) - Math.PI;
-		this.dx 
+		this.dx = Math.cos(a) * this.distance;
+		this.dy = Math.sin(a) * this.distance;
 	};
 	
 	damageCounters.push(this);

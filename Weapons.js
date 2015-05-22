@@ -294,6 +294,7 @@ function DrPepper(){
 	this.damage = 0;
 	this.WAITTIME = 1000;
 	this.waitTime = 1000;
+	this.isPepper = true;
 	
 	this.update = function(time){
 	

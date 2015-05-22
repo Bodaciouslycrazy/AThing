@@ -23,7 +23,7 @@ var lastTickTime
 	the time of the last time the tick() function was called
 	
 var UPDATEINTERVAL
-	the "frame rate" of the game.
+	the "frame rate" of the game. Never change this in the code.
 	
 var accumulate
 	stores the ammount of time needed to update that was left over from the last tick. You probably don't need to change this.
@@ -126,7 +126,7 @@ function clearScreen()
 function hurtEnemy( enemy, damage, type )
 	deals [damage] damage to [enemy]. If [enemy] is weak to [type], it will do double damage.
 	
-function sortEnemies( boxes )
+function sortBoxes( boxes )
 	sorts [boxes] based from highest y value to lowest y value. CAN BE USED TO SORT ANY BOXES, NOT JUST ENEMIES.
 	
 function sortDamageCounters( damageCounters )
@@ -143,6 +143,9 @@ function drawTitle()
 	
 function findDistanceFromCenters( box1 , box2 )
 	returns the distance between the centers of [box1] and [box2].
+	
+function makeHitBox( enemy )
+	the enemy you pass in must have a weapon object. This function returns a Box() of where the enemy will attack at that moment.
 
 function main()
 	The function called at the very beginning of the code. Put code here if you only want it to be run once at the very begining.

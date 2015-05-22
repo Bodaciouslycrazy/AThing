@@ -19,8 +19,8 @@ function LoadingGamestate(){
 			//setGamestate(gamestates.intro);
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			setGamestate(gamestates.renfestFront);
-			//playMusic(music.leander);
+			setGamestate(gamestates.mainRoom);
+			playMusic(music.leander);
 		}
 	}
 	
@@ -124,6 +124,7 @@ function MainRoom(){
 	
 	this.update = function(time){
 		player.update(time);
+		this.bodie.update(time);
 		for(var i = 0; i < this.enemies.length; i ++){
 			this.enemies[i].update(time);
 		}
@@ -135,10 +136,8 @@ function MainRoom(){
 		if(this.specialWall != false){
 			if(collide(player,this.specialWall))
 				adjust(player,this.specialWall);
-			if(this.enemies.length == 0){
+			if(this.enemies.length == 0)
 				this.specialWall = false;
-				this.bodie.status++;
-			}
 		}
 		
 		cleanUpBodies();
@@ -160,7 +159,7 @@ function MainRoom(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -261,7 +260,7 @@ function Room2(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -299,7 +298,7 @@ function Room2(){
 
 function LeftPath(){
 	this.name = "End of Road";
-	this.enemies = [new Slime(100,200), new Slime(100,400), new Saxaphone(100,300), new Knight(100,100)];//add something else here
+	this.enemies = [new Slime(100,200), new Slime(100,400), new Saxaphone(100,300)];
 	this.items = [];
 	this.walls = [
 		new Box(-10,0,820,20), //top wall
@@ -360,7 +359,7 @@ function LeftPath(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -462,7 +461,7 @@ function RightPath(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -563,7 +562,7 @@ this.enemies = [new Saxaphone(700,350), new Saxaphone(300,100), new Slime(600,30
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -673,7 +672,7 @@ function RenfestEntrance(){
 		
 		drw.push(player);
 		drw.push(l2);
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -773,7 +772,7 @@ function Ranch(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -876,7 +875,7 @@ function Ponyville(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -981,7 +980,7 @@ function EnterpriseEntrance(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -1081,7 +1080,7 @@ function RenfestFront(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -1108,7 +1107,7 @@ function RenfestFront(){
 
 function RenfestLeft(){
 	this.name = "Sherwood Left";
-	this.enemies = [];
+	this.enemies = [new Bowman(150,500), new Bowman(150,60), new Knight( 180, 230)];
 	this.items = [];
 	this.walls = [
 		new Box(0,0,800,20), //top wall
@@ -1168,7 +1167,7 @@ function RenfestLeft(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -1195,7 +1194,7 @@ function RenfestLeft(){
 
 function RenfestContinued(){
 	this.name = "Lost in Sherwood";
-	this.enemies = [];
+	this.enemies = [new Bowman(385,300), new Knight(385,380), new Bowman(680,450), new Knight(200,450)];
 	this.items = [];
 	this.walls = [
 		new Box(0,0,48,80), //top left wall
@@ -1266,7 +1265,7 @@ function RenfestContinued(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -1348,7 +1347,7 @@ function RenfestBoss(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -1465,7 +1464,7 @@ function BeamRoom(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -1560,7 +1559,7 @@ function Arena(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();
@@ -1643,7 +1642,7 @@ function EmptyGamestate(){
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
-		sortEnemies(drw);
+		sortBoxes(drw);
 		
 		for(var i = 0; i < this.items.length; i++){
 			this.items[i].draw();

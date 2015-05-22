@@ -11,39 +11,6 @@ function collide(obj1,obj2){
 	return true;
 }
 
-/*
-	This function adjusts the position of an object when they collide.
-	Here is an example of how to use the code:
-	
-	var player = {
-		x: 0,
-		y: 0,
-		w: 15,
-		h: 15,
-	};
-	var wall = {
-		x: 100,
-		y: 100,
-		w: 100,
-		h: 100,
-	};
-	
-	function run(){
-		
-		//code to move the player
-		
-		if(collide( player, wall) ){
-			adjust(plyaer, wall);
-		}
-	}
-	
-	NOTES:
-	-ONLY CALL THIS FUNCTION IF THERE IS ALREADY A COLLISION. Otherwise, it will teleport the player to the edge of a wall.
-	-Both objects MUST have an x, y, w, and h variable. please use w and h, not width and height.
-	Arguments:
-		moveable: this is the object that you want to move. The function will move this object for you.
-		stationary: This is the object that the moveable object ran into. This object will not move.
-*/
 function adjust(moveable,stationary){
 	var left = Math.abs(moveable.x - (stationary.x - moveable.w));
 	var right = Math.abs(moveable.x - (stationary.x + stationary.w));
@@ -126,7 +93,7 @@ function updateEffects(time){
 }
 
 function drawEffects(){
-	sortEnemies(effects);
+	sortBoxes(effects);
 	
 	for( var i = 0; i < effects.length; i++){
 		effects[i].draw();
@@ -144,8 +111,6 @@ function clearScreen(){
 	clearEffects();
 }
 
-
-
 function hurtEnemy(en,dam,type){
 	var c = "#FF0000";
 	for(var i = 0; i < en.weaknesses.length; i++){
@@ -161,7 +126,7 @@ function hurtEnemy(en,dam,type){
 
 
 //can also be used with effects
-function sortEnemies(en){
+function sortBoxes(en){
 	en.sort(function(a,b){
 		return (a.y + a.h) - (b.y + b.h);
 	});

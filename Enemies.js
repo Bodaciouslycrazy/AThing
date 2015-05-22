@@ -28,7 +28,7 @@ function TutorialDoor(a,b){
 	};
 	
 	this.draw = function(){
-		ctx.drawImage(images.enemies,0,0,100,30,this.x, this.y, this.w, this.h);
+		ctx.drawImage(images.enemies,0,100,100,30,this.x, this.y, this.w, this.h);
 	};
 }
 
@@ -116,8 +116,6 @@ function Slime(a,b){
 	};
 	
 	this.draw = function(){
-		//ctx.fillStyle = "#00FF00";
-		//ctx.fillRect(this.x, this.y, this.w, this.h);
 		if(this.frameNumber >= 3 && this.frameTime <= 0 ){
 			this.frameNumber = 0;
 			this.frameTime += 200;
@@ -128,11 +126,11 @@ function Slime(a,b){
 		}
 		
 		if(this.frameNumber == 0)
-			ctx.drawImage(images.enemies,0,30,20,20,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.enemies,0,130,20,20,this.x,this.y,this.w,this.h);
 		else if(this.frameNumber == 1 || this.frameNumber == 3)
-			ctx.drawImage(images.enemies,20,30,20,20,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.enemies,20,130,20,20,this.x,this.y,this.w,this.h);
 		else
-			ctx.drawImage(images.enemies,40,30,20,20,this.x,this.y,this.w,this.h);
+			ctx.drawImage(images.enemies,40,130,20,20,this.x,this.y,this.w,this.h);
 	};
 	
 	this.onDeath = function(){
@@ -229,6 +227,7 @@ function Saxaphone(a,b){
 		}
 	};
 	
+	//220,100
 	this.draw = function(){
 		if(this.frameTime <= 0 && this.frame == 1){
 			this.frameTime += 200;
@@ -239,18 +238,18 @@ function Saxaphone(a,b){
 			this.frame = 1;
 		}
 		
-		var cropX = 60;
-		var cropY = 50;
+		var cropX = 280;
+		var cropY = 100;
 		
 		if(this.frame == 1)
 			cropY += 30;
 		
 		if(this.angle < (-Math.PI / 4 ) && this.angle >= ( (-Math.PI * 3) / 4 ) ) //facing up
-			cropX = 40;
+			cropX -= 20;
 		else if(this.angle > (Math.PI / 4) && this.angle <= ( ( Math.PI * 3) / 4) ) //facing down
-			cropX = 0;
+			cropX -= 60;
 		else if(this.angle < ( (-Math.PI * 3) / 4 ) || this.angle > ( (Math.PI * 3) / 4 ) ) //facing left
-			cropX = 20;
+			cropX -= 40;
 			
 		ctx.drawImage(images.enemies, cropX, cropY, 20,30, this.x, this.y, this.w, this.h);
 	};
@@ -382,8 +381,8 @@ function Bowman(a,b){
 			this.frame = 1;
 		}
 		
-		var cropX = 170;
-		var cropY = 60;
+		var cropX = 90;
+		var cropY = 0;
 		
 		if(this.frame == 1)
 			cropY += 50;
@@ -501,8 +500,8 @@ function Knight(a,b){
 			this.frame = 1;
 		}
 		
-		var cropX = 290;
-		var cropY = 60;
+		var cropX = 210;
+		var cropY = 0;
 		
 		if(this.frame == 1)
 			cropY += 50;
@@ -624,7 +623,7 @@ function EarthPony(a,b){
 	this.draw = function(){
 		
 		var cropX = 190;
-		var cropY = 0;
+		var cropY = 100;
 		
 		if(this.frame == 1)
 			cropY += 30;
@@ -745,9 +744,6 @@ function Tribble(a,b){
 	};
 	
 	this.draw = function(){
-		//ctx.fillStyle = "#FF0000";
-		//ctx.fillRect(this.x, this.y, this.w, this.h);
-		
 		if(this.frameTime < 0){
 			this.frameNumber++;
 			this.frameTime += 200;
@@ -756,11 +752,11 @@ function Tribble(a,b){
 		}
 		
 		if(!this.walking || this.frameNumber == 0)
-			ctx.drawImage(images.enemies,0,130,20,20,this.x, this.y, this.w, this.h);
+			ctx.drawImage(images.enemies,0,150,20,20,this.x, this.y, this.w, this.h);
 		else if(this.frameNumber == 2)
-			ctx.drawImage(images.enemies, 40,130,20,20,this.x, this.y, this.w, this.h);
+			ctx.drawImage(images.enemies, 40,150,20,20,this.x, this.y, this.w, this.h);
 		else
-			ctx.drawImage(images.enemies,20,130,20,20,this.x, this.y, this.w, this.h);
+			ctx.drawImage(images.enemies,20,150,20,20,this.x, this.y, this.w, this.h);
 	};
 	
 	this.onDeath = function(){
@@ -789,20 +785,26 @@ function Tribble(a,b){
 function Larper(a,b){
 	this.x = a;
 	this.y = b;
-	this.w = 30;
-	this.h = 50;
+	this.w = 60;
+	this.h = 100;
 	this.speed = 50;
 	this.angle = 0;
 	this.baseHealth = 30;
 	this.health = 30;
 	this.weaknesses = ["scifi"];
 	
-	this.attacks = ["summon"];
+	this.attacks = ["summon","smash"];
 	this.status = "walking";
 	this.timer = 1500;
 	this.timer2 = 0;
 	
+	this.frame = 0;
+	this.frameTime = 300;
+	
 	this.update = function(time){
+		
+		this.frameTime -= time;
+		
 		if(this.status == "walking"){
 			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
 			this.x += Math.cos(this.angle) * this.speed * time * 0.001;
@@ -815,6 +817,10 @@ function Larper(a,b){
 				this.status = this.attacks[r];
 				if(this.status == this.attacks[0]){
 					this.timer += 1000;
+					this.timer2 = 1;
+				}
+				else if(this.status == this.attacks[1]){
+					this.timer = 1300;
 					this.timer2 = 1;
 				}
 			}
@@ -836,11 +842,54 @@ function Larper(a,b){
 				this.timer += 2500;
 			}
 		}
+		else if(this.status == this.attacks[1]){ //smash
+			this.timer -= time;
+			
+			if(this.timer <= 300 && this.timer2 > 0){
+				this.timer2--;
+				var b = new Box(this.x + (this.w * 0.5) - 50, this.y + (this.h * 0.5) - 50, 100, 100);
+				b.x += Math.cos(this.angle) * 50;
+				b.y += Math.sin(this.angle) * 50;
+				new Effect(images.effects,0,0,50,50, b.x, b.y, b.w, b.h, this.angle);
+				
+				if(collide(player,b)){
+					player.hurt(10);
+					sounds.punch.play();
+				}
+				else
+					sounds.swing.play();
+			}
+			if(this.timer <= 0){
+				this.status = "walking";
+				this.timer += 2500;
+			}
+		}
 	};
 	
 	this.draw = function(){
-		ctx.fillStyle = "#FF0000";
-		ctx.fillRect(this.x, this.y, this.w, this.h);
+		if(this.frameTime <= 0 && this.frame == 1){
+			this.frameTime += 300;
+			this.frame = 0;
+		}
+		else if(this.frameTime <= 0){
+			this.frameTime += 300;
+			this.frame = 1;
+		}
+		
+		var cropX = 330;
+		var cropY = 0;
+		
+		if(this.frame == 1)
+			cropY += 50;
+		
+		if(this.angle < (-Math.PI / 4 ) && this.angle >= ( (-Math.PI * 3) / 4 ) ) //facing up
+			cropX -= 30;
+		else if(this.angle > (Math.PI / 4) && this.angle <= ( ( Math.PI * 3) / 4) ) //facing down
+			cropX -= 90;
+		else if(this.angle < ( (-Math.PI * 3) / 4 ) || this.angle > ( (Math.PI * 3) / 4 ) ) //facing left
+			cropX -= 60;
+			
+		ctx.drawImage(images.enemies, cropX, cropY, 30,50, this.x, this.y, this.w, this.h);
 	};
 	
 	this.onDealth = function(){
@@ -1032,7 +1081,7 @@ function Original(a,b){
 	
 	this.draw = function(){
 		
-		ctx.drawImage(images.enemies, 0,110,10,10, this.x, this.y, this.w, this.h );
+		ctx.drawImage(images.enemies, 60,130,10,10, this.x, this.y, this.w, this.h );
 	};
 	
 }
@@ -1061,7 +1110,7 @@ function Mine(a,b){
 	};
 	
 	this.draw = function(){
-		ctx.drawImage(images.enemies, 10, 110,20,20, this.x, this.y, this.w, this.h);
+		ctx.drawImage(images.enemies, 70, 130,20,20, this.x, this.y, this.w, this.h);
 	};
 }
 
