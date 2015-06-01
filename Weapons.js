@@ -811,6 +811,64 @@ function Batleth(){
 }
 
 
+function Bomb(){
+	this.distance = 80.0;
+	this.damage = 5;
+	this.WAITTIME = 2500;
+	this.waitTime = 2500;
+	this.type = "scifi";
+	this.w = 20;
+	this.h = 20;
+	
+	this.update = function(time){
+		this.waitTime -= time;
+		if(this.waitTime < 0)
+			this.waitTime = 0;
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.drawImage(images.weapons,60,40,20,20,x,y,w,h);
+	};
+	
+	this.fire = function(px, py, ang){
+		this.waitTime = this.WAITTIME;
+		
+		bomb = new Effect(images.weapons,60,40,20,20,px - (this.w * 0.5),py - (this.h * 0.5), this.w, this.h, 0);
+		bomb.timeLeft = 1300;
+		bomb.update = function(time){
+			this.timeLeft -= time;
+			
+			if(this.timeLeft <= 0){
+				for(var i = 0; i < gamestate.enemies.length; i++){
+					var dist = 80.0 - findDistanceFromCenters(this, gamestate.enemies[i]);
+					if(dist > 0){
+						var rate = 80.0 / (5 * 1.0);
+						var dam = Math.floor( dist / rate ) + 1;
+						hurtEnemy(gamestate.enemies[i], dam, "scifi");
+					}
+				}
+			}
+		}
+		
+		console.log("fired");
+	};
+	
+	this.canFire = function(){
+		if(this.waitTime == 0)
+			return true;
+		return false;
+	};
+	
+	this.onPickup = function(){
+		
+	};
+	
+	this.onDrop = function(){
+		
+	};
+}
+
+
 function Boots(){
 	this.distance = 175;
 	this.damage = 5;

@@ -106,7 +106,7 @@ function Intro(){
 function MainRoom(){
 	this.name = "Bodie's House";
 	this.enemies = [new TutorialDoor(366,40)];
-	this.items = [new Item(400,300, new DrPepper())];
+	this.items = [new Item(400,300, new DrPepper()) , new Item(400,100, new Bomb() )];
 	this.walls = [
 		new Box(-10,-10,22,620), //left wall
 		new Box(-10,-10,385,50), //up left wall 
