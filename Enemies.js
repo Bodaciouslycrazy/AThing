@@ -140,13 +140,7 @@ function Slime(a,b){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Oboe() ) );
 		}
 		else if(num > 0.70){
-			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
-			thing.canPickUp = false;
-			thing.onCollide = function(){
-				player.heal(5);
-				return true;
-			};
-			gamestate.items.push( thing );
+			gamestate.items.push( HealthPrefab( this.x + (this.w / 2.0), this.y + (this.h / 2.0) ));
 		}
 		else if(num > 0.55){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Textbook() ) );
@@ -159,17 +153,17 @@ function Slime(a,b){
 
 
 /*
-███████╗ █████╗ ██╗  ██╗ █████╗ ██████╗ ██╗  ██╗ ██████╗ ███╗   ██╗███████╗
-██╔════╝██╔══██╗╚██╗██╔╝██╔══██╗██╔══██╗██║  ██║██╔═══██╗████╗  ██║██╔════╝
-███████╗███████║ ╚███╔╝ ███████║██████╔╝███████║██║   ██║██╔██╗ ██║█████╗  
-╚════██║██╔══██║ ██╔██╗ ██╔══██║██╔═══╝ ██╔══██║██║   ██║██║╚██╗██║██╔══╝  
-███████║██║  ██║██╔╝ ██╗██║  ██║██║     ██║  ██║╚██████╔╝██║ ╚████║███████╗
-╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+███████╗ █████╗ ██╗  ██╗ ██████╗ ██████╗ ██╗  ██╗ ██████╗ ███╗   ██╗███████╗
+██╔════╝██╔══██╗╚██╗██╔╝██╔═══██╗██╔══██╗██║  ██║██╔═══██╗████╗  ██║██╔════╝
+███████╗███████║ ╚███╔╝ ██║   ██║██████╔╝███████║██║   ██║██╔██╗ ██║█████╗  
+╚════██║██╔══██║ ██╔██╗ ██║   ██║██╔═══╝ ██╔══██║██║   ██║██║╚██╗██║██╔══╝  
+███████║██║  ██║██╔╝ ██╗╚██████╔╝██║     ██║  ██║╚██████╔╝██║ ╚████║███████╗
+╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 */
 
 
 
-function Saxaphone(a,b){
+function Saxophone(a,b){
 	this.x = a;
 	this.y = b;
 	this.w = 20;
@@ -663,6 +657,76 @@ function EarthPony(a,b){
 
 
 
+function Healer(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 30;
+	this.h = 30;
+	this.angle = 0;
+	this.speed = 75;
+	this.baseHealth = 11;
+	this.health = 11;
+	this.weaknesses = ["ren"];
+	
+	this.ATTACKDELAY = 2800;
+	this.attackDelay = 2800;
+	
+	this.update = function(time){
+		
+		this.attackDelay -= time;
+		if(this.attackDelay < 0)
+			this.attackDelay = 0;
+		
+		var target = false;
+		var record = false;
+		
+		if(findDistanceFromCenters(player,this) <= 100 || gamestate.enemies.length <= 1){
+			//run away
+			this.angle = findAngle(player,this);
+			this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+			this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+		}
+		else{
+			
+			for(var i = 0; i < gamestate.enemies.length; i++){
+				if(gamestate.enemies[i] == this || gamestate.enemies[i].health == gamestate.enemies[i].baseHealth)
+					continue;
+				
+				if(record == false){
+					record = gamestate.enemies[i].health;
+					target = gamestate.enemies[i];
+				}
+				else if(gamestate.enemies[i].health < record){
+					record = gamestate.enemies[i].health;
+					target = gamestate.enemies[i];
+				}
+			}
+			
+			if(target != false){
+				this.angle = findAngle(this,target);
+				this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+				this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+				
+				if(collide(this,target) && this.attackDelay == 0 && target.health < target.baseHealth){
+					healEnemy(target,3);
+					this.attackDelay = this.ATTACKDELAY;
+				}
+			}
+			
+		}
+	};
+	
+	this.draw = function(){
+		ctx.fillStyle = "#FF0000";
+		ctx.fillRect(this.x, this.y, this.w, this.h);
+	};
+	
+	this.onDealth = function(){
+		
+	};
+}
+
+
 /*
 ████████╗██████╗ ██╗██████╗ ██████╗ ██╗     ███████╗
 ╚══██╔══╝██╔══██╗██║██╔══██╗██╔══██╗██║     ██╔════╝
@@ -769,7 +833,7 @@ function Tribble(a,b){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Batleth() ) );
 		}
 		else if(num > 0.55){
-			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
+			var thing = new Item(this.x + (this.w * 0.5) - 10, this.y + this.h - 10, new HealthPack() );
 			thing.canPickUp = false;
 			thing.onCollide = function(){
 				player.heal(5);
@@ -780,6 +844,136 @@ function Tribble(a,b){
 	};
 	
 }
+
+
+
+/*
+██████╗  █████╗ ██████╗  █████╗ ███████╗██████╗ ██████╗ ██╗████████╗███████╗
+██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔══██╗██║╚══██╔══╝██╔════╝
+██████╔╝███████║██████╔╝███████║███████╗██████╔╝██████╔╝██║   ██║   █████╗  
+██╔═══╝ ██╔══██║██╔══██╗██╔══██║╚════██║██╔═══╝ ██╔══██╗██║   ██║   ██╔══╝  
+██║     ██║  ██║██║  ██║██║  ██║███████║██║     ██║  ██║██║   ██║   ███████╗
+╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝   ╚═╝   ╚══════╝
+*/
+
+
+
+function Parasprite(a,b){//PLEASE FIX ME
+	this.x = a;
+	this.y = b;
+	this.w = 20;
+	this.h = 20;
+	this.angle = 0;
+	this.speed = 50;
+	this.baseHealth = 7;
+	this.health = 7;
+	this.weaknesses = ["ren"];
+	this.walking = true;
+	this.weapon = new Tribs();
+	
+	this.ATTACKDELAY = 250;
+	this.attackDelay = 250;
+	
+	this.rep = 2000;
+	this.spawn = true;
+	
+	this.frameNumber = 0;
+	this.frameTime = 200;
+	
+	this.update = function(time){
+		if(this.walking){
+			this.angle = Math.atan2(player.y + (player.h * 0.5) - (this.y + (this.h * 0.5) ), player.x + (player.w * 0.5) - (this.x + (this.w * 0.5)));
+			this.x += Math.cos(this.angle) * this.speed * time * 0.001;
+			this.y += Math.sin(this.angle) * this.speed * time * 0.001;
+			
+			this.frameTime -= time;
+			
+			var hitb = makeHitBox(this);
+			
+			this.weapon.waitTime -= time;
+			if(this.weapon.waitTime < 0)
+				this.weapon.waitTime = 0;
+			
+			this.rep -= time;
+			if(this.rep < 0)
+				this.rep = 0;
+			
+			if(this.weapon.waitTime == 0 && collide(player,hitb)){
+				this.walking = false;
+				this.attackDelay = this.ATTACKDELAY;
+			}
+			else if(this.rep == 0 && this.spawn){
+				var ang = Math.random() * 2 * Math.PI;
+				ang - Math.PI;
+				gamestate.enemies.push(new Tribble(this.x +(Math.cos(ang) * 30 ), this.y + (Math.sin(ang) * 30 ) ) );
+				this.spawn = false;
+			}
+		}
+		else{
+			this.attackDelay -= time;
+			
+			if(this.attackDelay <= 0){
+				
+				var b = makeHitBox(this)
+				if(collide(player,b) )
+					player.hurt(this.weapon.damage, "scifi");
+				
+				new Effect(images.effects,0,0,50,50, b.x, b.y, b.w, b.h, this.angle);
+				sounds.swing.play();
+				
+				this.weapon.waitTime = this.weapon.WAITTIME;
+				this.walking = true;
+			}
+		}
+	};
+	
+	this.draw = function(){
+		if(this.frameTime < 0){
+			this.frameNumber++;
+			this.frameTime += 200;
+			if(this.frameNumber == 4)
+				this.frameNumber = 0;
+		}
+		
+		if(!this.walking || this.frameNumber == 0)
+			ctx.drawImage(images.enemies,0,150,20,20,this.x, this.y, this.w, this.h);
+		else if(this.frameNumber == 2)
+			ctx.drawImage(images.enemies, 40,150,20,20,this.x, this.y, this.w, this.h);
+		else
+			ctx.drawImage(images.enemies,20,150,20,20,this.x, this.y, this.w, this.h);
+	};
+	
+	this.onDeath = function(){
+		var num = Math.random();
+		
+		if(num > 0.95){
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Phaser() ) );
+		}
+		else if(num > 0.85){
+			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Batleth() ) );
+		}
+		else if(num > 0.55){
+			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
+			thing.canPickUp = false;
+			thing.onCollide = function(){
+				player.heal(5);
+				return true;
+			};
+			gamestate.items.push( thing );
+		}
+	};
+}
+
+
+
+/*
+██████╗ ███████╗███╗   ██╗    ██████╗  ██████╗ ███████╗███████╗
+██╔══██╗██╔════╝████╗  ██║    ██╔══██╗██╔═══██╗██╔════╝██╔════╝
+██████╔╝█████╗  ██╔██╗ ██║    ██████╔╝██║   ██║███████╗███████╗
+██╔══██╗██╔══╝  ██║╚██╗██║    ██╔══██╗██║   ██║╚════██║╚════██║
+██║  ██║███████╗██║ ╚████║    ██████╔╝╚██████╔╝███████║███████║
+╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
+*/
 
 
 

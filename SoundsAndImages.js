@@ -49,6 +49,7 @@ var images = {
 		laser: false,
 		magic: false,
 		teleport: false,
+		heal: false,
 	};
 	
 	var music = {
@@ -212,6 +213,10 @@ function loadSoundsAndImages(){
 	sounds.teleport = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ["Sounds/Teleport.wav"],
+	});
+	sounds.heal = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Heal.wav"],
 	});
 }
 

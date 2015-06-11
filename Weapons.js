@@ -275,6 +275,19 @@ function HealthPack(){
 }
 
 
+//here is a health prefab ITEM that you can userAgent
+
+function HealthPrefab(a,b){
+	this = new Item(a,b, new HealthPack() );
+	this.canPickUp = false;
+	this.onCollide = function(){
+		player.heal(5);
+		sounds.heal.play();
+		return true;
+	};
+}
+
+
 
 /*
 ██████╗ ██████╗    ██████╗ ███████╗██████╗ ██████╗ ███████╗██████╗ 
@@ -460,9 +473,9 @@ function Cupcake(){
 	this.w = 0;
 	this.h = 0;
 	this.distance = 0;
-	this.damage = 8;
-	this.WAITTIME = 10000;
-	this.waitTime = 10000;
+	this.damage = 6;
+	this.WAITTIME = 5000;
+	this.waitTime = 5000;
 	this.weakness = "ren";
 	
 	this.update = function(time){
@@ -477,7 +490,9 @@ function Cupcake(){
 	
 	this.fire = function(px,py,ang){
 		//sound effect
-		player.heal(8);
+		sounds.heal.play();
+		player.heal(this.damage);
+		new DamageCounter(player.x + (player.w / 2.0), player.y + (player.h / 2.0), this.damage, "#00FF00");
 		this.waitTime += this.WAITTIME;
 	};
 	
@@ -811,7 +826,7 @@ function Batleth(){
 }
 
 
-function Bomb(){
+function Bomb(){//needs sound
 	this.distance = 80.0;
 	this.damage = 5;
 	this.WAITTIME = 2500;
@@ -833,7 +848,7 @@ function Bomb(){
 	this.fire = function(px, py, ang){
 		this.waitTime = this.WAITTIME;
 		
-		bomb = new Effect(images.weapons,60,40,20,20,px - (this.w * 0.5),py - (this.h * 0.5), this.w, this.h, 0);
+		var bomb = new Effect(images.weapons,60,40,20,20,px - (this.w * 0.5),py - (this.h * 0.5), this.w, this.h, 0);
 		bomb.timeLeft = 1300;
 		bomb.update = function(time){
 			this.timeLeft -= time;
@@ -869,7 +884,7 @@ function Bomb(){
 }
 
 
-function Boots(){
+function Boots(){//needs sound
 	this.distance = 175;
 	this.damage = 5;
 	this.type = "ren";
@@ -914,6 +929,49 @@ function Boots(){
 			return true;
 		return false;
 	};
+	
+	this.onPickup = function(){
+		
+	};
+	
+	this.onDrop = function(){
+		
+	};
+}
+
+
+
+function MitchelsStick(){//needs sound
+	this.damage = 100;
+	this.w = 100;
+	this.h = 100;
+	this.distance = 50;
+	this.type = "normal";
+	this.waitTime = 100;
+	this.WAITTIME = 100;
+	
+	this.update = function(time){
+		this.waitTime -= time;
+		if(this.waitTime < 0)
+			this.waitTime = 0;
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.drawImage(images.weapons, 80,40,20,20,x,y,w,h);
+	};
+	
+	this.fire = function(px,py, ang){
+		this.waitTime = this.WAITTIME;
+		for(var i = 0; i < gamestate.enemies.length; i++){
+			hurtEnemy(gamestate.enemies[i], this.damage, this.type);
+		}
+	};
+	
+	this.canFire = function(){
+		if(this.waitTime == 0)
+			return true;
+		return false;
+	}
 	
 	this.onPickup = function(){
 		

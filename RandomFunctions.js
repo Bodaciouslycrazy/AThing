@@ -124,6 +124,17 @@ function hurtEnemy(en,dam,type){
 	new DamageCounter(en.x + ( en.w / 2.0 ),en.y + ( en.h / 2.0 ),dam, c);
 }
 
+function healEnemy(en,num){
+	en.health += num;
+	var amm = 0;
+	if(en.health > en.baseHealth){
+		amm = en.health -= en.baseHealth;
+		en.health = en.baseHealth;
+	}
+	
+	new DamageCounter( en.x + (en.w / 2.0), en.y + (en.h / 2.0), num - amm, "#00FF00");
+}
+
 
 //can also be used with effects
 function sortBoxes(en){
@@ -229,4 +240,19 @@ function pressPause(){
 		gamestates.pause.state = gamestate;
 		gamestate = gamestates.pause;
 	}
+}
+
+function addAngles(a,b){
+	var c = a + b;
+	
+	if(c > Math.PI)
+		c -= Math.PI * 2;
+	else if(c < -Math.PI)
+		c += Math.PI * 2;
+	
+	return c;
+}
+
+function findAngle(from,to){
+	return Math.atan2(to.y + (to.h * 0.5) - (from.y + (from.h * 0.5) ), to.x + (to.w * 0.5) - (from.x + (from.w * 0.5)));
 }

@@ -106,7 +106,7 @@ function Intro(){
 function MainRoom(){
 	this.name = "Bodie's House";
 	this.enemies = [new TutorialDoor(366,40)];
-	this.items = [new Item(400,300, new DrPepper()) , new Item(400,100, new Bomb() )];
+	this.items = [new Item(400,300, new DrPepper()) ];
 	this.walls = [
 		new Box(-10,-10,22,620), //left wall
 		new Box(-10,-10,385,50), //up left wall 
@@ -298,7 +298,7 @@ function Room2(){
 
 function LeftPath(){
 	this.name = "End of Road";
-	this.enemies = [new Slime(100,200), new Slime(100,400), new Saxaphone(100,300)];
+	this.enemies = [new Slime(100,200), new Slime(100,400), new Saxophone(100,300), new Healer(100,100)];
 	this.items = [];
 	this.walls = [
 		new Box(-10,0,820,20), //top wall
@@ -499,7 +499,7 @@ function RightPath(){
 
 function Forest(){
 	this.name = "Forest";
-this.enemies = [new Saxaphone(700,350), new Saxaphone(300,100), new Slime(600,300), new Slime(600,350)];
+this.enemies = [new Saxophone(700,350), new Saxophone(300,100), new Slime(600,300), new Slime(600,350)];
 	this.items = [];
 	this.walls = [
 		new Box(276,0,524,12), //top wall
@@ -710,7 +710,7 @@ function RenfestEntrance(){
 
 function Ranch(){
 	this.name = "Ranch";
-	this.enemies = [new Saxaphone(385,150), new Slime(200,300), new Slime(600,300)];
+	this.enemies = [new Saxophone(385,150), new Slime(200,300), new Slime(600,300)];
 	this.items = [];
 	this.walls = [
 		new Box(0,536,292,64), //bottom left wall
@@ -900,6 +900,83 @@ function Ponyville(){
 
 
 
+function TownSquare(){
+	this.name = "Town Square";
+	this.enemies = [];
+	this.items = [];
+	this.walls = [
+		new Box(0,68,120,16), //bridge top
+		new Box(0,160,120,1), //bridge bottom
+		new Box(0,200,56,400), //left wall
+		new Box(0,548,800,52), //bottom wall
+		];
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		cleanUpBodies();
+		
+		//doors
+	};
+	
+	this.draw = function(){
+		//ctx.drawImage( ,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
+		sortBoxes(drw);
+		
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
+		}
+		
+		player.drawHUD();
+		drawTitle();
+	};
+}
+
+
+
 /*
 ███████╗███╗   ██╗████████╗███████╗██████╗ ██████╗ ██████╗ ██╗███████╗███████╗    ███████╗███╗   ██╗████████╗██████╗  █████╗ ███╗   ██╗ ██████╗███████╗
 ██╔════╝████╗  ██║╚══██╔══╝██╔════╝██╔══██╗██╔══██╗██╔══██╗██║██╔════╝██╔════╝    ██╔════╝████╗  ██║╚══██╔══╝██╔══██╗██╔══██╗████╗  ██║██╔════╝██╔════╝
@@ -913,7 +990,7 @@ function Ponyville(){
 
 function EnterpriseEntrance(){
 	this.name = "Enterprise Entrance";
-	this.enemies = [new Saxaphone(190,285), new Saxaphone( 190, 485), new Slime( 300,290)];
+	this.enemies = [new Saxophone(190,285), new Saxophone( 190, 485), new Slime( 300,290)];
 	this.items = [new Item(276, 480, new Oboe() ) ];
 	this.walls = [
 		new Box(0,0,800,20), //top wall
@@ -1682,7 +1759,7 @@ function ArenaMenu(){
 	
 	this.choices = [
 		new MenuEnemy("Slime", Slime),
-		new MenuEnemy("Saxaphone", Saxaphone),
+		new MenuEnemy("Saxophone", Saxophone),
 		new MenuEnemy("Bowman", Bowman),
 		new MenuEnemy("Knight", Knight),
 		new MenuEnemy("Earth Pony", EarthPony),
@@ -1821,6 +1898,7 @@ var gamestates = {
 	renfestBoss: new RenfestBoss(),
 	ranch: new Ranch(),
 	ponyville: new Ponyville(),
+	townSquare: new TownSquare(),
 	enterpriseEntrance: new EnterpriseEntrance(),
 	renfestFront: new RenfestFront(),
 	beamRoom: new BeamRoom(),

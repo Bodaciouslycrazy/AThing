@@ -92,29 +92,32 @@ function Player(){
 		
 		for(var i = 0; i < this.keys.arrows.length; i++ ){
 			
-			//when e is held, pick up or drop weapons
+			//when e is pressed, pick up or drop weapons
 			
 			if(this.keys.e.down && this.keys.arrows[i].pressed){
 				
-				if(this.weapons[i] != false){
-					gamestate.items.push(new Item(this.x + (this.w * 0.5) - 10, this.y + this.h - 10, this.weapons[i]) );
-					this.weapons[i].onDrop();
-					this.weapons[i] = false;
-					
-					sounds.drop.play();
-				}
-				else{
-					for(var k = 0; k < gamestate.items.length; k++){
-						if(collide(player,gamestate.items[k]) && this.weapons[i] == false && gamestate.items[k].canPickUp ){
-							this.weapons[i] = gamestate.items[k].weapon;
-							this.weapons[i].onPickup();
-							gamestate.items.splice(k,1);
-							
-							sounds.pickUp.play();
-							
-							break;
-						}
+				var tempWep = false;
+				
+				for(var k = 0; k < gamestate.items.length; k++){
+					if(collide(player,gamestate.items[k]) && gamestate.items[k].canPickUp ){
+						
+						tempWep = gamestate.items[k].weapon;
+						gamestate.items.splice(k,1);
+						
+						break;
 					}
+				}
+				
+				if(this.weapons[i] != false){
+					this.weapons[i].onDrop();
+					sounds.drop.play();
+					gamestate.items.push(new Item(this.x + (this.w * 0.5) - 10, this.y + (this.h * 0.5) - 10, this.weapons[i]) );
+				}
+				
+				this.weapons[i] = tempWep;
+				if(this.weapons[i] != false){
+					this.weapons[i].onPickup();
+					sounds.pickUp.play();
 				}
 				
 			}
