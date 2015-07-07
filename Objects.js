@@ -49,10 +49,12 @@ function Bodie(a,b){
 	
 	this.talk = function(){
 		if(this.peppers == 0){
-			ctx.font = "18px Impact";
-			ctx.fillStyle = "#000000";
-			ctx.fillText("I don't feel very good...",500,200);
-			ctx.fillText("Kim! Can you plaese give me that Dr.Pepper can?",400,220);
+			var bub1 = new Bubble("I don't feel very good...",500,200,20);
+			bub1.draw();
+			var bub2 = new Bubble("Kim! Can you plaese give me",500,230,20);
+			bub2.draw();
+			var bub3 = new Bubble("that Dr.Pepper can?",500,260,20);
+			bub3.draw();
 			
 			var hasPepper = false;
 			for(var i = 0; i < player.weapons.length; i++){
@@ -61,30 +63,34 @@ function Bodie(a,b){
 			}
 			
 			if(hasPepper && collide(player, new Box(this.x - 20, this.y - 20, this.w + 40, this.h + 40) )){
-				ctx.font = "14px Impact";
-				ctx.fillText("Hold \"E\" and press the arrow key to drop an item.", 400,400);
+				var bub = new Bubble("Hold \"E\" and press the arrow key to drop an item.", 400,400,14);
+				bub.draw();
 			}
 			else if(!hasPepper){
-				ctx.font = "14px Impact";
-				ctx.fillText("Hold \"E\" and press an arrow key to pick up an item.", 400,400);
+				var bub = new Bubble("Hold \"E\" and press an arrow key to pick up an item.", 400,400,14);
+				bub.draw();
 			}
 		}
 		else if(this.peppers == 1 && gamestate.enemies.length > 0){
-			ctx.font = "18px Impact";
-			ctx.fillStyle = "#000000";
-			ctx.fillText("I feel a bit better... But I will need a lot more.",400,200);
-			ctx.fillText("Here, take my Calc textbook. You can use it to break ",400,220);
-			ctx.fillText("the door down and start searching. I need my Dr.P!!!",400,240);
+			var bub1 = new Bubble("I feel a bit better... But I will need a lot more.",400,200,15);
+			var bub2 = new Bubble("Here, take my Calc textbook. You can use it to break ",400,225,15);
+			var bub3 = new Bubble("the door down and start searching. I need my Dr.P!!!",400,250,15);
+			bub1.draw();
+			bub2.draw();
+			bub3.draw();
 			
 			if(collide(player, new Box(356,0,120,100) ) ){
-				ctx.font = "14px Impact";
-				ctx.fillText("Press an item's arrow key to use it.",200,750);
+				var bub = new Bubble("Press an item's arrow key to use it.",200,100,14);
+				bub.draw();
 			}
 		}
 		else if(this.peppers == 2){
-			ctx.font = "18px Impact";
-			ctx.fillStyle = "#000000";
-			ctx.fillText("OH, thank you Kim! There are still some Dr.Peppers left though! *poke*", 400,200);
+			var bub1 = new Bubble("OH, thank you Kim!", 400,200,15);
+			var bub2 = new Bubble("There are still some Dr.Peppers left though!",400,225,15);
+			var bub3 = new Bubble("*poke*", 450, 400, 10);
+			bub1.draw();
+			bub2.draw();
+			bub3.draw();
 		}
 	};
 }
@@ -279,5 +285,24 @@ function MenuEnemy(n,en){
 	this.subtract = function(){
 		if(this.ammount > 0)
 			this.ammount--;
+	};
+}
+
+function Bubble(a,b,c,s){
+	this.x = b;
+	this.y = c;
+	this.text = a;
+	this.size = s;
+	
+	this.draw = function(){
+		ctx.fillStyle = "#000000";
+		ctx.font = this.size + "px Impact";
+		
+		var width = Math.floor( ctx.measureText(this.text).width ) + 1;
+		
+		ctx.drawImage(images.speechBubble, 0,0,10,20, this.x, this.y, (this.size + 10) / 2.0, this.size + 10);
+		ctx.drawImage(images.speechBubble, 8,0,4,20, this.x + ( (this.size + 10) / 2.0 ), this.y, width, this.size + 10);
+		ctx.drawImage(images.speechBubble, 10,0,10,20, this.x + ( (this.size + 10) / 2.0 ) + width, this.y, ( (this.size + 10) / 2.0 ), this.size + 10);
+		ctx.fillText(this.text, this.x + ( (this.size + 10) / 2.0 ), this.y + this.size + 5);
 	};
 }

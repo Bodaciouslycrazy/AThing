@@ -185,6 +185,17 @@ function findDistanceFromCenters(a,b){
 	return Math.sqrt( Math.pow( (b.x + (b.w * 0.5)) - (a.x + (a.w * 0.5)) ,2) + Math.pow( (b.y + (b.h * 0.5)) - (a.y + (a.h * 0.5)) ,2) );
 }
 
+function findCenter(box){
+	var point = {
+		x: box.x + (box.w / 2.0),
+		y: box.y + (box.h / 2.0),
+		w:0,
+		h:0,
+	};
+	
+	return point;
+}
+
 function drawEnemyHealth( en ){
 	if(!en.dontDrawHealth){
 		var box = new Box(en.x, en.y - 3, en.w, 3);

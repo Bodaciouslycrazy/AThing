@@ -106,7 +106,7 @@ function Intro(){
 function MainRoom(){
 	this.name = "Bodie's House";
 	this.enemies = [new TutorialDoor(366,40)];
-	this.items = [new Item(400,300, new DrPepper()) ];
+	this.items = [new Item(400,300, new DrPepper())];
 	this.walls = [
 		new Box(-10,-10,22,620), //left wall
 		new Box(-10,-10,385,50), //up left wall 
@@ -1374,7 +1374,10 @@ function RenfestBoss(){
 		new Box(0,584,800,16), //bottom fence
 		new Box(0,0,736,96), //top wall
 		new Box(740,0,60,120), //crates
+		new Box(800,0,20,600), //right wall
 		];
+		
+	this.rightDoor = new Box(790,0,20,600);
 	
 	this.update = function(time){
 		
@@ -1408,6 +1411,10 @@ function RenfestBoss(){
 		cleanUpBodies();
 		
 		//doors
+		if(collide( player,this.rightDoor) && gamestate.enemies.length == 0){
+			player.x = 30;
+			gamestate = gamestates.renfestContinued;
+		}
 	};
 	
 	this.draw = function(){
@@ -1590,7 +1597,9 @@ function Arena(){
 		new Box(780,-20,20,640), //right wall
 		];
 		
-	this.exit = new Box(0,0,0,0);
+	this.exit = new Box(364,0,72,60);
+	
+	this.open = false;
 	
 	this.update = function(time){
 		
@@ -1623,14 +1632,26 @@ function Arena(){
 		
 		cleanUpBodies();
 		
+		if(this.open == false && this.enemies.length == 0){
+			//play sound
+			this.open = true;
+		}
+		
 		//doors
-		if(this.enemies.length == 0 && collide(player, this.exit) ){
-			//setGamestate();
+		if(this.open && collide(player, this.exit) ){
+			player.x = 100;
+			player.y = 450;
+			setGamestate(gamestates.mainRoom);
 		}
 	};
 	
 	this.draw = function(){
 		ctx.drawImage( images.arena,0,0,200,150,0,0,800,600);
+		if(this.open == false)
+			ctx.drawImage(images.arenaDoor, 0,0,18,21, 364,0,72,84);
+		else
+			ctx.drawImage(images.arenaDoor, 18,0,18,21, 364,0,72,84);
+		
 		var drw = this.enemies.slice();
 		drw.push(player);
 		for(var i = 0; i < effects.length; i++){
@@ -1782,6 +1803,7 @@ function ArenaMenu(){
 		}
 		
 		if(this.selected == this.choices.length && player.keys.space.pressed){
+			gamestates.arena.items.splice(0,gamestates.arena.items.length);
 			for(var i = 0; i < this.choices.length; i++){
 				
 				while(this.choices[i].ammount > 0){
@@ -1793,6 +1815,7 @@ function ArenaMenu(){
 				}
 				
 			}
+			gamestates.arena.open = false;
 			setGamestate(gamestates.arena);
 		}
 		else if(this.selected == this.choices.length + 1 && player.keys.space.pressed){

@@ -289,7 +289,12 @@ function Player(){
 	
 	this.heal = function(num){
 		this.health += num;
-		if(this.health > this.baseHealth)
+		var counter = num;
+		if(this.health > this.baseHealth){
+			counter -= this.health - this.baseHealth;
 			this.health = this.baseHealth;
+		}
+		
+		new DamageCounter(this.x + (this.w / 2.0),this.y + (this.h / 2.0), counter, "#00FF00");
 	}
 }

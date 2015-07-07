@@ -29,6 +29,8 @@ var images = {
 		arenaMenu: new Image(),
 		arenaMenuBackground: new Image(),
 		arena: new Image(),
+		arenaDoor: new Image(),
+		speechBubble: new Image(),
 	};
 	
 	var sounds = {
@@ -104,6 +106,8 @@ function loadSoundsAndImages(){
 	images.arenaMenu.onload = function(){ gamestate.loaded++; };
 	images.arenaMenuBackground.onload = function(){ gamestate.loaded++ };
 	images.arena.onload = function(){ gamestate.loaded++ };
+	images.arenaDoor.onload = function(){ gamestate.loaded++ };
+	images.speechBubble.onload = function(){ gamestate.loaded++ };
 	images.frame.src = "Images/Frame.png";
 	images.life.src = "Images/Life.png";
 	images.weapons.src = "Images/Weapons.png";
@@ -134,6 +138,11 @@ function loadSoundsAndImages(){
 	images.arenaMenu.src = "Images/ArenaMenu.png";
 	images.arenaMenuBackground.src = "Images/ArenaBackground.png";
 	images.arena.src = "Images/Arena.png";
+	images.arenaDoor.src = "Images/ArenaDoor.png";
+	images.speechBubble.src = "Images/SpeechBubble.png";
+	
+	
+	
 	music.intro = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ['Sounds/SadSong.wav'],

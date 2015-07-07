@@ -278,8 +278,22 @@ function HealthPack(){
 //here is a health prefab ITEM that you can userAgent
 
 function HealthPrefab(a,b){
-	this = new Item(a,b, new HealthPack() );
+	this.x = a;
+	this.y = b;
+	this.w = 20;
+	this.h = 20;
 	this.canPickUp = false;
+	
+	this.weapon = new HealthPack();
+	
+	this.update = function(time){
+	
+	};
+	
+	this.draw = function(){
+		this.weapon.draw(this.x,this.y,this.w,this.h);
+	};
+	
 	this.onCollide = function(){
 		player.heal(5);
 		sounds.heal.play();

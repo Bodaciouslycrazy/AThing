@@ -139,10 +139,10 @@ function Slime(a,b){
 		if(num > 0.95){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Oboe() ) );
 		}
-		else if(num > 0.70){
-			gamestate.items.push( HealthPrefab( this.x + (this.w / 2.0), this.y + (this.h / 2.0) ));
+		else if(num > 0.45){
+			gamestate.items.push( new HealthPrefab( this.x + (this.w / 2.0), this.y + (this.h / 2.0) ));
 		}
-		else if(num > 0.55){
+		else if(num > 0.20){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Textbook() ) );
 		}
 		
@@ -256,14 +256,8 @@ function Saxophone(a,b){
 		if(num > 0.85){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Oboe() ) );
 		}
-		else if(num > 0.60){
-			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
-			thing.canPickUp = false;
-			thing.onCollide = function(){
-				player.heal(5);
-				return true;
-			};
-			gamestate.items.push( thing );
+		else if(num > 0.30){
+			gamestate.items.push( new HealthPrefab( this.x + (this.w / 2.0), this.y + (this.h / 2.0) ));
 		}
 	};
 	
@@ -400,14 +394,8 @@ function Bowman(a,b){
 		else if(num > 0.80){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Bow() ) );
 		}
-		else if(num > 0.55){
-			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
-			thing.canPickUp = false;
-			thing.onCollide = function(){
-				player.heal(5);
-				return true;
-			};
-			gamestate.items.push( thing );
+		else if(num > 0.40){
+			gamestate.items.push( new HealthPrefab( this.x + (this.w / 2.0), this.y + (this.h / 2.0) ));
 		}
 	};
 }
@@ -431,7 +419,7 @@ function Knight(a,b){
 	this.w = 30;
 	this.h = 50;
 	this.angle = 0;
-	this.speed = 100;
+	this.speed = 70;
 	this.baseHealth = 15;
 	this.health = 15;
 	this.weaknesses = ["scifi"];
@@ -517,14 +505,8 @@ function Knight(a,b){
 			gamestate.items.push(new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new TurkeyLeg() ) );
 		else if(num > 0.7)
 			gamestate.items.push(new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Armor() ) );
-		else if(num > 0.6){
-			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
-			thing.canPickUp = false;
-			thing.onCollide = function(){
-				player.heal(5);
-				return true;
-			};
-			gamestate.items.push( thing );
+		else if(num > 0.3){
+			gamestate.items.push( new HealthPrefab( this.x + (this.w / 2.0), this.y + (this.h / 2.0) ));
 		}
 	}
 }
@@ -643,14 +625,8 @@ function EarthPony(a,b){
 		else if(num > 0.85){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new PartyHorn() ) );
 		}
-		else if(num > 0.55){
-			var thing = new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new HealthPack() );
-			thing.canPickUp = false;
-			thing.onCollide = function(){
-				player.heal(5);
-				return true;
-			};
-			gamestate.items.push( thing );
+		else if(num > 0.45){
+			gamestate.items.push( new HealthPrefab( this.x + (this.w / 2.0), this.y + (this.h / 2.0) ));
 		}
 	};
 }
@@ -722,7 +698,7 @@ function Healer(a,b){
 	};
 	
 	this.onDealth = function(){
-		
+		gamestate.items.push( new HealthPrefab( this.x + (this.w / 2.0), this.y + (this.h / 2.0) ));
 	};
 }
 
@@ -832,14 +808,8 @@ function Tribble(a,b){
 		else if(num > 0.85){
 			gamestate.items.push( new Item(this.x + (this.w * 0.5) - 5, this.y + this.h - 5, new Batleth() ) );
 		}
-		else if(num > 0.55){
-			var thing = new Item(this.x + (this.w * 0.5) - 10, this.y + this.h - 10, new HealthPack() );
-			thing.canPickUp = false;
-			thing.onCollide = function(){
-				player.heal(5);
-				return true;
-			};
-			gamestate.items.push( thing );
+		else if(num > 0.45){
+			gamestate.items.push( new HealthPrefab( this.x + (this.w / 2.0), this.y + (this.h / 2.0) ));
 		}
 	};
 	
@@ -1087,8 +1057,10 @@ function Larper(a,b){
 		ctx.drawImage(images.enemies, cropX, cropY, 30,50, this.x, this.y, this.w, this.h);
 	};
 	
-	this.onDealth = function(){
+	this.onDeath = function(){
 		gamestate.items.push( new Item( this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5, new DrPepper() ) );
+		gamestate.enemies.splice(0,gamestate.enemies.length);
+		player.heal(player.baseHealth);
 	};
 }
 
@@ -1361,9 +1333,9 @@ function CrapBow(){
 function Sword(){
 	this.w = 50;
 	this.h = 50;
-	this.damage = 6;
-	this.waitTime = 1200;
-	this.WAITTIME = 1200;
+	this.damage = 4;
+	this.waitTime = 3000;
+	this.WAITTIME = 3000;
 	this.distance = 40;
 }
 
