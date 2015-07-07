@@ -1231,6 +1231,7 @@ function Original(a,b){
 	this.health = 1;
 	this.weaknesses = ["scifi"];
 	this.dontDrawHealth = true;
+	this.invincible = true;
 	
 	this.timeLeft = 3000;
 	
@@ -1264,6 +1265,7 @@ function Mine(a,b){
 	this.health = 1;
 	this.weaknesses = [];
 	this.dontDrawHealth = true;
+	this.invincible = true;
 	
 	this.timeLeft = 1000;
 	
@@ -1273,6 +1275,10 @@ function Mine(a,b){
 		if(this.timeLeft <= 0){
 			if(collide(player,this))
 				player.hurt(8,"normal");
+			
+			var e = new Effect(images.effects, 60,50,30,30, this.x, this.y, this.w, this.h, 0);
+			e.timeLeft = 150;
+			sounds.smallExplosion.play();
 			
 			deleteEnemy(this);
 		}

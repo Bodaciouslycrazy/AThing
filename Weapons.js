@@ -868,6 +868,11 @@ function Bomb(){//needs sound
 			this.timeLeft -= time;
 			
 			if(this.timeLeft <= 0){
+				
+				sounds.explosion.play();
+					var e = new Effect(images.effects, 60,50,30,30, this.x - 20, this.y - 20, 60,60, 0);
+					e.timeLeft = 120;
+				
 				for(var i = 0; i < gamestate.enemies.length; i++){
 					var dist = 80.0 - findDistanceFromCenters(this, gamestate.enemies[i]);
 					if(dist > 0){
@@ -879,7 +884,6 @@ function Bomb(){//needs sound
 			}
 		}
 		
-		console.log("fired");
 	};
 	
 	this.canFire = function(){

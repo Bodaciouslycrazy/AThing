@@ -112,6 +112,8 @@ function clearScreen(){
 }
 
 function hurtEnemy(en,dam,type){
+	if(en.invincible == true)
+		return;
 	var c = "#FF0000";
 	for(var i = 0; i < en.weaknesses.length; i++){
 		if(type == en.weaknesses[i]){

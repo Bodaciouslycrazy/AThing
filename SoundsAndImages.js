@@ -52,6 +52,8 @@ var images = {
 		magic: false,
 		teleport: false,
 		heal: false,
+		explosion: false,
+		smallExplosion: false,
 	};
 	
 	var music = {
@@ -226,6 +228,15 @@ function loadSoundsAndImages(){
 	sounds.heal = new Howl({
 		onload: function(){ gamestate.loaded++; },
 		urls: ["Sounds/Heal.wav"],
+	});
+	sounds.explosion = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Explosion2.wav"],
+	});
+	sounds.smallExplosion = new Howl({
+		onload: function(){ gamestate.loaded++; },
+		urls: ["Sounds/Explosion2.wav"],
+		volume: 0.3,
 	});
 }
 
