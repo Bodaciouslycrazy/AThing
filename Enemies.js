@@ -9,7 +9,6 @@
 
 
 
-
 function TutorialDoor(a,b){
 	this.x = a;
 	this.y = b;
@@ -287,8 +286,8 @@ function Bowman(a,b){
 	this.angle = 0;
 	this.speed = 50;
 	this.weapon = new CrapBow();
-	this.attackDelay = 500;
-	this.ATTACKDELAY = 500;
+	this.attackDelay = 700;
+	this.ATTACKDELAY = 700;
 	this.moving = true;
 	
 	this.maxRunDistance = 200;
@@ -426,7 +425,7 @@ function Knight(a,b){
 	this.walking = true;
 	this.weapon = new Sword();
 	
-	this.attackDelay = 0;
+	this.attackDelay = 300;
 	this.ATTACKDELAY = 300;
 	
 	this.frameNumber = 0;
@@ -966,6 +965,8 @@ function Larper(a,b){
 	this.frame = 0;
 	this.frameTime = 300;
 	
+	this.bubble = new Bubble("No one steals my Dr.Pepper!", this.x, this.y - 20, 15);
+	
 	this.update = function(time){
 		
 		this.frameTime -= time;
@@ -1055,12 +1056,50 @@ function Larper(a,b){
 			cropX -= 60;
 			
 		ctx.drawImage(images.enemies, cropX, cropY, 30,50, this.x, this.y, this.w, this.h);
+		
+		if(timeInGamestate <= 2000)
+			this.bubble.draw();
 	};
 	
 	this.onDeath = function(){
 		gamestate.items.push( new Item( this.x + (this.w * 0.5) - 5, this.y + (this.h * 0.5) - 5, new DrPepper() ) );
-		gamestate.enemies.splice(0,gamestate.enemies.length);
+		for(var i = 0; i < gamestate.enemies.length; i++){
+			gamestate.enemies[i].health = 0;
+		}
+		gamestate.enemies.push(new deadLerper(this.x, this.y) );
+		gamestates.renfestBoss.canLeave = true;
 		player.heal(player.baseHealth);
+	};
+}
+
+function deadLerper(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 60;
+	this.h = 100;
+	this.speed = 0;
+	this.angle = 0;
+	this.baseHealth = 3;
+	this.health = 3;
+	this.weaknesses = ["scifi"];
+	this.dontDrawHealth = true;
+	this.invincible = true;
+	
+	this.bubble = new Bubble("I'm not supposed to have soda in character anyway...", this.x, this.y - 20, 15);
+	this.timeLeft = 2000;
+	
+	this.update = function(time){
+		this.timeLeft -= time;
+		if(this.timeLeft <= 0)
+			this.health = 0;
+	};
+	
+	this.draw = function(){
+		ctx.drawImage(images.deaths, 0,0,30,50, this.x, this.y, this.w, this.h);
+	};
+	
+	this.onDeath = function(){
+		
 	};
 }
 
@@ -1085,9 +1124,9 @@ function Gundersen(a,b){
 	this.h = 60;
 	this.speed = 80;
 	this.angle = 0;
-	this.baseHeath = 100;
-	this.health = 100;
-	this.weaknesses = [];
+	this.baseHeath = 120;
+	this.health = 120;
+	this.weaknesses = ["normal"];
 	this.weapon = new Baton();
 	
 	this.timing = 3000;

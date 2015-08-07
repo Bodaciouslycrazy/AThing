@@ -319,6 +319,12 @@ var frameNumber
 var frameTime
 	the time left for this frame.
 	
+var dontDrawHealth
+	if true, the health of this enemy will never be drawn.
+
+var invincible
+	if true, this enemy will not take damage or die.
+	
 function update( time )
 	updates the enemy. Moves the enemy, and attacks (when the enemy is allowed to attack).
 	

@@ -4,6 +4,8 @@ var images = {
 		life: new Image(),
 		weapons: new Image(),
 		enemies: new Image(),
+		characters: new Image(),
+		deaths: new Image(),
 		room1: new Image(),
 		room2: new Image(),
 		bodie: new Image(),
@@ -21,6 +23,8 @@ var images = {
 		ranch: new Image(),
 		ponyville: new Image(),
 		ponyvilleLayer2: new Image(),
+		townSquare: new Image(),
+		townSquareLayer2: new Image(),
 		shipEntrance: new Image(),
 		shipEntranceLayer2: new Image(),
 		renfestFront: new Image(),
@@ -84,6 +88,8 @@ function loadSoundsAndImages(){
 	images.room1.onload = function(){ gamestate.loaded++; };
 	images.kim.onload = function(){ gamestate.loaded++; };
 	images.enemies.onload = function(){ gamestate.loaded++; };
+	images.characters.onload = function(){ gamestate.loaded++; };
+	images.deaths.onload = function(){ gamestate.loaded++; };
 	images.room2.onload = function(){ gamestate.loaded++; };
 	images.bodie.onload = function(){ gamestate.loaded++; };
 	images.leftPath.onload = function(){ gamestate.loaded++; };
@@ -100,6 +106,8 @@ function loadSoundsAndImages(){
 	images.ranch.onload = function(){ gamestate.loaded++; };
 	images.ponyville.onload = function(){ gamestate.loaded++; };
 	images.ponyvilleLayer2.onload = function(){ gamestate.loaded++; };
+	images.townSquare.onload = function(){ gamestate.loaded++ };
+	images.townSquareLayer2.onload = function(){ gamestate.loaded++ };
 	images.shipEntrance.onload = function(){ gamestate.loaded++; };
 	images.shipEntranceLayer2.onload = function(){ gamestate.loaded++; };
 	images.renfestFront.onload = function(){ gamestate.loaded++; };
@@ -116,6 +124,8 @@ function loadSoundsAndImages(){
 	images.room1.src = "Images/Room1.png";
 	images.kim.src = "Images/Kim.png";
 	images.enemies.src = "Images/Enemies.png";
+	images.characters.src = "Images/Characters.png";
+	images.deaths.src = "Images/Deaths.png";
 	images.room2.src = "Images/Room2.png";
 	images.bodie.src = "Images/Bodie.png";
 	images.leftPath.src = "Images/LeftPath.png";
@@ -132,6 +142,8 @@ function loadSoundsAndImages(){
 	images.ranch.src = "Images/Ranch.png";
 	images.ponyville.src = "Images/Ponyville.png";
 	images.ponyvilleLayer2.src = "Images/PonyvilleLayer2.png";
+	images.townSquare.src = "Images/TownSquare.png";
+	images.townSquareLayer2.src = "Images/TownSquareLayer2.png";
 	images.shipEntrance.src = "Images/ShipEntrance.png";
 	images.shipEntranceLayer2.src = "Images/ShipEntranceLayer2.png";
 	images.renfestFront.src = "Images/RenfestFront.png";

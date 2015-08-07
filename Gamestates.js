@@ -20,7 +20,7 @@ function LoadingGamestate(){
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
 			setGamestate(gamestates.mainRoom);
-			playMusic(music.leander);
+			//playMusic(music.leander);
 		}
 	}
 	
@@ -129,7 +129,6 @@ function MainRoom(){
 	this.specialWall = new Box(376,0,80,50)
 	this.door = new Box(385,-10,100,20);
 	this.bodie = new Bodie(600,300);
-	this.arenaManager = new ArenaManager(200,500);
 	
 	this.update = function(time){
 		player.update(time);
@@ -155,7 +154,6 @@ function MainRoom(){
 			player.y = 530;
 			setGamestate(gamestates.room2);
 		}
-		this.arenaManager.update(time);
 	}
 	
 	this.draw = function(){
@@ -164,7 +162,6 @@ function MainRoom(){
 		var drw = this.enemies.slice();
 		drw.push(player);
 		drw.push(this.bodie);
-		drw.push(this.arenaManager);
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
@@ -183,7 +180,6 @@ function MainRoom(){
 			this.specialWall.draw();
 		
 		this.bodie.talk();
-		this.arenaManager.talk();
 		player.drawHUD();
 		drawTitle();
 	}
@@ -204,7 +200,7 @@ function MainRoom(){
 
 function Room2(){
 	this.name = "Stagecoach Bend";
-	this.enemies = [new Slime(200,100), new Slime(500,200), new Gundersen(100,100)];
+	this.enemies = [new Slime(200,100), new Slime(500,200)];
 	this.items = [new Item(100, 100, new Bow() ), new Item(100,300, new Bomb() )];
 	this.walls = [
 		//new Box(-20,-10,20,620), //left wall
@@ -217,9 +213,13 @@ function Room2(){
 	this.leftDoor = new Box(-20,-10,20,600);
 	this.rightDoor = new Box(800,-10,20,600);
 	
+	this.arenaManager = new ArenaManager(200,100);
+	
 	this.update = function(time){
 		
 		player.update(time);
+		if(this.arenaManager.update() )
+			return;
 		
 		for(var i = 0; i < this.enemies.length; i ++){
 			this.enemies[i].update(time);
@@ -266,6 +266,7 @@ function Room2(){
 		ctx.drawImage(images.room2,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
+		drw.push(this.arenaManager);
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
@@ -523,9 +524,12 @@ this.enemies = [new Saxophone(700,350), new Saxophone(300,100), new Slime(600,30
 	this.rightDoor = new Box(800,0,20,600);
 	this.downDoor = new Box(0,600,200,20);
 	
+	this.joey = new Joey(50,200);
+	
 	this.update = function(time){
 		
 		player.update(time);
+		this.joey.update();
 		
 		for(var i = 0; i < this.enemies.length; i ++){
 			this.enemies[i].update(time);
@@ -568,6 +572,8 @@ this.enemies = [new Saxophone(700,350), new Saxophone(300,100), new Slime(600,30
 		ctx.drawImage(images.forest,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
+		drw.push(this.joey);
+		
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
@@ -588,6 +594,8 @@ this.enemies = [new Saxophone(700,350), new Saxophone(300,100), new Slime(600,30
 		for(var i = 0; i < this.enemies.length; i++){
 			drawEnemyHealth(this.enemies[i]);
 		}
+		
+		this.joey.talk();
 		
 		player.drawHUD();
 		drawTitle();
@@ -829,15 +837,19 @@ function Ponyville(){
 		new Box(508,540,288,60), //bottom right wall
 		new Box(760,0,40,80), //top river
 		new Box(760,164,40,456), //bottom river
-		new Box(684,68,120,16), //bridge top
-		new Box(684,160,120,1), //bridge bottom
+		new Box(690,68,110,16), //bridge top
+		new Box(690,160,110,1), //bridge bottom
 		];
 	
 	this.downDoor = new Box(0,600,800,20);
+	this.rightDoor = new Box(800,68,20,93);
+	
+	this.expoPony = new ExpoPony(160, 250);
 	
 	this.update = function(time){
 		
 		player.update(time);
+		this.expoPony.update(time);
 		
 		for(var i = 0; i < this.enemies.length; i ++){
 			this.enemies[i].update(time);
@@ -870,12 +882,17 @@ function Ponyville(){
 			player.y = 10;
 			setGamestate(gamestates.ranch);
 		}
+		else if(collide(player,this.rightDoor)){
+			player.x = 10;
+			setGamestate(gamestates.townSquare);
+		}
 	};
 	
 	this.draw = function(){
 		ctx.drawImage(images.ponyville,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
+		drw.push(this.expoPony);
 		
 		var l2 = new Box(684,148,116,30);
 		l2.draw = function(){ ctx.drawImage(images.ponyvilleLayer2,0,0,200,150,0,0,800,600); };
@@ -902,6 +919,7 @@ function Ponyville(){
 			drawEnemyHealth(this.enemies[i]);
 		}
 		
+		this.expoPony.talk();
 		player.drawHUD();
 		drawTitle();
 	};
@@ -925,11 +943,15 @@ function TownSquare(){
 	this.enemies = [];
 	this.items = [];
 	this.walls = [
-		new Box(0,68,120,16), //bridge top
-		new Box(0,160,120,1), //bridge bottom
+		new Box(0,68,110,16), //bridge top
+		new Box(0,160,110,1), //bridge bottom
 		new Box(0,200,56,400), //left wall
+		new Box(0,0,56,68), //top left wall
 		new Box(0,548,800,52), //bottom wall
+		new Box(0,-20,800,20), //top wall
 		];
+		
+	this.leftDoor = new Box(-20,68,20,93);
 	
 	this.update = function(time){
 		
@@ -963,12 +985,21 @@ function TownSquare(){
 		cleanUpBodies();
 		
 		//doors
+		if(collide( player, this.leftDoor)){
+			player.x = 760;
+			setGamestate(gamestates.ponyville);
+		}
 	};
 	
 	this.draw = function(){
-		//ctx.drawImage( ,0,0,200,150,0,0,800,600);
+		ctx.drawImage( images.townSquare,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(player);
+		
+		var l2 = new Box(0,148,116,30);
+		l2.draw = function(){ ctx.drawImage(images.townSquareLayer2,0,0,200,150,0,0,800,600); };
+		drw.push(l2);
+		
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
 		}
@@ -1434,6 +1465,8 @@ function RenfestBoss(){
 		
 	this.rightDoor = new Box(790,0,20,600);
 	
+	this.canLeave = false;
+	
 	this.update = function(time){
 		
 		player.update(time);
@@ -1466,7 +1499,7 @@ function RenfestBoss(){
 		cleanUpBodies();
 		
 		//doors
-		if(collide( player,this.rightDoor) && gamestate.enemies.length == 0){
+		if(collide( player,this.rightDoor) && this.canLeave){
 			player.x = 30;
 			gamestate = gamestates.renfestContinued;
 		}

@@ -11,6 +11,3 @@ healing pony
 CODE
 Catch up on sounds
 door/enter area sounds.
-let the player leave renfestboss gamestate and arena gamestate
-
-united health care card

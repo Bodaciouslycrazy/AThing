@@ -22,108 +22,6 @@ function Item(a,b,c){
 
 
 
-function Bodie(a,b){
-	this.x = a;
-	this.y = b;
-	this.w = 30;
-	this.h = 50;
-	this.peppers = 0;
-	
-	this.update = function(time){
-		for(var i = 0; i < gamestate.items.length; i++){
-			if(gamestate.items[i].weapon.isPepper && findDistanceFromCenters(this,gamestate.items[i]) < 100){
-				
-				if(this.peppers == 0)
-					gamestate.items.push(new Item(390,290, new Textbook() ) );
-				
-				this.peppers++;
-				gamestate.items.splice(i,1);
-				i--;
-			}
-		}
-	};
-	
-	this.draw = function(){
-		ctx.drawImage(images.bodie, 0,0,30,50,this.x,this.y,this.w,this.h);
-	};
-	
-	this.talk = function(){
-		if(this.peppers == 0){
-			var bub1 = new Bubble("I don't feel very good...",500,200,20);
-			bub1.draw();
-			var bub2 = new Bubble("Kim! Can you plaese give me",500,230,20);
-			bub2.draw();
-			var bub3 = new Bubble("that Dr.Pepper can?",500,260,20);
-			bub3.draw();
-			
-			var hasPepper = false;
-			for(var i = 0; i < player.weapons.length; i++){
-				if(player.weapons[i] != false)
-					hasPepper = true;
-			}
-			
-			if(hasPepper && collide(player, new Box(this.x - 20, this.y - 20, this.w + 40, this.h + 40) )){
-				var bub = new Bubble("Hold \"E\" and press the arrow key to drop an item.", 400,400,14);
-				bub.draw();
-			}
-			else if(!hasPepper){
-				var bub = new Bubble("Hold \"E\" and press an arrow key to pick up an item.", 400,400,14);
-				bub.draw();
-			}
-		}
-		else if(this.peppers == 1 && gamestate.enemies.length > 0){
-			var bub1 = new Bubble("I feel a bit better... But I will need a lot more.",400,200,15);
-			var bub2 = new Bubble("Here, take my Calc textbook. You can use it to break ",400,225,15);
-			var bub3 = new Bubble("the door down and start searching. I need my Dr.P!!!",400,250,15);
-			bub1.draw();
-			bub2.draw();
-			bub3.draw();
-			
-			if(collide(player, new Box(356,0,120,100) ) ){
-				var bub = new Bubble("Press an item's arrow key to use it.",200,100,14);
-				bub.draw();
-			}
-		}
-		else if(this.peppers == 2){
-			var bub1 = new Bubble("OH, thank you Kim!", 400,200,15);
-			var bub2 = new Bubble("There are still some Dr.Peppers left though!",400,225,15);
-			var bub3 = new Bubble("*poke*", 450, 400, 10);
-			bub1.draw();
-			bub2.draw();
-			bub3.draw();
-		}
-	};
-}
-
-
-
-function ArenaManager(a,b){
-	this.x = a;
-	this.y = b;
-	this.w = 30;
-	this.h = 50;
-	
-	this.update = function(time){
-		if(findDistanceFromCenters(this,player) < 125 && player.keys.space.pressed)
-			setGamestate(gamestates.arenaMenu);
-	};
-	
-	this.draw = function(){
-		ctx.fillStyle = "#00FF00";
-		ctx.fillRect(this.x, this.y, this.w, this.h);
-	};
-	
-	this.talk = function(){
-		if(findDistanceFromCenters(this,player) < 125){
-			ctx.font = "14px Impact";
-			ctx.fillStyle = "#000000";
-			ctx.fillText("Welcome to the Arena!",this.x - 10, this.y - 30);
-		}
-	};
-}
-
-
-
 function Tele(a,b){
 	this.x = a;
 	this.y = b;
@@ -288,7 +186,9 @@ function MenuEnemy(n,en){
 	};
 }
 
-function Bubble(a,b,c,s){
+
+//the total height of a bubble is size plus 10.
+function Bubble(a,b,c,s){ //text (string), x (float), y (float), size (int)
 	this.x = b;
 	this.y = c;
 	this.text = a;
