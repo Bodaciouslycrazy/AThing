@@ -201,7 +201,7 @@ function MainRoom(){
 function Room2(){
 	this.name = "Stagecoach Bend";
 	this.enemies = [new Slime(200,100), new Slime(500,200)];
-	this.items = [new Item(100, 100, new Bow() ), new Item(100,300, new Bomb() )];
+	this.items = [new Item(100, 100, new Bow() ), new Item(100,300, new ZapGun() )];
 	this.walls = [
 		//new Box(-20,-10,20,620), //left wall
 		new Box(-10,0,820,20), //top wall
