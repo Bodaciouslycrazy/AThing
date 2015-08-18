@@ -133,6 +133,48 @@ function ExpoPony(a,b){
 
 
 
+function Trekie(a,b){
+	this.x = a;
+	this.y = b;
+	this.w = 30;
+	this.h = 50;
+	
+	this.bubble1 = new Bubble("Our electricity went out for some reason...", this.x - 75, this.y - 100, 15);
+	this.bubble2 = new Bubble("I think something is stuck in our generator.", this.x - 75, this.y - 75, 15);
+	this.bubble3 = new Bubble("If you fix it, I can give you a cool weapon!", this.x - 75, this.y - 50, 15);
+	
+	this.bubble4 = new Bubble("Thank you! Here, take this.", this.x - 75, this.y - 100, 15);
+	
+	this.dropped = false;
+	
+	this.update = function(time){
+		if(this.dropped == false && gamestates.engineRoom.powered == true){
+			this.dropped = true;
+			gamestate.items.push(new Item(this.x + 5, this.y + 45, new ZapGun() ) )
+		}
+	};
+	
+	this.draw = function(){
+		ctx.fillStyle = "#0000FF";
+		ctx.fillRect(this.x, this.y, this.w, this.h);
+	};
+	
+	this.talk = function(){
+		if( findDistanceFromCenters(player, this) <= 150 ){
+			if(dropped == false){
+				this.bubble1.draw();
+				this.bubble2.draw();
+				this.bubble3.draw();
+			}
+			else{
+				this.bubble4.draw();
+			}
+		}
+	};
+}
+
+
+
 function Joey(a,b){
 	this.x = a;
 	this.y = b;
@@ -156,8 +198,8 @@ function Joey(a,b){
 			for(var i = 0; i < gamestate.items.length; i++){
 				if( findDistanceFromCenters(this, gamestate.items[i]) < 100 && gamestate.items[i].weapon.isPepper != true ){
 					gamestate.items.splice(i,1);
-					i--;
 					this.weps++;
+					i--;
 					
 					if(this.weps == 3)
 						break;

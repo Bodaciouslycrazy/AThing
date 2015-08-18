@@ -299,3 +299,9 @@ function createLightningEffect( box1, box2){
 	eff.timeLeft = 100;
 	
 }
+
+function getRandomNumber(){
+	return 4;
+	
+	//random number was determined by a dice roll.
+}

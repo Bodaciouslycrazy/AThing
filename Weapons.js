@@ -1001,13 +1001,13 @@ function GunderKiller(){ //NEED TO FINISH
 }
 
 function ZapGun(){
-	this.damage = 3;
+	this.damage = 4;
 	this.w = 0;
 	this.h = 0;
 	this.distance = 110;
 	this.type = "sci-fi";
-	this.waitTime = 5000;
-	this.WAITTIME = 5000;
+	this.waitTime = 2700;
+	this.WAITTIME = 2700;
 	
 	this.update = function(time){
 		this.waitTime -= time;
@@ -1016,8 +1016,7 @@ function ZapGun(){
 	};
 	
 	this.draw = function(x,y,w,h){
-		ctx.fillStyle = "#FF0000";
-		ctx.fillRect(x + (x * 0.25),y,w * 0.5,h);
+		ctx.drawImage(images.weapons, 0,60,20,20, x,y,w,h);
 	};
 	
 	this.fire = function(px, py, ang){
