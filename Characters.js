@@ -27,7 +27,7 @@ function Bodie(a,b){
 		if(this.peppers == 0){
 			var bub1 = new Bubble("I don't feel very good...",500,200,20);
 			bub1.draw();
-			var bub2 = new Bubble("Kim! Can you plaese give me",500,230,20);
+			var bub2 = new Bubble("Kim! Can you please give me",500,230,20);
 			bub2.draw();
 			var bub3 = new Bubble("that Dr.Pepper can?",500,260,20);
 			bub3.draw();
