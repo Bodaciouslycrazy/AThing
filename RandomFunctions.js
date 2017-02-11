@@ -269,3 +269,39 @@ function addAngles(a,b){
 function findAngle(from,to){
 	return Math.atan2(to.y + (to.h * 0.5) - (from.y + (from.h * 0.5) ), to.x + (to.w * 0.5) - (from.x + (from.w * 0.5)));
 }
+
+function isInArray( arr, thing ){
+	for(var i = 0; i < arr.length; i++){
+		if(thing == arr[i])
+			return true;
+	}
+	
+	return false;
+}
+
+function bisectFromCenters( box1, box2){
+	var fin = {
+		x:0,
+		y:0,
+	};
+	
+	fin.x = ((box1.x + (box1.w * 0.5)) + (box2.x + (box2.w * 0.5))) * 0.5;
+	fin.y = ((box1.y + (box1.h * 0.5)) + (box2.y + (box2.h * 0.5))) * 0.5;
+	
+	return fin;
+	
+}
+
+function createLightningEffect( box1, box2){
+	var dist = findDistanceFromCenters(box1, box2);
+	var place = bisectFromCenters(box1, box2);
+	var eff = new Effect(images.effects, 0,80,30,30, place.x - (dist * 0.5), place.y - 15, dist, 30, findAngle(box1, box2) );
+	eff.timeLeft = 100;
+	
+}
+
+function getRandomNumber(){
+	return 4;
+	
+	//random number was determined by a dice roll.
+}

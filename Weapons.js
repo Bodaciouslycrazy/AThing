@@ -960,6 +960,115 @@ function Boots(){//needs sound
 
 
 
+function GunderKiller(){ //NEED TO FINISH
+	this.damage = 7;
+	this.w = 50;
+	this.h = 50;
+	this.distance = 0;
+	this.type = "gunder";
+	this.waitTime = 1000;
+	this.WAITTIME = 1000;
+	
+	this.update = function(time){
+		this.waitTime -= time;
+		if(this.waitTime < 0)
+			this.waitTime = 0;
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.fillStyle = "#000000";
+		ctx.fillRect(x,y,w,h);
+	};
+	
+	this.fire = function(px, py, ang){
+		
+	};
+	
+	this.canFire = function(){
+		if(this.waitTime <= 0)
+			return true;
+		
+		return false;
+	};
+	
+	this.onPickup = function(){
+		
+	};
+	
+	this.onDrop = function(){
+		
+	};
+}
+
+function ZapGun(){
+	this.damage = 4;
+	this.w = 0;
+	this.h = 0;
+	this.distance = 110;
+	this.type = "sci-fi";
+	this.waitTime = 2700;
+	this.WAITTIME = 2700;
+	
+	this.update = function(time){
+		this.waitTime -= time;
+		if(this.waitTime < 0)
+			this.waitTime = 0;
+	};
+	
+	this.draw = function(x,y,w,h){
+		ctx.drawImage(images.weapons, 0,60,20,20, x,y,w,h);
+	};
+	
+	this.fire = function(px, py, ang){
+		//lightning sound
+		
+		this.waitTime = this.WAITTIME;
+		var hit = [];
+		
+		for(var i = 0; i < gamestate.enemies.length; i++){
+			if( findDistanceFromCenters(player, gamestate.enemies[i]) < this.distance){
+				hit.push( gamestate.enemies[i] );
+				
+				createLightningEffect(player, gamestate.enemies[i]);
+			}
+		}
+		
+		for(var i = 0; i < hit.length; i++){
+			for(var j = 0; j < gamestate.enemies.length; j++){
+				
+				if(hit[i] == gamestate.enemies[j])
+					continue;
+				
+				if(findDistanceFromCenters( hit[i] , gamestate.enemies[j]) < this.distance && isInArray(hit, gamestate.enemies[j]) == false){
+					hit.push(gamestate.enemies[j]);
+					
+					createLightningEffect(hit[i], gamestate.enemies[j]);
+				}
+				
+			}
+			
+			hurtEnemy(hit[i], this.damage, this.type);
+		}
+	};
+	
+	this.canFire = function(){
+		if(this.waitTime <= 0)
+			return true;
+		
+		return false;
+	};
+	
+	this.onPickup = function(){
+		
+	};
+	
+	this.onDrop = function(){
+		
+	};
+}
+
+
+
 function MitchelsStick(){//needs sound
 	this.damage = 100;
 	this.w = 100;

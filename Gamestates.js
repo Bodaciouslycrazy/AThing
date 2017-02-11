@@ -19,7 +19,7 @@ function LoadingGamestate(){
 			//setGamestate(gamestates.intro);
 			
 			//for testing purposes, you can skip to a gamestate by putting it here
-			setGamestate(gamestates.mainRoom);
+			setGamestate(gamestates.engineRoom);
 			//playMusic(music.leander);
 		}
 	}
@@ -201,7 +201,7 @@ function MainRoom(){
 function Room2(){
 	this.name = "Stagecoach Bend";
 	this.enemies = [new Slime(200,100), new Slime(500,200)];
-	this.items = [new Item(100, 100, new Bow() ), new Item(100,300, new Bomb() )];
+	this.items = [new Item(100, 100, new Bow() ), new Item(100,300, new ZapGun() )];
 	this.walls = [
 		//new Box(-20,-10,20,620), //left wall
 		new Box(-10,0,820,20), //top wall
@@ -1574,10 +1574,12 @@ function BeamRoom(){
 	this.leftDoor = new Box(-20,0,20,600);
 	
 	this.tele = new Tele(456,80);
+	this.trekie = new Trekie(600,300);
 	
 	this.update = function(time){
 		
-		this.tele.update(time)
+		this.tele.update(time);
+		this.trekie.update();
 		player.update(time);
 		
 		for(var i = 0; i < this.enemies.length; i ++){
@@ -1632,6 +1634,7 @@ function BeamRoom(){
 		ctx.drawImage(images.beamRoom,0,0,200,150,0,0,800,600);
 		var drw = this.enemies.slice();
 		drw.push(this.tele);
+		drw.push(this.trekie);
 		drw.push(player);
 		for(var i = 0; i < effects.length; i++){
 			drw.push(effects[i]);
@@ -1656,11 +1659,97 @@ function BeamRoom(){
 			drawEnemyHealth(this.enemies[i]);
 		}
 		
+		this.trekie.talk();
 		player.drawHUD();
 		drawTitle();
 	};
 }
 
+
+
+function EngineRoom(){
+	this.name = "Empty";
+	this.enemies = [];
+	this.items = [new Item(100,100, new DrPepper() )];
+	this.walls = [];
+	
+	this.engine = new Box(100,100,50,50);
+	this.powered = false;
+	
+	this.update = function(time){
+		
+		player.update(time);
+		
+		for(var i = 0; i < this.enemies.length; i ++){
+			this.enemies[i].update(time);
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			
+			for(var e = 0; e < this.enemies.length; e++){
+				if(collide(this.enemies[e],this.walls[i]))
+					adjust(this.enemies[e],this.walls[i]);
+			}
+			
+			if(collide(player,this.walls[i]))
+				adjust(player,this.walls[i]);
+		}
+		
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(player, this.items[i]) ){
+				var del = this.items[i].onCollide();
+				if(del){
+					this.items.splice(i,1);
+					i--;
+				}
+			}
+		}
+		
+		this.powered = true;
+		for(var i = 0; i < this.items.length; i++){
+			if(collide(this.engine, this.items[i]) ){
+				this.powered = false;
+				break;
+			}
+		}
+		
+		cleanUpBodies();
+		
+		//doors
+	};
+	
+	this.draw = function(){
+		//ctx.drawImage( ,0,0,200,150,0,0,800,600);
+		var drw = this.enemies.slice();
+		drw.push(player);
+		for(var i = 0; i < effects.length; i++){
+			drw.push(effects[i]);
+		}
+		sortBoxes(drw);
+		
+		this.engine.draw();
+		for(var i = 0; i < this.items.length; i++){
+			this.items[i].draw();
+		}
+		
+		for(var i = 0; i < drw.length; i++){
+			drw[i].draw();
+		}
+		
+		for(var i = 0; i < this.walls.length; i++){
+			this.walls[i].draw();
+		}
+		
+		for(var i = 0; i < this.enemies.length; i++){
+			drawEnemyHealth(this.enemies[i]);
+		}
+		
+		player.drawHUD();
+		drawTitle();
+		var b = new Bubble(this.powered + " on", 250,100, 15);
+		b.draw();
+	};
+}
 
 
 /*
@@ -2015,6 +2104,7 @@ var gamestates = {
 	enterpriseEntrance: new EnterpriseEntrance(),
 	renfestFront: new RenfestFront(),
 	beamRoom: new BeamRoom(),
+	engineRoom: new EngineRoom(),
 	arenaMenu: new ArenaMenu(),
 	arena: new Arena(),
 	pause: new Pause(),
